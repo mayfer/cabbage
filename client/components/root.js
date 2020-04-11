@@ -51,6 +51,7 @@ define(function(require, exports) {
                         });
                     </script>
                     <script src="/client/core/require.min.js"></script>
+                    <script src="/client/lib/jquery.slim.min.js"></script>
                     <script type="text/javascript">
                         (function() {
                             /* browser-only javascript, ignored for server-side text-rendering */

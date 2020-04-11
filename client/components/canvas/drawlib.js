@@ -1,4 +1,5 @@
 define(function(require, exports) {
+    const $ = require('jquery');
 
     function setCanvasSize(canvas_jq, width, height) {
         canvas_jq.css('width', width);
@@ -45,8 +46,8 @@ define(function(require, exports) {
         return canvas_jq;
     }
 
-    function drawingCanvas(jq_elem) {
-        var jq_elem = jq_elem;
+    function drawingCanvas(raw_elem) {
+        var jq_elem = $(raw_elem);
         var canvas_jq = Canvas(jq_elem).addClass('drawing-canvas');
         var canvas = canvas_jq.get(0);
         var ctx = canvas.getContext("2d");
@@ -86,13 +87,20 @@ define(function(require, exports) {
                 that.snapshot();
             });
 
+            /*
             Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
                 that.undo();
             });
             Mousetrap.bind(['command+shift+z', 'ctrl+shift+z'], function(e) {
                 that.redo();
             });
+            */
             
+        }
+
+        this.removeEvents = function() {
+            $(document).off("mousemove");
+            $(document).off("mouseup");
         }
 
         this.drawLine = function(prev_position, current_position) {
@@ -162,5 +170,7 @@ define(function(require, exports) {
         this.init();
         return this;
     }
+
+    return { drawingCanvas };
 
 });

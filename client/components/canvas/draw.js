@@ -26,16 +26,23 @@ define(function(require, exports) {
                 });
             */
 
-            require(['./mousetrap', './draw'], function(mousetrap, draw) {
+            require(['./mousetrap', './drawlib'], (mousetrap, drawlib) => {
+                if(this.draw_area) {
+                    this.canvas = new drawlib.drawingCanvas(this.draw_area);
+                }
 
             });
+        }
+
+        componentShouldUpdate(){
+            return false;
         }
 
         render(props, s) {
             const { channel } = props;
             return html`
                 <div class='drawing-container'>
-                    <div id='draw'> </div>
+                    <div class='draw-area' ref=${r => this.draw_area=r}> </div>
                     <button id='save'>Save</button>
                 </div>
 
@@ -45,7 +52,7 @@ define(function(require, exports) {
         static css() {
             return `
                 .drawing-container { width: 600px; margin: 0 auto; padding: 50px; text-align: center; }
-                #draw { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
+                .draw-area { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
                 #save { margin: 10px; font-size: 20px; line-height: 25px; }
             `;
         }
