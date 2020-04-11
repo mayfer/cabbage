@@ -11,6 +11,8 @@ define(function(require, exports) {
     const DrawingCanvas = require("components/canvas/draw");
     const Channel = require("components/channel/channel");
     const { fonts } = require("components/theme");
+    const CreateForm = require("components/create");
+    const InstructionTile = require("components/instructionTile");
 
     class Layout extends Component {
         constructor(props) {
@@ -25,7 +27,7 @@ define(function(require, exports) {
                 '/': {
                     as: 'home',
                     uses: (...args) => {
-                        this.setState({}, () => {
+                        this.setState({channel: undefined}, () => {
                         });
                     }
                 },
@@ -55,23 +57,24 @@ define(function(require, exports) {
             this.setState({user});
         }
         render(props, s) {
-            const { channel } = props;
+            const { channel } = s;
+            console.log(channel)
             return html`
                 <div id="layout">
                     <div id="header-container">
                         <${Header} />
                     </div>
                     <div id="content-container">
-                        ${channel ? html`
+                        ${channel ? html` 
                             <div class="game-column active column ">
                                 game area
                                 <${DrawingCanvas} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
-                                <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels} />
+                                <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
                             </div>
                         ` : html`
-                            Landing page
+                            <${CreateForm} />
                         `}
                     </div>
                     <div id="mobile-nav">
