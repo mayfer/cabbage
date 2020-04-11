@@ -39,12 +39,20 @@ define(function(require, exports) {
 
         async submit_name(e) {
             e.preventDefault()
-            console.log(e)
-            Router.navigate("/lobby/howto")
+            var slug = this.format_slug(this.state.name, false)
+            var slugURL = `${slug}-${Common.uuid(6)}`
+            this.setState({slug: slugURL})
+            Router.navigate(this.state.slug)
         }
 
-                            // you entered: ${s.name}
-
+        format_slug(text, keep_trailing_space) {
+            var slug = text.trim().toLowerCase().split(' ').join('-');
+            slug = slug.replace(/[^A-Za-z0-9-]/g,'').replace(/\s/g,'').replace(/\-{2,}/g,'-');
+            if(!keep_trailing_space) {
+                slug = slug.replace(/-$/,'');
+            }
+                return slug;
+        }
     }
 });
 
