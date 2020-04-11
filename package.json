@@ -1,0 +1,48 @@
+{
+  "name": "draw",
+  "version": "1.0.0",
+  "description": "drawing game for pioneer hackathon",
+  "main": "server/index.js",
+  "dependencies": {
+    "amdefine": "^1.0.1",
+    "bluebird": "^3.5.3",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.4",
+    "connect-redis": "^4.0.3",
+    "cookie-parser": "^1.4.3",
+    "elasticsearch": "^16.4.0",
+    "express": "^4.16.4",
+    "express-session": "^1.17.0",
+    "global-define": "^2.3.0",
+    "http": "0.0.0",
+    "ioredis": "^4.6.2",
+    "minimatch": "^3.0.4",
+    "node-fetch": "^2.6.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pg": "^7.8.0",
+    "preact": "^10.3.2",
+    "preact-render-to-string": "^5.1.4",
+    "requirejs": "^2.3.6",
+    "rfr": "^1.2.3",
+    "socket.io": "^2.3.0",
+    "socket.io-redis": "^5.2.0",
+    "typeorm": "^0.2.21",
+    "uuid": "^3.3.2",
+    "yargs": "^12.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon run.js --port=8005"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayfer/draw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayfer/draw/issues"
+  },
+  "homepage": "https://github.com/mayfer/draw#readme"
+}
