@@ -12,7 +12,7 @@ define(function(require, exports) {
             let channel = props.channel;
             this.state = {
             };
-            css.load("draw", Draw.css())
+            //css.load("draw", Draw.css())
         }
 
         componentDidMount() {
@@ -30,8 +30,13 @@ define(function(require, exports) {
                 if(this.draw_area) {
                     this.canvas = new drawlib.drawingCanvas(this.draw_area);
                 }
-
             });
+        }
+
+        componentWillUnmount() {
+            if(this.canvas) {
+                this.canvas.removeEvents();
+            }
         }
 
         componentShouldUpdate(){
@@ -44,6 +49,8 @@ define(function(require, exports) {
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
                     <button id='save'>Save</button>
+                    <button id='undoStrokeButton'>Undo</button>
+                    <button id='redoStrokeButton'>Redo</button>
                 </div>
 
             `

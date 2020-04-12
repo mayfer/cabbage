@@ -71,7 +71,7 @@ define(function(require, exports) {
                         <${Header} />
                     </div>
                     <div id="content-container">
-                        ${channel ? html` 
+                        ${channel ? html`
                             <div class="game-column active column ">
                                 <div id="title-wrapper">
                                     Share the URL to bring others into
@@ -179,7 +179,7 @@ define(function(require, exports) {
                     #content-container .column { width: 100%; display: block; }
                     #content-container .column.hidden { display: none; }
                 }
-            ` + Header.css() + Channel.css();
+            ` + Header.css() + Channel.css() + DrawingCanvas.css() + CreateForm.css();
         }
 
     }

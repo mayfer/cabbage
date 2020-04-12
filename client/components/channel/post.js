@@ -186,7 +186,7 @@ define(function(require, exports) {
             let self = this;
             if(this.state.user) return callback();
             
-            let key = '6LcxM8cUAAAAAKyRaWq7Qk6ntPTRM_VpP2q06bh9';
+            let key = '6Lf7zOgUAAAAANljafpjnkghf6x5xvAvqzjYziAY';
             require(['https://www.google.com/recaptcha/api.js?render='+key], (recap) => {
                 grecaptcha.ready(() => {
                     grecaptcha.execute(key, {action: 'verify'})

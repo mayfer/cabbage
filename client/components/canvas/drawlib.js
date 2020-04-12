@@ -87,15 +87,20 @@ define(function(require, exports) {
                 that.snapshot();
             });
 
-            /*
+            $('#undoStrokeButton').click(function(e){
+                that.undo();
+            });
+
+            $('#redoStrokeButton').click(function(e){
+                that.redo();
+            });
+
             Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
                 that.undo();
             });
             Mousetrap.bind(['command+shift+z', 'ctrl+shift+z'], function(e) {
                 that.redo();
             });
-            */
-            
         }
 
         this.removeEvents = function() {
@@ -114,47 +119,53 @@ define(function(require, exports) {
             draw = true;
             prev_position = pos;
         }
+
         this.stopDrawing = function() {
             draw = false;
             this.resetLineHistory();
         }
+        
         this.snapshot = function () {
+            if (history_position <= history.length) {
+                history = history.slice(0, history_position)
+            }
             history[history_position++] = canvas.toDataURL();
         };
 
         this.redo = function() {
-            
             if(history.length > history_position) {
-                ctx.clearRect(0, 0, ctx.width, ctx.height);
-
                 var data = history[history_position++];
                 var img = new Image;
                 img.src = data;
-                ctx.drawImage(img, 0, 0, img.width/ctx.scale_ratio, img.height/ctx.scale_ratio);
-
+                img.onload = function() {
+                    ctx.clearRect(0, 0, ctx.width, ctx.height);
+                    ctx.drawImage(img, 0, 0, img.width/ctx.scale_ratio, img.height/ctx.scale_ratio)
+                };
             }
-            
         }
-        this.undo = function() {
-            
-            if(history.length >= history_position && 0 < history_position) {
-                ctx.clearRect(0, 0, ctx.width, ctx.height);
 
+        this.undo = function() {
+            if(history.length >= history_position && 0 < history_position) {                
                 var snap = history[--history_position-1];
 
                 if(snap) {
                     var data = snap;
                     var img = new Image;
                     img.src = data;
-                    ctx.drawImage(img, 0, 0, img.width/ctx.scale_ratio, img.height/ctx.scale_ratio);
+                    img.onload = function() {
+                        ctx.clearRect(0, 0, ctx.width, ctx.height);
+                        ctx.drawImage(img, 0, 0, img.width/ctx.scale_ratio, img.height/ctx.scale_ratio)
+                    };
+                } else {
+                    ctx.clearRect(0, 0, ctx.width, ctx.height);
                 }
-
-            }
-            
+            }   
         }
+
         this.resetLineHistory = function() {
             prev_position = { x: null, y: null };
         }
+
         this.getCursorPosition = function(e) {
             var x = e.pageX - canvas_jq.offset().left
             var y = e.pageY - canvas_jq.offset().top
