@@ -49,6 +49,8 @@ define(function(require, exports) {
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
                     <button id='save'>Save</button>
+                    <button id='undoStrokeButton'>Undo</button>
+                    <button id='redoStrokeButton'>Redo</button>
                 </div>
 
             `
