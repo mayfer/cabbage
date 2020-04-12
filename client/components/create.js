@@ -41,8 +41,9 @@ define(function(require, exports) {
             e.preventDefault()
             var slug = this.format_slug(this.state.name, false)
             var slugURL = `${slug}-${Common.uuid(6)}`
-            this.setState({slug: slugURL})
-            Router.navigate(this.state.slug)
+            await this.setState({slug: slugURL})
+            var url = `lobby/${this.state.slug}`
+            Router.navigate(url)
         }
 
         format_slug(text, keep_trailing_space) {
