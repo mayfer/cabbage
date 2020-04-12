@@ -159,6 +159,7 @@ define(function(require, exports) {
                     border: 2px solid #000;
                 }
 
+
                 button:hover {
                     opacity: 0.8;
                     border: 2px solid rgba(0,0,0,0.8);
@@ -169,6 +170,8 @@ define(function(require, exports) {
                     left: 1px;
                 }
                 #game-wrapper {
+                    width: 600px;
+                    margin: 0 auto;
                     display: flex;
                     justify-content: center;
                     align-items: center;
