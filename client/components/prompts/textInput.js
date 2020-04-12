@@ -34,7 +34,7 @@ define(function(require, exports) {
                 	<textarea placeholder="Enter a prompt!" />
                 	<div class="button-grid">
                         <div></div>
-	                    <button id='submit' onClick=${this.submit}>Submit</button>
+	                    <button id='prompt-submit' onClick=${this.submit}>Submit</button>
                     </div>
                 </div>
             `

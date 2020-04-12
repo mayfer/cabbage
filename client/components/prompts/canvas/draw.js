@@ -57,7 +57,7 @@ define(function(require, exports) {
                             <button id='undoStrokeButton' class='control-button'>Undo</button>
                             <button id='redoStrokeButton' class='control-button'>Redo</button>
                         </div>
-                        <button id='submit' onClick=${this.submit}>Submit</button>
+                        <button id='prompt-submit' onClick=${this.submit}>Submit</button>
                     </div>
                 </div>
 

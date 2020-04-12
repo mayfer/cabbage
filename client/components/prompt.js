@@ -57,9 +57,9 @@ define(function(require, exports) {
             	#text-prompt-wrapper h2 { 
             		margin: 0 0 10px 0;
             	}
-            	#submit { text-decoration: none; display: inline-block; padding: 10px 30px; background: #0a0; color: #fff; font-size: 30px; }
-                #submit .newgame:hover { background: #000; }
-                #submit .newgame:active { background: #00a; }
+            	#prompt-submit { text-decoration: none; display: inline-block; padding: 10px 30px; background: #0a0; color: #fff; font-size: 30px; }
+                #prompt-submit .newgame:hover { background: #000; }
+                #prompt-submit .newgame:active { background: #00a; }
                 .button-grid { width: 100%; display: grid; grid-template-columns: 1fr 160px; padding-top: 5px; }
             ` + DrawingCanvas.css() + TextInput.css();
         }
