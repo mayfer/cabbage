@@ -127,11 +127,12 @@ define(function(require, exports) {
         render(props, s) {
             return html`
                 <div class="channel-container ${s.narrow ? 'narrow' : ''}" onClick=${e => this.clickFocusHandler(e)}>
-                    <div class='channel-details-container hidden channel-tab ${s.channel_tab == 'details' ? 'active' : 'inactive'}'>
+                    <div class='channel-details-container channel-tab ${s.channel_tab == 'details' ? 'active' : 'inactive'}'>
                         <${ChannelDetails} channel=${props.channel} />
                     </div>
                     <div class='channel-stream-container channel-tab  ${s.channel_tab == 'stream' ? 'active' : 'inactive'}'>
                         <${ChannelStream}
+                            narrow=${s.narrow}
                             channel=${props.channel}
                             user=${props.user}
                             color=${props.color}
@@ -149,7 +150,7 @@ define(function(require, exports) {
                             ` : html``
                         }
                         ${s.narrow ? html`
-                                <span class='toggle-channel-tab' style='display: inline-block; padding: 0 10px;' onClick=${
+                                <span class='toggle-channel-tab' onClick=${
                                     e => {
                                         if(this.state.channel_tab == 'stream') {
                                             this.setState({channel_tab: 'details'});
@@ -198,8 +199,12 @@ define(function(require, exports) {
                     width: 100%;
                 }
 
-                .channel-container .toggle-channel-tab { cursor: pointer; }
+                .channel-container .toggle-channel-tab { display: inline-block; padding: 0 10px; display: none; cursor: pointer; }
                 .channel-container .toggle-channel-tab:hover { color: #fff; }
+
+                .channel-container.narrow .channel-header .channel {
+                    display: none;
+                }
 
             ` + css.add_parents(".channel-container", `
                 

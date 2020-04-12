@@ -141,7 +141,6 @@ define(function(require, exports) {
 
 
                 #content-container .inner {
-                    text-align: center;
                     width: 100%;
                 }
 
@@ -187,8 +186,8 @@ define(function(require, exports) {
                     #content-container .column.hidden {
                         opacity: 1;
                     }
-                    #content-container .column.channel-column { width: 20%; }
-                    #content-container .column.game-column { width: 80%; }
+                    #content-container .column.channel-column { width: 25%; min-width: 300px; }
+                    #content-container .column.game-column { width: 75%; }
 
 
 
