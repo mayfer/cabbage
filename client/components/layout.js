@@ -92,7 +92,9 @@ define(function(require, exports) {
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
                             </div>
                         ` : html`
-                            <${CreateForm} setLobbyDetails=${(l) => this.setLobbyDetails(l)} />
+                            <div class='inner'>
+                                <${CreateForm} setLobbyDetails=${(l) => this.setLobbyDetails(l)} />
+                            </div>
                         `}
                     </div>
                     <div id="mobile-nav">
@@ -117,7 +119,7 @@ define(function(require, exports) {
                     margin-top: constant(safe-area-inset-top);
                     height: calc(100% - constant(safe-area-inset-top)); 
                     height: calc(100% - env(safe-area-inset-top));
-
+                    overflow: auto;
                 }
 
                 .game-column.active.column {
@@ -135,6 +137,12 @@ define(function(require, exports) {
                     border-radius: 5px;
                     overflow: hidden;
                     z-index: 1;
+                }
+
+
+                #content-container .inner {
+                    text-align: center;
+                    width: 100%;
                 }
 
                 #title-wrapper {
