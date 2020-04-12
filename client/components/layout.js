@@ -169,7 +169,18 @@ define(function(require, exports) {
                 }
 
                 button {
+                    outline: none;
                     border: 2px solid #000;
+                }
+
+                button:hover {
+                    opacity: 0.8;
+                    border: 2px solid rgba(0,0,0,0.8);
+                }
+                button:active {
+                    position: relative;
+                    top: 1px;
+                    left: 1px;
                 }
 
                 @media only screen and (min-width: 600px) {
