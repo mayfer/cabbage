@@ -87,15 +87,20 @@ define(function(require, exports) {
                 that.snapshot();
             });
 
-            /*
-            Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
+            $('#undoStrokeButton').click(function(e){
                 that.undo();
             });
-            Mousetrap.bind(['command+shift+z', 'ctrl+shift+z'], function(e) {
+
+            $('#undoStrokeButton').click(function(e){
                 that.redo();
             });
-            */
-            
+
+            // Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
+            //     that.undo();
+            // });
+            // Mousetrap.bind(['command+shift+z', 'ctrl+shift+z'], function(e) {
+            //     that.redo();
+            // });
         }
 
         this.removeEvents = function() {
@@ -131,12 +136,10 @@ define(function(require, exports) {
                 var img = new Image;
                 img.src = data;
                 ctx.drawImage(img, 0, 0, img.width/ctx.scale_ratio, img.height/ctx.scale_ratio);
-
             }
             
         }
         this.undo = function() {
-            
             if(history.length >= history_position && 0 < history_position) {
                 ctx.clearRect(0, 0, ctx.width, ctx.height);
 
