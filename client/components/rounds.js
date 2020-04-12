@@ -29,7 +29,10 @@ define(function(require, exports) {
                             ${dummyData.map(d => html`
                                 <div class="stack" >
                                     ${d.name}
-                                    <img class="stack-image" src="/client/assets/stack1.svg" />
+                                    <div class="paper-sheet"> </div>
+                                    <div class="stack-count" > 
+                                        ${d.count}
+                                    </div>
                                 </div>
                             `)}
                         </div>
@@ -62,6 +65,11 @@ define(function(require, exports) {
                 .stack-image { width: 100px}
                 .round-section-title { margin-top: 50px; margin-bottom: 15px;}
                 .footer-image { }
+                .stack { position: relative; text-align:center; height: 67px; width: 100px;}
+                .stack-image { width: 100%; position: absolute; }
+                .stack-count {postion: absolute}
+                .paper-sheet {background-color: grey; width: 100%}
+
             `
         }
 

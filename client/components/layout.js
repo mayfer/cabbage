@@ -132,9 +132,7 @@ define(function(require, exports) {
                                             Copy sharable link
                                         </button>
                                     </div>
-                                    <${Prompt} 
-                                        promptMode='draw'
-                                    />
+                                    <${Rounds} />
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -157,6 +155,10 @@ define(function(require, exports) {
 
             // #f9d49c
             // #e2806a
+
+                                       //         <${Prompt} 
+                                     //   promptMode='draw'
+                                   // />
             return `
                 .grecaptcha-badge { display: none; }
 
