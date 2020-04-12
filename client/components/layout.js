@@ -136,6 +136,7 @@ define(function(require, exports) {
                                         promptMode='imageResponse'
                                     />
                                 </div>
+                                <${Stacks} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />

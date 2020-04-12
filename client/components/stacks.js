@@ -27,7 +27,10 @@ define(function(require, exports) {
                         </div>
                         <div class="rounds">
                             ${dummyData.map(d => html`
-                                <div>${d.name}</div>
+                                <div class="stack" >
+                                    ${d.name}
+                                    <img class="stack-image" src="/client/assets/stack1.svg" />
+                                </div>
                             `)}
                         </div>
                     </div>
@@ -36,6 +39,12 @@ define(function(require, exports) {
                             Complete Rounds
                         </div>
                         <div class="rounds">
+                            ${dummyData.map(d => html`
+                                <div class="stack" >
+                                    ${d.name}
+                                    <img class="stack-image" src="/client/assets/stack1.svg" />
+                                </div>
+                            `)}
                         </div>
                     </div>
                     <div class="footer-image-wrapper">
@@ -50,11 +59,9 @@ define(function(require, exports) {
             return `
                 .rounds-wrapper { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; display: block; }
                 .rounds-content { width: 600px; height: 400px; }
+                .stack-image { width: 100px}
+                .round-section-title { margin-top: 50px; margin-bottom: 15px;}
             `
-        }
-
-        getAvailableRounds() {
-            var dummyData = [{name: murat, count: 3}, {name: adele, count: 2}, {name: theo, count: 7 }];
         }
 
     }
