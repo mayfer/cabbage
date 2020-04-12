@@ -33,8 +33,14 @@ define(function(require, exports) {
 					<${TextInput} />
 					` : ''}
 					${promptMode === 'textResponse' ? html`
-					<img src=''/>
+					<img src='/client/assets/cabbage-af.png' id="prompt-image" />
 					<${TextInput} />
+					` : ''}
+					${promptMode === 'imageResponse' ? html`
+					<div id='text-prompt-wrapper'>
+						<h2>This is an example prompt</h2>
+					</div>
+					<${DrawingCanvas} />
 					` : ''}
 				</div>
             `
@@ -44,6 +50,12 @@ define(function(require, exports) {
             return `
             	#prompt-container {
             		padding-top: 20px;
+            	}
+            	#prompt-image {
+            		width: 100%;
+            	}
+            	#text-prompt-wrapper h2 { 
+            		margin: 0 0 10px 0;
             	}
             ` + DrawingCanvas.css() + TextInput.css();
         }

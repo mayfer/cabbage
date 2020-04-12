@@ -23,7 +23,7 @@ define(function(require, exports) {
 
         }
 
-        bok(){
+        submit(){
         	alert('bok bok bok!')
         }
 
@@ -33,7 +33,7 @@ define(function(require, exports) {
                 <div class='main-textarea'>
                 	<textarea placeholder="Enter a prompt!" />
                 	<div>
-	                    <button id='save' class='control-button' onClick=${this.bok}>Save</button>
+	                    <button id='submit' onClick=${this.submit}>Submit</button>
                     </div>
                 </div>
             `

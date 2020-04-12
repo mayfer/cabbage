@@ -43,12 +43,16 @@ define(function(require, exports) {
             return false;
         }
 
+        submit(){
+            alert('submit!')
+        }
+
         render(props, s) {
             const { channel } = props;
             return html`
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
-                    <button id='save' class='control-button'>Save</button>
+                    <button id='save' class='control-button' onClick=${this.submit}>Submit</button>
                     <button id='undoStrokeButton' class='control-button'>Undo</button>
                     <button id='redoStrokeButton' class='control-button'>Redo</button>
                 </div>
