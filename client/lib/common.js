@@ -438,6 +438,16 @@ define(function(require, exports) {
             
             return obj;
         },
+
+        copy_link: function(e) {
+            e.preventDefault()
+            var dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = window.location.href;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+        }
     }
     return common;
 });

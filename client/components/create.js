@@ -41,6 +41,7 @@ define(function(require, exports) {
             var slug = this.format_slug(this.state.name, false)
             var slugURL = `${slug}-${Common.uuid(6)}`
             await this.setState({slug: slugURL})
+            this.props.setLobbyDetails({lobbyName: this.state.name, lobbySlug: this.state.slug})
             var url = `lobby/${this.state.slug}`
             Router.navigate(url)
         }

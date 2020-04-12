@@ -13,7 +13,7 @@ define(function(require, exports) {
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
-    const URLDisplayTile = require("components/urlDisplayTile");
+    const Common = require("lib/common");
 
     class Layout extends Component {
         constructor(props) {
@@ -54,11 +54,17 @@ define(function(require, exports) {
             Events.on("logged_in", e => this.log_in(e));
         }
 
+        setLobbyDetails({lobbyName, lobbySlug}) {
+            this.setState({lobbyName: lobbyName, slug: lobbySlug});
+        }
+
         log_in ({detail: {user}})  {
             this.setState({user});
         }
+
         render(props, s) {
             const { channel } = s;
+            const titleURLString = `Share the URL to bring others into ${s.lobbyName}`
             return html`
                 <div id="layout">
                     <div id="header-container">
@@ -67,17 +73,23 @@ define(function(require, exports) {
                     <div id="content-container">
                         ${channel ? html` 
                             <div class="game-column active column ">
-                                game area
+                                <div id="title-wrapper">
+                                    <span>
+                                        ${titleURLString}
+                                    </span>
+                                    <span>
+                                        <button onclick=${e => Common.copy_link(e)}>
+                                            Copy sharable link
+                                        </button>
+                                    </span>
+                                </div>
                                 <${DrawingCanvas} />
-                            </div>
-                            <div class="active">
-                                <${URLDisplayTile} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
                             </div>
                         ` : html`
-                            <${CreateForm} />
+                            <${CreateForm} setLobbyDetails=${(l) => this.setLobbyDetails(l)} />
                         `}
                     </div>
                     <div id="mobile-nav">
@@ -115,6 +127,14 @@ define(function(require, exports) {
                     border-radius: 5px;
                     overflow: hidden;
                     z-index: 1;
+                }
+
+                #title-wrapper {
+                    color: grey;
+                }
+
+                button {
+                    border: 3px solid #000;
                 }
 
                 @media only screen and (min-width: 600px) {
