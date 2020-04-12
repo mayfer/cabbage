@@ -21,7 +21,7 @@ define(function(require, exports) {
         render(props, s) {
             return html`
                 <div class="channel-stream">
-                    <div class="chat hardware-acceleration scroll" ref=${r => this.scrollRef = r}>
+                    <div class="chat hardware-acceleration scroll ${props.narrow ? 'narrow' : ''}" ref=${r => this.scrollRef = r}>
                         <div class='padding'>
                             <div class='inner'>
                                 ${props.loading ? html`
@@ -37,7 +37,7 @@ define(function(require, exports) {
                         </div>
                     </div>
                     <div class='post-container'>
-                        <${Post} ref=${r => this.post=r} channel=${props.channel} user=${props.user} handle_new_spiel=${props.handle_new_spiel}  color=${props.color} />
+                        <${Post} ref=${r => this.post=r} narrow=${props.narrow} channel=${props.channel} user=${props.user} handle_new_spiel=${props.handle_new_spiel}  color=${props.color} />
                     </div>
                 </div>
                 
@@ -149,6 +149,7 @@ define(function(require, exports) {
 
 
                 .row { position: relative; padding-left: 45px; padding-right: 45px; -webkit-transform: translate3d(0,0,0); }
+                .narrow .row { padding-left: 25px; padding-right: 25px; }
 
 
                 .message.truncated .ellipsis:hover { color: #ce8600; }
@@ -170,7 +171,7 @@ define(function(require, exports) {
 
                 .vote-listener { cursor: pointer; }
 
-                .row .vote-count { font-size: 15px; font-family: ${fonts.mono}; vertical-align:sub; }
+                .row .vote-count { display: none; font-size: 15px; font-family: ${fonts.mono}; vertical-align:sub; }
                 .row:hover .vote { opacity: 0.2; }
                 .row .vote:hover { opacity: 1; color: #333; }
                 .emphasis.row .vote { opacity: 1; }

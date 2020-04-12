@@ -31,11 +31,11 @@ define(function(require, exports) {
             let attempted_text = "";
             let text = s.text;
 
-            let name = s.name;
+            let name = s.name || '';
             
             return html`
                 <div class='post-spiel'>
-                    <div class='inner'>
+                    <div class='inner ${props.narrow ? 'narrow' : ''}'>
                         <form action='/post' id="submit-spiel" onSubmit=${e => this.submit_spiel(e)}>
                             <span class='color my-color' style='background-color: ${ color };'></span>
                             <input type='text' name='name' value='${ name }' placeholder='${ !name ? "Choose a name" : "Name (optional)" }' onInput=${e =>  this.setState({name: e.target.value}) } />
@@ -144,11 +144,14 @@ define(function(require, exports) {
                 }
                 .post-spiel input:disabled, .post-spiel textarea:disabled { opacity: 0.8; }
                 .post-spiel textarea.expanding { line-height: 17px; }
-                .post-spiel textarea { width: calc(80% - 65px); max-height: 50vh; margin-left: 5px; }
+                .post-spiel textarea { width: calc(80% - 65px); max-height: 50vh; margin-top: 2px; }
                 .post-spiel input[name='name'] { width: 20%; }
                 .post-spiel .submit { display: none; }
                 .post-spiel .signup-now { color: #333; text-decoration: underline; cursor: pointer; }
                 .post-spiel .force-username { cursor: pointer; }
+
+                .post-spiel .narrow input[name='name'] { width: calc(100% - 65px); display: block; }
+                .post-spiel .narrow textarea { width: calc(100% - 65px); display: block; }
 
 
                 .post-spiel form { padding-left: 30px; }
