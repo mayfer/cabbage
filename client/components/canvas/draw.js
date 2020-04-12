@@ -58,7 +58,7 @@ define(function(require, exports) {
 
         static css() {
             return `
-                .drawing-container { width: 600px; padding: 50px 0; text-align: center; }
+                .drawing-container { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; display: block; }
                 .draw-area { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
                 .draw-area:hover { cursor: url("/client/assets/pencil.svg") 0 29, auto; }
                 .control-button { margin: 10px; font-size: 15px; line-height: 20px; min-width: 55px; }

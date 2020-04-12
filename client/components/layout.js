@@ -95,7 +95,7 @@ define(function(require, exports) {
 
                                     <p>It's a game we play among our friends with pen and paper IRL.</p>
                                     <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (text or drawing)</p>
-                                    <div style="height: 150px; width: 100%; border: 3px solid #000;"></div>
+                                    <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
                                     <ul>
                                         <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
                                         <li>If you are <strong>prompted with a drawing</strong>, you <strong>caption it with text</strong>.</li>
@@ -105,7 +105,7 @@ define(function(require, exports) {
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                     <hr />
-                                    <p>Cabbage<span class='af'>af</span> was made for the <a href=''>Pioneer hackathon</a> on April 11-13, 2020</p>
+                                    <p>Cabbage<span class='af'>af</span> was made for the <a href='https://pioneer.app/hackathon'>Pioneer hackathon</a> on April 11-12, 2020</p>
                                     <p>by Murat, Adele, Madeleine and Theo.<br />contact@probablymurat.com</p>
 
                                     <img class='authors-img' src='/client/assets/authors.svg' />
@@ -122,19 +122,18 @@ define(function(require, exports) {
                         ${page == "channel" && channel ? html`
                             <div class="game-column active column ">
                                 <div id="title-wrapper">
-                                    Share the URL to bring others into
-                                    <span id="title-text">
-                                        ${s.lobbyName}
-                                    </span>
-                                    <span>
-                                        <button onclick=${e => Common.copy_link(e)}>
-                                            Copy sharable link
-                                        </button>
-                                    </span>
-                                </div>
-                                <div id='game-wrapper'>
-                                    <${DrawingCanvas} />  
-                                    <!-- <${TextInput} /> -->
+                                    <div id=title-text>
+                                    <div>
+                                        Share the URL to bring others into
+                                        <span id="lobbyName-text">
+                                            ${s.lobbyName}
+                                        </span>
+                                    </div>
+                                    <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
+                                        Copy sharable link
+                                    </button>
+                                    </div>
+                                    <${DrawingCanvas} />
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -170,9 +169,14 @@ define(function(require, exports) {
                     overflow: auto;
                 }
 
+                .game-column.active.column {
+                    text-align: center;                    
+                }
+
                 #content-container {
                     position: relative;
                 }
+
                 #content-container .column {
                     height: 100%;
                     position: relative;
@@ -184,6 +188,7 @@ define(function(require, exports) {
 
 
                 #content-container .inner {
+                    text-align: center;
                     width: 100%;
                 }
 
@@ -199,15 +204,25 @@ define(function(require, exports) {
 
                 #title-wrapper {
                     color: grey;
-                    text-align: center;
                     margin-top: 50px;
+                    display: inline-block;
                 }
 
                 #title-text {
+                    padding-left: 50px;
+                    text-align: left;
+                    font-size: large;
+                }
+
+                #lobbyName-text {
                     margin-right: 10px;
                     margin-left: 5px;
                     font-weight: bolder;
                     color: black;
+                }
+
+                #copy-link-button {
+                    margin-top: 10px;
                 }
 
                 button {
@@ -237,7 +252,7 @@ define(function(require, exports) {
                 @media only screen and (min-width: 600px) {
                     #content-container {
                         display: flex;
-                        height: calc(100% - 60px - 5px - 10px);
+                        height: calc(100% - 40px - 5px - 10px);
                     }
                     #content-container .column {
                         flex-grow: 1;
@@ -249,8 +264,8 @@ define(function(require, exports) {
                     #content-container .column.hidden {
                         opacity: 1;
                     }
-                    #content-container .column.channel-column { width: 25%; min-width: 300px; }
-                    #content-container .column.game-column { width: 75%; }
+                    #content-container .column.channel-column { width: 20%; }
+                    #content-container .column.game-column { width: 80%; }
 
 
 
