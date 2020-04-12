@@ -133,8 +133,8 @@ define(function(require, exports) {
                                     </span>
                                 </div>
                                 <div id='game-wrapper'>
-                                    <!-- <${DrawingCanvas} /> -->
-                                    <${TextInput} />
+                                    <${DrawingCanvas} />  
+                                    <!-- <${TextInput} /> -->
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
