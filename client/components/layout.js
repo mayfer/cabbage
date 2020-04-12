@@ -9,6 +9,7 @@ define(function(require, exports) {
     const Router = require("components/router");
     const Header = require("components/header");
     const DrawingCanvas = require("components/canvas/draw");
+    const TextInput = require("components/textInput");
     const Channel = require("components/channel/channel");
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
@@ -84,7 +85,10 @@ define(function(require, exports) {
                                         </button>
                                     </span>
                                 </div>
-                                <${DrawingCanvas} />
+                                <div id='game-wrapper'>
+                                    <!-- <${DrawingCanvas} /> -->
+                                    <${TextInput} />
+                                </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
@@ -164,6 +168,12 @@ define(function(require, exports) {
                     top: 1px;
                     left: 1px;
                 }
+                #game-wrapper {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-flow: column;
+                }
 
                 @media only screen and (min-width: 600px) {
                     #content-container {
@@ -197,7 +207,7 @@ define(function(require, exports) {
                     #content-container .column { width: 100%; display: block; }
                     #content-container .column.hidden { display: none; }
                 }
-            ` + Header.css() + Channel.css() + DrawingCanvas.css() + CreateForm.css();
+            ` + Header.css() + Channel.css() + DrawingCanvas.css() + TextInput.css() + CreateForm.css();
         }
 
     }
