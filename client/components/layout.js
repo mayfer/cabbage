@@ -55,6 +55,13 @@ define(function(require, exports) {
                         });
                     }
                 },
+                '/lobby/:channel/newturn/:round_id': {
+                    as: 'newturn',
+                    uses: ({channel, round_id}) => {
+                        this.setState({page: 'round', channel}, () => {
+                        });
+                    }
+                },
             });
 
         }
@@ -90,11 +97,11 @@ define(function(require, exports) {
                                     <a href='/' class="go-to" data-channel="">
                                         <img src="/client/assets/cabbage-af.png" class='home-logo' />
                                     </a>
-                                    <p>Cabbage<span class='af'>af</span> is a drawing game for groups.</p>
+                                    <p>Cabbage<span class='af'>AF</span> is a drawing game for groups.</p>
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                     <p>It's a game we play among our friends with pen and paper IRL.</p>
-                                    <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
+                                    <p>It's sort of like paper telephone; every round begins with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
                                     <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
                                     <ul>
                                         <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
@@ -132,7 +139,10 @@ define(function(require, exports) {
                                             Copy sharable link
                                         </button>
                                     </div>
-                                    <${Rounds} />
+                                    <${Prompt} 
+                                        mode='imageAsResponse'
+                                        prompt='This is an example prompt'
+                                    />
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -169,7 +179,7 @@ define(function(require, exports) {
                     margin-top: constant(safe-area-inset-top);
                     height: calc(100% - constant(safe-area-inset-top)); 
                     height: calc(100% - env(safe-area-inset-top));
-                    overflow: auto;
+                    overflow: scroll;
                 }
 
                 .game-column.active.column {
@@ -185,18 +195,22 @@ define(function(require, exports) {
                     position: relative;
                     box-sizing: border-box;
                     border-radius: 5px;
+<<<<<<< HEAD
                     overflow: auto;
+=======
+                    overflow-y: auto;
+                    overflow-x: hidden;
+>>>>>>> master
                     z-index: 1;
                 }
 
 
                 #content-container .inner {
-                    text-align: center;
                     width: 100%;
                 }
 
                 .landing { text-align: center; font-size: 20px; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 24px; }
-                .landing .af { color: rgba(60, 0, 0, 0.9); font-size: 15px; transform: rotate(-25deg); display: inline-block; position: relative; top: 5px;}
+                .landing .af { color: rgba(126, 86, 86, 0.9); font-weight: bold; font-size: 13px; transform: rotate(-20deg); display: inline-block; position: relative; top: 5px;}
                 .landing .home-logo { height: 200px; }
                 .landing ul {text-align: left; }
                 .landing li {text-align: left; margin: 10px; }
