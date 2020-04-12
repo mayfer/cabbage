@@ -74,17 +74,19 @@ define(function(require, exports) {
                         ${channel ? html`
                             <div class="game-column active column ">
                                 <div id="title-wrapper">
-                                    Share the URL to bring others into
-                                    <span id="title-text">
-                                        ${s.lobbyName}
-                                    </span>
-                                    <span>
-                                        <button onclick=${e => Common.copy_link(e)}>
-                                            Copy sharable link
-                                        </button>
-                                    </span>
+                                    <div id=title-text>
+                                    <div>
+                                        Share the URL to bring others into
+                                        <span id="lobbyName-text">
+                                            ${s.lobbyName}
+                                        </span>
+                                    </div>
+                                    <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
+                                        Copy sharable link
+                                    </button>
+                                    </div>
+                                    <${DrawingCanvas} />
                                 </div>
-                                <${DrawingCanvas} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
@@ -118,9 +120,14 @@ define(function(require, exports) {
 
                 }
 
+                .game-column.active.column {
+                    text-align: center;                    
+                }
+
                 #content-container {
                     position: relative;
                 }
+
                 #content-container .column {
                     height: 100%;
                     position: relative;
@@ -132,15 +139,25 @@ define(function(require, exports) {
 
                 #title-wrapper {
                     color: grey;
-                    text-align: center;
                     margin-top: 50px;
+                    display: inline-block;
                 }
 
                 #title-text {
+                    padding-left: 50px;
+                    text-align: left;
+                    font-size: large;
+                }
+
+                #lobbyName-text {
                     margin-right: 10px;
                     margin-left: 5px;
                     font-weight: bolder;
                     color: black;
+                }
+
+                #copy-link-button {
+                    margin-top: 10px;
                 }
 
                 button {
