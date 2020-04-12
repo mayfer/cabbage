@@ -26,16 +26,20 @@ define(function(require, exports) {
         render(props, s) {
             const { channel } = props;
             return html`
-                <div class='main-text-input'>
-                <h1>hello</h1>
+                <div class='main-textarea'>
+                	<textarea placeholder="Enter a prompt!" />
+                	<div>
                     <button id='save' class='control-button'>Save</button>
+                    </div>
                 </div>
             `
         }
 
         static css() {
             return `
-                
+            	.main-textarea { padding-top: 50px; display: flex; align-items: center; flex-flow: column;}
+            	.main-textarea textarea { width: 600px; height: 300px; resize: none; border: 2px solid black; font-size: 30px; padding: 20px;}
+            	.main-textarea textarea:focus { outline: none; }
             `;
         }
 
