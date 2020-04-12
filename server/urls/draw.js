@@ -105,9 +105,10 @@ module.exports = function({app, io, websockets}) {
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
 
-    app.post("/save", function(req, res){
-        redis.set("polygons", JSON.stringify(req.body.polygons));
-        res.json({polygons: req.body.polygons});
+    app.post("/api/channel", async function(req, res){
+        const {slug} = req.query;
+        const channel = await cabbage.get_channel({slug});
+        res.json({channel});
     });
     app.post("/get", async function(req, res){
         let polygons = await redis.get("polygons");

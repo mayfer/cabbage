@@ -16,9 +16,13 @@ define(function(require, exports) {
             super()
             let { channel, user, color, initial_spiels } = props;
             this.state = {
-                spiels: initial_spiels,
+                spiels: initial_spiels.length > 0 ? initial_spiels : [
+                    {name: "bot", color: "#ffa", spiel: "Hello, this is the shared chat area for anyone who joins your game.", timestamp: Date.now(), channel, },
+                    {name: "bot", color: "#ffa", spiel: "Pick a name and feel free to bother everyone.", timestamp: Date.now(), channel, },
+                ],
                 loading: false,
                 online_count: 0,
+                narrow: true,
             };
 
             this.state.channel_tab = 'stream';
