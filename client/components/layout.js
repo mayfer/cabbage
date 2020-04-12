@@ -216,8 +216,9 @@ define(function(require, exports) {
                     border: 2px solid rgba(0,0,0,0.8);
                 }
                 button:active {
-                    color: blue;
-                    border: 2px solid blue;
+                    position: relative;
+                    top: 1px;
+                    left: 1px;
                 }
 
                 @media only screen and (min-width: 600px) {
