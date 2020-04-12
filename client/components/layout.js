@@ -94,7 +94,7 @@ define(function(require, exports) {
 
                                     <p>It's a game we play among our friends with pen and paper IRL.</p>
                                     <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (text or drawing)</p>
-                                    <div style="height: 150px; width: 100%; border: 3px solid #000;"></div>
+                                    <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
                                     <ul>
                                         <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
                                         <li>If you are <strong>prompted with a drawing</strong>, you <strong>caption it with text</strong>.</li>
@@ -104,7 +104,7 @@ define(function(require, exports) {
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                     <hr />
-                                    <p>Cabbage<span class='af'>af</span> was made for the <a href=''>Pioneer hackathon</a> on April 11-13, 2020</p>
+                                    <p>Cabbage<span class='af'>af</span> was made for the <a href='https://pioneer.app/hackathon'>Pioneer hackathon</a> on April 11-12, 2020</p>
                                     <p>by Murat, Adele, Madeleine and Theo.<br />contact@probablymurat.com</p>
 
                                     <img class='authors-img' src='/client/assets/authors.svg' />
