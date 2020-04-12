@@ -27,20 +27,20 @@ define(function(require, exports) {
             return html`
             	<div id="prompt-container">
 					${promptMode === 'draw' ? html`
-					<${DrawingCanvas} />
+						<${DrawingCanvas} />
 					` : ''}
 					${promptMode === 'text' ? html`
-					<${TextInput} />
+						<${TextInput} />
 					` : ''}
 					${promptMode === 'textResponse' ? html`
-					<img src='/client/assets/cabbage-af.png' id="prompt-image" />
-					<${TextInput} />
+						<img src='/client/assets/cabbage-af.png' id="prompt-image" />
+						<${TextInput} />
 					` : ''}
 					${promptMode === 'imageResponse' ? html`
-					<div id='text-prompt-wrapper'>
-						<h2>This is an example prompt</h2>
-					</div>
-					<${DrawingCanvas} />
+						<div id='text-prompt-wrapper'>
+							<h2>This is an example prompt</h2>
+						</div>
+						<${DrawingCanvas} />
 					` : ''}
 				</div>
             `
@@ -57,6 +57,10 @@ define(function(require, exports) {
             	#text-prompt-wrapper h2 { 
             		margin: 0 0 10px 0;
             	}
+            	#prompt-submit { text-decoration: none; display: inline-block; padding: 10px 30px; background: #0a0; color: #fff; font-size: 30px; }
+                #prompt-submit .newgame:hover { background: #000; }
+                #prompt-submit .newgame:active { background: #00a; }
+                .button-grid { width: 100%; display: grid; grid-template-columns: 1fr 160px; padding-top: 5px; }
             ` + DrawingCanvas.css() + TextInput.css();
         }
 

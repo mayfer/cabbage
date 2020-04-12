@@ -132,8 +132,8 @@ define(function(require, exports) {
                                             Copy sharable link
                                         </button>
                                     </div>
-                                    <${Prompt}
-                                        promptMode='imageResponse'
+                                    <${Prompt} 
+                                        promptMode='draw'
                                     />
                                 </div>
                             </div>
