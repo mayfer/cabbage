@@ -32,14 +32,14 @@ define(function(require, exports) {
 
         static css() {
             return css.add_parents('.create.form-container', `
-                { font-size: 20px; margin: 30px; display: inline-block; background: #9ad6af; width: 600px; border: 20px solid #fff; border-radius: 5px; box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2); }
+                { font-size: 20px; margin: 30px; display: inline-block; background: #9ad6af; width: 600px; border: 20px solid #fff; border-radius: 5px; box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2); margin: 30px auto; display: block;  }
                 .text-input { font-size: 18px; padding: 10px; line-height: 20px; width: 300px; border: 3px solid #000; } 
                 .text-input:focus { border-color: #03f; }
                 button { font-size: 18px; display: inline-block; cursor: pointer; background: #000; color: #fff; }
                 button:active { background: #3a0; }
                 .form-title { margin: 20px;  }
-                .img.carrot { margin: 30px 0; width: 500px; display: inline-block; }
-                .create-form { text-align: center; }
+                .img.carrot { margin: 30px 0; width: 400px; display: inline-block; }
+                .create-form { text-align: center;  }
             `);
         }
 
