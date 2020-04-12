@@ -161,7 +161,7 @@ define(function(require, exports) {
                 }
                 button:active {
                     color: blue;
-                    outline: solid;
+                    border: 2px solid blue;
                 }
 
                 @media only screen and (min-width: 600px) {
