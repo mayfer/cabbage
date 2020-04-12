@@ -89,6 +89,7 @@ define(function(require, exports) {
                !e.target.matches('textarea') &&
                !e.target.matches('label') &&
                !e.target.matches('form') &&
+               !e.target.matches('canvas') &&
                !e.target.matches('[contenteditable]') != "true") {
                    setTimeout(() => {
                         this.stream.post.textarea.focus();

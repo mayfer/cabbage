@@ -23,6 +23,7 @@ define(function(require, exports) {
                     <input class="text-input" id="game-title-input" type="text"  
                     onInput=${e => this.setState({name: e.target.value})} />
                 </form>
+                <img class="img carrot" src="/client/assets/carrot.svg" />
             </div>
             `;
         }
@@ -33,6 +34,7 @@ define(function(require, exports) {
                 .form-container { background: #76ba8d; height: 400px; width: 600px; border: 3px solid #000; margin-right: auto; margin-left: auto; display: flex; justify-content: center;}
                 .text-input { height: 25px; width: 200px; border: 3px solid #000; text-align: center;} 
                 .form-title { margin: 30px;}
+                .img.carrot { width: 200px; display: block; }
                 form { text-align: center;}
             `
         }

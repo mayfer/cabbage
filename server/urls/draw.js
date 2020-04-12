@@ -17,6 +17,7 @@ const { render: render_preact } = require('preact-render-to-string');
 const Root = rfr('/client/components/root.js');
 const Layout = rfr('/client/components/layout.js');
 const { html } = rfr('/client/core/preact-htm-umd.js');
+const credentials = rfr('/credentials.json');
 
 
 passport.use(new LocalStrategy({
@@ -26,7 +27,7 @@ passport.use(new LocalStrategy({
         if(username == '__anonymous_login') {
             const token = password;
             const ip_address = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            const secret = "6LcxM8cUAAAAAMZl8BkjOq4nI-vYnzNWatoiZrQF";
+            const secret = credentials.recaptcha.secret;
             const url = 'https://www.google.com/recaptcha/api/siteverify?secret='+ secret +'&response=' + token + '&remoteip=' + ip_address;
             const responseRaw = await fetch(url, {
                 method: 'GET',

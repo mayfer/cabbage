@@ -65,9 +65,8 @@ define(function(require, exports) {
                         <${Header} />
                     </div>
                     <div id="content-container">
-                        ${channel ? html` 
+                        ${channel ? html`
                             <div class="game-column active column ">
-                                game area
                                 <${DrawingCanvas} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -146,7 +145,7 @@ define(function(require, exports) {
                     #content-container .column { width: 100%; display: block; }
                     #content-container .column.hidden { display: none; }
                 }
-            ` + Header.css() + Channel.css();
+            ` + Header.css() + Channel.css() + DrawingCanvas.css();
         }
 
     }
