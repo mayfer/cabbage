@@ -52,9 +52,13 @@ define(function(require, exports) {
             return html`
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
-                    <button id='save' class='control-button' onClick=${this.submit}>Submit</button>
-                    <button id='undoStrokeButton' class='control-button'>Undo</button>
-                    <button id='redoStrokeButton' class='control-button'>Redo</button>
+                    <div class="button-grid">
+                        <div id='undo-redo-container'>
+                            <button id='undoStrokeButton' class='control-button'>Undo</button>
+                            <button id='redoStrokeButton' class='control-button'>Redo</button>
+                        </div>
+                        <button id='submit' onClick=${this.submit}>Submit</button>
+                    </div>
                 </div>
 
             `
@@ -65,7 +69,8 @@ define(function(require, exports) {
                 .drawing-container { width: 100%; display: block; }
                 .draw-area { width: 100%; height: 400px; border: 3px solid #000; background: #fff; box-sizing: border-box;}
                 .draw-area:hover { cursor: url("/client/assets/pencil.svg") 0 29, auto; }
-                .control-button { margin: 10px; font-size: 15px; line-height: 20px; min-width: 55px; }
+                #undo-redo-container { height: 100%; display: flex; align-items: flex-start;}
+                .control-button { margin: 0 10px 0 0; font-size: 15px; line-height: 20px; max-width: 55px; }
             `;
         }
 

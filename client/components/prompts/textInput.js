@@ -32,7 +32,8 @@ define(function(require, exports) {
             return html`
                 <div class='main-textarea'>
                 	<textarea placeholder="Enter a prompt!" />
-                	<div>
+                	<div class="button-grid">
+                        <div></div>
 	                    <button id='submit' onClick=${this.submit}>Submit</button>
                     </div>
                 </div>
