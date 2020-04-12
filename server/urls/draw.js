@@ -74,11 +74,15 @@ function genColor (seed) {
 module.exports = function({app, io, websockets}) {
 
     app.get("/?", function(req, res){
-        let props = {};
+        let props = {page: 'home'};
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
 
     });
-    
+    app.get("/newgame/?", function(req, res){
+        let props = {page: 'newgame'};
+        res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
+
+    });
     app.get("/lobby/:channel([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
         // console.log("session", req.session)
         let {user} = req;
@@ -96,7 +100,7 @@ module.exports = function({app, io, websockets}) {
             filters: {},
         });
 
-        let props = {channel, color, initial_spiels, user};
+        let props = {channel, color, initial_spiels, user, page: 'channel'};
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
