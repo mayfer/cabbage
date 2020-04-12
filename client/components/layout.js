@@ -202,12 +202,6 @@ define(function(require, exports) {
                 .landing .newgame:active { background: #00a; }
                 .landing .authors-img { width: 600px; }
 
-                #game-wrapper {
-                    color: grey;
-                    margin-top: 50px;
-                    display: inline-block;
-                }
-
                 #game-text {
                     padding-left: 50px;
                     text-align: left;
@@ -241,13 +235,15 @@ define(function(require, exports) {
                     left: 1px;
                 }
                 #game-wrapper {
-                    width: 600px;
-                    margin: 0 auto;
-                    display: flex;
+                    width: 700px;
+                    margin: 50px auto;
                     justify-content: center;
                     align-items: center;
                     flex-flow: column;
+                    color: grey;
+                    display: inline-block;
                 }
+
 
                 @media only screen and (min-width: 600px) {
                     #content-container {
