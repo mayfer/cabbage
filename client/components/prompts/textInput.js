@@ -23,7 +23,7 @@ define(function(require, exports) {
 
         }
 
-        bok(){
+        submit(){
         	alert('bok bok bok!')
         }
 
@@ -33,7 +33,7 @@ define(function(require, exports) {
                 <div class='main-textarea'>
                 	<textarea placeholder="Enter a prompt!" />
                 	<div>
-	                    <button id='save' class='control-button' onClick=${this.bok}>Save</button>
+	                    <button id='submit' onClick=${this.submit}>Submit</button>
                     </div>
                 </div>
             `
@@ -41,7 +41,7 @@ define(function(require, exports) {
 
         static css() {
             return `
-            	.main-textarea { width: 100%; padding-top: 50px; display: flex; align-items: center; flex-flow: column;}
+            	.main-textarea { width: 100%; display: flex; align-items: center; flex-flow: column;}
             	.main-textarea textarea { width: 100%; height: 300px; resize: none; border: 2px solid black; font-size: 30px; padding: 20px; box-sizing: border-box;}
             	.main-textarea textarea:focus { outline: none; }
             `;

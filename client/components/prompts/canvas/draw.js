@@ -43,12 +43,16 @@ define(function(require, exports) {
             return false;
         }
 
+        submit(){
+            alert('submit!')
+        }
+
         render(props, s) {
             const { channel } = props;
             return html`
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
-                    <button id='save' class='control-button'>Save</button>
+                    <button id='save' class='control-button' onClick=${this.submit}>Submit</button>
                     <button id='undoStrokeButton' class='control-button'>Undo</button>
                     <button id='redoStrokeButton' class='control-button'>Redo</button>
                 </div>
@@ -58,8 +62,8 @@ define(function(require, exports) {
 
         static css() {
             return `
-                .drawing-container { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; display: block; }
-                .draw-area { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
+                .drawing-container { width: 100%; display: block; }
+                .draw-area { width: 100%; height: 400px; border: 3px solid #000; background: #fff; box-sizing: border-box;}
                 .draw-area:hover { cursor: url("/client/assets/pencil.svg") 0 29, auto; }
                 .control-button { margin: 10px; font-size: 15px; line-height: 20px; min-width: 55px; }
             `;

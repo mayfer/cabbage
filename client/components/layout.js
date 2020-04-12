@@ -8,9 +8,8 @@ define(function(require, exports) {
     const Events = require("components/events");
     const Router = require("components/router");
     const Header = require("components/header");
-    const DrawingCanvas = require("components/canvas/draw");
-    const TextInput = require("components/textInput");
     const Channel = require("components/channel/channel");
+    const Prompt = require("components/prompt")
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
@@ -95,7 +94,7 @@ define(function(require, exports) {
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                     <p>It's a game we play among our friends with pen and paper IRL.</p>
-                                    <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (text or drawing)</p>
+                                    <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
                                     <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
                                     <ul>
                                         <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
@@ -104,7 +103,6 @@ define(function(require, exports) {
                                         <li>A round ends when either (a) every player has made a submission, or (b) the round times out.</li>
                                     </ul>
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
-
                                     <hr />
                                     <p>Cabbage<span class='af'>af</span> was made for the <a href='https://pioneer.app/hackathon'>Pioneer hackathon</a> on April 11-12, 2020</p>
                                     <p>by Murat, Adele, Madeleine and Theo.<br />contact@probablymurat.com</p>
@@ -122,19 +120,21 @@ define(function(require, exports) {
 
                         ${page == "channel" && channel ? html`
                             <div class="game-column active column ">
-                                <div id="title-wrapper">
-                                    <div id=title-text>
-                                    <div>
-                                        Share the URL to bring others into
-                                        <span id="lobbyName-text">
-                                            ${s.lobbyName}
-                                        </span>
+                                <div id="game-wrapper">
+                                    <div id='game-text'>
+                                        <div>
+                                            Share the URL to bring others into
+                                            <span id="lobbyName-text">
+                                                ${s.lobbyName}
+                                            </span>
+                                        </div>
+                                        <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
+                                            Copy sharable link
+                                        </button>
                                     </div>
-                                    <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
-                                        Copy sharable link
-                                    </button>
-                                    </div>
-                                    <${Stacks} />
+                                    <${Prompt} 
+                                        promptMode='imageResponse'
+                                    />
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -203,14 +203,7 @@ define(function(require, exports) {
                 .landing .newgame:active { background: #00a; }
                 .landing .authors-img { width: 600px; }
 
-                #title-wrapper {
-                    color: grey;
-                    margin-top: 50px;
-                    display: inline-block;
-                }
-
-                #title-text {
-                    padding-left: 50px;
+                #game-text {
                     text-align: left;
                     font-size: large;
                 }
@@ -243,17 +236,19 @@ define(function(require, exports) {
                 }
                 #game-wrapper {
                     width: 600px;
-                    margin: 0 auto;
-                    display: flex;
+                    margin: 50px auto;
                     justify-content: center;
                     align-items: center;
                     flex-flow: column;
+                    color: grey;
+                    display: inline-block;
                 }
+
 
                 @media only screen and (min-width: 600px) {
                     #content-container {
                         display: flex;
-                        height: calc(100% - 40px - 5px - 10px);
+                        height: calc(100% - 60px - 5px - 10px);
                     }
                     #content-container .column {
                         flex-grow: 1;
@@ -274,7 +269,7 @@ define(function(require, exports) {
                 @media only screen and (max-width: 600px) {
                     #content-container { 
                         display: block; 
-                        height: calc(100% - 40px - 5px - 40px - 4px);
+                        height: calc(100% - 60px - 5px - 40px - 4px);
                     }
                     #mobile-nav { height: 44px; display: flex; }
                     #mobile-nav a { color: #aaa; text-align: center; flex-grow: 1; flex-basis: 0; line-height: 40px; border-radius: 3px; margin: 2px; text-decoration: none; }
@@ -282,7 +277,7 @@ define(function(require, exports) {
                     #content-container .column { width: 100%; display: block; }
                     #content-container .column.hidden { display: none; }
                 }
-            ` + Header.css() + Channel.css() + DrawingCanvas.css() + TextInput.css() + CreateForm.css();
+            ` + Header.css() + Channel.css() + Prompt.css() + CreateForm.css();
         }
 
     }
