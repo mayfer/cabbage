@@ -18,9 +18,10 @@ define(function(require, exports) {
     class Layout extends Component {
         constructor(props) {
             super();
-            let channel = props.channel;
+            let { channel, page } = props;
             this.state = {
                 channel,
+                page,
                 chat_open: false,
                 color: props.color,
             };
@@ -28,21 +29,28 @@ define(function(require, exports) {
                 '/': {
                     as: 'home',
                     uses: (...args) => {
-                        this.setState({channel: undefined}, () => {
+                        this.setState({page: 'home', channel: undefined}, () => {
+                        });
+                    }
+                },
+                '/newgame': {
+                    as: 'newgame',
+                    uses: (...args) => {
+                        this.setState({page: 'newgame', channel: undefined}, () => {
                         });
                     }
                 },
                 '/lobby/:channel': {
                     as: 'lobby',
                     uses: ({channel}) => {
-                        this.setState({channel}, () => {
+                        this.setState({page: 'channel', channel}, () => {
                         });
                     }
                 },
                 '/lobby/:channel/round/:round_id': {
-                    as: 'lobby',
+                    as: 'round',
                     uses: ({channel, round_id}) => {
-                        this.setState({channel}, () => {
+                        this.setState({page: 'round', channel}, () => {
                         });
                     }
                 },
@@ -63,15 +71,54 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { channel } = s;
+            const { page, channel } = s;
             const titleURLString = `Share the URL to bring others into ${s.lobbyName}`
             return html`
                 <div id="layout">
-                    <div id="header-container">
-                        <${Header} />
-                    </div>
+                    ${page != "home" ? html`
+                        <div id="header-container">
+                            <${Header} />
+                        </div>
+                    ` : ''}
                     <div id="content-container">
-                        ${channel ? html`
+                        ${page == "home" ? html`
+
+                            <div class='inner'>
+                                <div class='landing'>
+
+                                    <a href='/' class="go-to" data-channel="">
+                                        <img src="/client/assets/cabbage-af.png" class='home-logo' />
+                                    </a>
+                                    <p>Cabbage<span class='af'>af</span> is a drawing game for groups.</p>
+                                    <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
+
+                                    <p>It's a game we play among our friends with pen and paper IRL.</p>
+                                    <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (text or drawing)</p>
+                                    <div style="height: 150px; width: 100%; border: 3px solid #000;"></div>
+                                    <ul>
+                                        <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
+                                        <li>If you are <strong>prompted with a drawing</strong>, you <strong>caption it with text</strong>.</li>
+                                        <li>During the rounds, you only see what you are passed off from the other player; you don't get to see the full chain of submissions until the round ends.</li>
+                                        <li>A round ends when either (a) every player has made a submission, or (b) the round times out.</li>
+                                    </ul>
+                                    <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
+
+                                    <hr />
+                                    <p>Cabbage<span class='af'>af</span> was made for the <a href=''>Pioneer hackathon</a> on April 11-13, 2020</p>
+                                    <p>by Murat, Adele, Madeleine and Theo.<br />contact@probablymurat.com</p>
+
+                                    <img class='authors-img' src='/client/assets/authors.svg' />
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${page == "newgame" ? html`
+                            <div class='inner'>
+                                <${CreateForm} setLobbyDetails=${(l) => this.setLobbyDetails(l)} />
+                            </div>
+                        ` : ''}
+
+                        ${page == "channel" && channel ? html`
                             <div class="game-column active column ">
                                 <div id="title-wrapper">
                                     Share the URL to bring others into
@@ -89,11 +136,7 @@ define(function(require, exports) {
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
                             </div>
-                        ` : html`
-                            <div class='inner'>
-                                <${CreateForm} setLobbyDetails=${(l) => this.setLobbyDetails(l)} />
-                            </div>
-                        `}
+                        ` : ''}
                     </div>
                     <div id="mobile-nav">
                         
@@ -107,6 +150,9 @@ define(function(require, exports) {
             let params = {
                 column_gap: "10px",
             }
+
+            // #f9d49c
+            // #e2806a
             return `
                 .grecaptcha-badge { display: none; }
 
@@ -136,6 +182,16 @@ define(function(require, exports) {
                 #content-container .inner {
                     width: 100%;
                 }
+
+                .landing { text-align: center; font-size: 20px; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 24px; }
+                .landing .af { color: rgba(60, 0, 0, 0.9); font-size: 15px; transform: rotate(-25deg); display: inline-block; position: relative; top: 5px;}
+                .landing .home-logo { height: 200px; }
+                .landing ul {text-align: left; }
+                .landing li {text-align: left; margin: 10px; }
+                .landing .newgame { text-decoration: none; display: inline-block; padding: 10px 30px; background: #0a0; color: #fff; font-size: 30px; }
+                .landing .newgame:hover { background: #000; }
+                .landing .newgame:active { background: #00a; }
+                .landing .authors-img { width: 600px; }
 
                 #title-wrapper {
                     color: grey;
