@@ -19,7 +19,7 @@ define(function(require, exports) {
             <html>
                 <head>
                     <meta charset='utf-8' />
-                    <title>drawing game</title>
+                    <title>Cabbage (af) &bull; the drawing game</title>
                     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
                             
                     <link href='https://fonts.googleapis.com/css?family=PT+Mono' rel='stylesheet'  type='text/css' />
