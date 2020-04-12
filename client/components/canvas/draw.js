@@ -60,6 +60,8 @@ define(function(require, exports) {
             return `
                 .drawing-container { width: 600px; margin: 0 auto; padding: 50px; text-align: center; }
                 .draw-area { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
+                .draw-area:hover { cursor: url("/client/assets/pencil.svg") 0 30, progress; }
+                #undoStrokeButton { margin-right: 10px;}
                 #save { margin: 10px; font-size: 20px; line-height: 25px; }
             `;
         }
