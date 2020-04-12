@@ -12,7 +12,7 @@ define(function(require, exports) {
             super();
             console.log("init create", props)
             this.state = {};
-            css.load("create-form", CreateForm.css())
+            //css.load("create-form", CreateForm.css())
         }
 
         render(props, s) {
