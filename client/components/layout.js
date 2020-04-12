@@ -18,10 +18,11 @@ define(function(require, exports) {
     class Layout extends Component {
         constructor(props) {
             super();
-            let { channel, page } = props;
+            let { channel, page, prompt_mode } = props;
             this.state = {
                 channel,
                 page,
+                prompt_mode,
                 chat_open: false,
                 color: props.color,
             };
@@ -47,6 +48,15 @@ define(function(require, exports) {
                         });
                     }
                 },
+
+                '/lobby/:channel/round/new/:prompt_mode': {
+                    as: 'round',
+                    uses: ({channel, prompt_mode}) => {      
+                        this.setState({ page: 'round', channel, prompt_mode }, () => {
+                        });
+                    }
+                },
+
                 '/lobby/:channel/round/:round_id': {
                     as: 'round',
                     uses: ({channel, round_id}) => {
@@ -54,10 +64,11 @@ define(function(require, exports) {
                         });
                     }
                 },
-                '/lobby/:channel/newturn/:round_id': {
+                '/lobby/:channel/round/:round_id/newturn': {
                     as: 'newturn',
-                    uses: ({channel, round_id}) => {
-                        this.setState({page: 'round', channel}, () => {
+                    uses: ({ channel, round_id }) => {
+                        // console.log(prompt_mode)
+                        this.setState({ page: 'round', channel, prompt_mode }, () => {
                         });
                     }
                 },
@@ -78,7 +89,7 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { page, channel } = s;
+            const { page, channel, prompt_mode } = s;
             const titleURLString = `Share the URL to bring others into ${s.lobbyName}`
             return html`
                 <div id="layout">
@@ -139,7 +150,7 @@ define(function(require, exports) {
                                         </button>
                                     </div>
                                     <${Prompt} 
-                                        mode='imageAsResponse'
+                                        mode=${prompt_mode}
                                         prompt='This is an example prompt'
                                     />
                                 </div>
