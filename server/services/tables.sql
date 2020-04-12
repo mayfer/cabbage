@@ -57,7 +57,7 @@ CREATE INDEX channels_slug_idx ON channels(slug text_ops);
 
 -- Table Definition ----------------------------------------------
 
-CREATE TABLE round (
+CREATE TABLE rounds (
     id SERIAL PRIMARY KEY,
     user_id integer REFERENCES users(id) ON DELETE CASCADE,
     timestamp bigint,
@@ -67,5 +67,5 @@ CREATE TABLE round (
 
 -- Indices -------------------------------------------------------
 
-CREATE UNIQUE INDEX round_pkey ON round(id int4_ops);
-CREATE INDEX round_channel_id_idx ON round(channel_id int4_ops);
+CREATE UNIQUE INDEX rounds_pkey ON rounds(id int4_ops);
+CREATE INDEX rounds_channel_id_idx ON rounds(channel_id int4_ops);
