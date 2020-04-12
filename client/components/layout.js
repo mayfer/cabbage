@@ -120,17 +120,17 @@ define(function(require, exports) {
 
                         ${page == "channel" && channel ? html`
                             <div class="game-column active column ">
-                                <div id="title-wrapper">
-                                    <div id=title-text>
-                                    <div>
-                                        Share the URL to bring others into
-                                        <span id="lobbyName-text">
-                                            ${s.lobbyName}
-                                        </span>
-                                    </div>
-                                    <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
-                                        Copy sharable link
-                                    </button>
+                                <div id="game-wrapper">
+                                    <div id='game-text'>
+                                        <div>
+                                            Share the URL to bring others into
+                                            <span id="lobbyName-text">
+                                                ${s.lobbyName}
+                                            </span>
+                                        </div>
+                                        <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
+                                            Copy sharable link
+                                        </button>
                                     </div>
                                     <${DrawingCanvas} />
                                 </div>
@@ -201,13 +201,13 @@ define(function(require, exports) {
                 .landing .newgame:active { background: #00a; }
                 .landing .authors-img { width: 600px; }
 
-                #title-wrapper {
+                #game-wrapper {
                     color: grey;
                     margin-top: 50px;
                     display: inline-block;
                 }
 
-                #title-text {
+                #game-text {
                     padding-left: 50px;
                     text-align: left;
                     font-size: large;
@@ -242,7 +242,7 @@ define(function(require, exports) {
                 @media only screen and (min-width: 600px) {
                     #content-container {
                         display: flex;
-                        height: calc(100% - 40px - 5px - 10px);
+                        height: calc(100% - 60px - 5px - 10px);
                     }
                     #content-container .column {
                         flex-grow: 1;
@@ -263,7 +263,7 @@ define(function(require, exports) {
                 @media only screen and (max-width: 600px) {
                     #content-container { 
                         display: block; 
-                        height: calc(100% - 40px - 5px - 40px - 4px);
+                        height: calc(100% - 60px - 5px - 40px - 4px);
                     }
                     #mobile-nav { height: 44px; display: flex; }
                     #mobile-nav a { color: #aaa; text-align: center; flex-grow: 1; flex-basis: 0; line-height: 40px; border-radius: 3px; margin: 2px; text-decoration: none; }
