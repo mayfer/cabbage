@@ -8,9 +8,8 @@ define(function(require, exports) {
     const Events = require("components/events");
     const Router = require("components/router");
     const Header = require("components/header");
-    const DrawingCanvas = require("components/canvas/draw");
-    const TextInput = require("components/textInput");
     const Channel = require("components/channel/channel");
+    const Prompt = require("components/prompt")
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
@@ -110,7 +109,6 @@ define(function(require, exports) {
                                         <li>A round ends when either (a) every player has made a submission, or (b) the round times out.</li>
                                     </ul>
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
-
                                     <hr />
                                     <p>Cabbage<span class='af'>af</span> was made for the <a href='https://pioneer.app/hackathon'>Pioneer hackathon</a> on April 11-12, 2020</p>
                                     <p>by Murat, Adele, Madeleine and Theo.<br />contact@probablymurat.com</p>
@@ -140,7 +138,9 @@ define(function(require, exports) {
                                             Copy sharable link
                                         </button>
                                     </div>
-                                    <${DrawingCanvas} />
+                                    <${Prompt} 
+                                        promptMode='draw'
+                                    />
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -210,7 +210,6 @@ define(function(require, exports) {
                 .landing .authors-img { width: 600px; }
 
                 #game-text {
-                    padding-left: 50px;
                     text-align: left;
                     font-size: large;
                 }
@@ -242,7 +241,7 @@ define(function(require, exports) {
                     left: 1px;
                 }
                 #game-wrapper {
-                    width: 700px;
+                    width: 600px;
                     margin: 50px auto;
                     justify-content: center;
                     align-items: center;
@@ -284,7 +283,7 @@ define(function(require, exports) {
                     #content-container .column { width: 100%; display: block; }
                     #content-container .column.hidden { display: none; }
                 }
-            ` + Header.css() + Channel.css() + DrawingCanvas.css() + TextInput.css() + CreateForm.css();
+            ` + Header.css() + Channel.css() + Prompt.css() + CreateForm.css();
         }
 
     }
