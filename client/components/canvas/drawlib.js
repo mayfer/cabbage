@@ -95,12 +95,17 @@ define(function(require, exports) {
                 that.redo();
             });
 
-            Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
-                that.undo();
-            });
-            Mousetrap.bind(['command+shift+z', 'ctrl+shift+z'], function(e) {
-                that.redo();
-            });
+            function KeyPress(e) {
+                var evtobj = window.event? event : e;
+                if (evtobj.metaKey || evtobj.ctrlKey) {
+                    if (evtobj.keyCode == 90) {
+                        e.preventDefault();
+                        evtobj.shiftKey ? that.redo() : that.undo()
+                    }
+                }
+            }
+
+            document.onkeydown = KeyPress;
         }
 
         this.removeEvents = function() {
@@ -124,7 +129,7 @@ define(function(require, exports) {
             draw = false;
             this.resetLineHistory();
         }
-        
+
         this.snapshot = function () {
             if (history_position <= history.length) {
                 history = history.slice(0, history_position)
