@@ -93,7 +93,7 @@ define(function(require, exports) {
                                     <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                     <p>It's a game we play among our friends with pen and paper IRL.</p>
-                                    <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (text or drawing)</p>
+                                    <p>It's sort of like paper telephone; every round beings with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
                                     <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
                                     <ul>
                                         <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
@@ -119,17 +119,17 @@ define(function(require, exports) {
 
                         ${page == "channel" && channel ? html`
                             <div class="game-column active column ">
-                                <div id="game-container">
-                                    <div id=title-text>
-                                    <div>
-                                        Share the URL to bring others into
-                                        <span id="lobbyName-text">
-                                            ${s.lobbyName}
-                                        </span>
-                                    </div>
-                                    <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
-                                        Copy sharable link
-                                    </button>
+                                <div id="game-wrapper">
+                                    <div id='game-text'>
+                                        <div>
+                                            Share the URL to bring others into
+                                            <span id="lobbyName-text">
+                                                ${s.lobbyName}
+                                            </span>
+                                        </div>
+                                        <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
+                                            Copy sharable link
+                                        </button>
                                     </div>
                                     <${Prompt} 
                                         promptMode='textResponse'
@@ -202,15 +202,7 @@ define(function(require, exports) {
                 .landing .newgame:active { background: #00a; }
                 .landing .authors-img { width: 600px; }
 
-                #game-container {
-                    padding-left: 50px;
-                    width: 600px;
-                    color: grey;
-                    margin-top: 50px;
-                    display: inline-block;
-                }
-
-                #title-text {
+                #game-text {
                     text-align: left;
                     font-size: large;
                 }
@@ -242,18 +234,20 @@ define(function(require, exports) {
                     left: 1px;
                 }
                 #game-wrapper {
-                    width: 600px;
-                    margin: 0 auto;
-                    display: flex;
+                    width: 700px;
+                    margin: 50px auto;
                     justify-content: center;
                     align-items: center;
                     flex-flow: column;
+                    color: grey;
+                    display: inline-block;
                 }
+
 
                 @media only screen and (min-width: 600px) {
                     #content-container {
                         display: flex;
-                        height: calc(100% - 40px - 5px - 10px);
+                        height: calc(100% - 60px - 5px - 10px);
                     }
                     #content-container .column {
                         flex-grow: 1;
@@ -274,7 +268,7 @@ define(function(require, exports) {
                 @media only screen and (max-width: 600px) {
                     #content-container { 
                         display: block; 
-                        height: calc(100% - 40px - 5px - 40px - 4px);
+                        height: calc(100% - 60px - 5px - 40px - 4px);
                     }
                     #mobile-nav { height: 44px; display: flex; }
                     #mobile-nav a { color: #aaa; text-align: center; flex-grow: 1; flex-basis: 0; line-height: 40px; border-radius: 3px; margin: 2px; text-decoration: none; }
