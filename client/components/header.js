@@ -11,10 +11,9 @@ define(function(require, exports) {
                 <div id='header'>
                     <div id='logo'>
                         <a href='/' class="go-to" data-channel="">
-                            drawing game
+                            <img src="/client/assets/cabbage.png" id='logo' />
                         </a>
                     </div>
-
                 </div>
             `;
         }
@@ -22,15 +21,14 @@ define(function(require, exports) {
 
         static css() {
             return `
-                #header {  height: 40px; padding: 0 15px; position: relative;  }
+                #header {  height: 60px; padding: 0 15px; position: relative;  }
             
-                #logo { height: 40px; line-height: 40px; display: inline-block; opacity: 0.8; }
+                #logo { height: 90px; display: inline-block; opacity: 0.9; }
                 #logo:hover { opacity: 1; }
                 #logo:active { position: relative; top: 1px; left: 1px; }
                 
-                #logo a { height: 40px; line-height: 40px; color: #000; text-decoration: none; display: inline-block;  Header-size: 20px; vertical-align: middle; font-family: ${fonts.mono}; opacity: 0.8; }
-                #logo a.img { width: 30px; }
-                #logo a img { display: inline-block; height: 30px; margin: 5px 0; }
+                #logo a { height: 60px; line-height: 60px; color: #000; text-decoration: none; display: inline-block; vertical-align: middle; font-family: ${fonts.mono}; opacity: 0.8; }
+                #logo a img { display: inline-block; height: 80px; margin: 5px 0; }
 
 
                 @media only screen and (max-width: 600px) {

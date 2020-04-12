@@ -16,26 +16,31 @@ define(function(require, exports) {
 
         render(props, s) {
             return html`
-            <div class="form-container">
-                <form id='create-form' onSubmit=${e => this.submit_name(e)}>
+            <div class="create form-container">
+                <form class='create-form' onSubmit=${e => this.submit_name(e)}>
                     <div class="form-title" >Pick a name for your game room</div>
-                    <input class="text-input" id="game-title-input" type="text"  
-                    onInput=${e => this.setState({name: e.target.value})} />
+                    <input class="text-input" id="game-title-input" type="text" onInput=${e => this.setState({name: e.target.value})} placeholder="e.g. Adams Family Cabbage House" />
+                    <br />
+                    <button type="submit">Create room</button>
+                    <br />
+                    <img class="img carrot" src="/client/assets/carrot.svg" />  
                 </form>
-                <img class="img carrot" src="/client/assets/carrot.svg" />
             </div>
             `;
         }
 
 
         static css() {
-            return `
-                .form-container { background: #76ba8d; height: 400px; width: 600px; border: 3px solid #000; margin-right: auto; margin-left: auto; display: flex; justify-content: center;}
-                .text-input { height: 25px; width: 200px; border: 3px solid #000; text-align: center;} 
-                .form-title { margin: 30px;}
-                .img.carrot { width: 200px; display: block; }
-                form { text-align: center;}
-            `
+            return css.add_parents('.create.form-container', `
+                { font-size: 20px; margin: 30px; display: inline-block; background: #9ad6af; width: 600px; border: 20px solid #fff; border-radius: 5px; box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.2); }
+                .text-input { font-size: 18px; padding: 10px; line-height: 20px; width: 300px; border: 3px solid #000; } 
+                .text-input:focus { border-color: #03f; }
+                button { font-size: 18px; display: inline-block; cursor: pointer; background: #000; color: #fff; }
+                button:active { background: #3a0; }
+                .form-title { margin: 20px;  }
+                .img.carrot { margin: 30px 0; width: 500px; display: inline-block; }
+                .create-form { text-align: center; }
+            `);
         }
 
         async submit_name(e) {
