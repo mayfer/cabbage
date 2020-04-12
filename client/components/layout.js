@@ -13,6 +13,7 @@ define(function(require, exports) {
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
+    const Stacks = require("components/stacks");
     const Common = require("lib/common");
 
     class Layout extends Component {
@@ -132,7 +133,7 @@ define(function(require, exports) {
                                         Copy sharable link
                                     </button>
                                     </div>
-                                    <${DrawingCanvas} />
+                                    <${Stacks} />
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
