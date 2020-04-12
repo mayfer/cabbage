@@ -27,20 +27,20 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { promptMode, prompt } = props;
+            const { mode, prompt } = props;
             return html`
             	<div id="prompt-container">
-					${promptMode === 'draw' ? html`
+					${mode === 'draw' ? html`
 						<${DrawingCanvas} submitPrompt=${this.submitPrompt}/>
 					` : ''}
-					${promptMode === 'text' ? html`
+					${mode === 'text' ? html`
 						<${TextInput} submitPrompt=${this.submitPrompt}/>
 					` : ''}
-					${promptMode === 'textAsResponse' ? html`
+					${mode === 'textAsResponse' ? html`
 						<img src=${prompt} id="prompt-image" />
 						<${TextInput} submitPrompt=${this.submitPrompt} />
 					` : ''}
-					${promptMode === 'imageAsResponse' ? html`
+					${mode === 'imageAsResponse' ? html`
 						<div id='text-prompt-wrapper'>
 							<h2>${prompt}</h2>
 						</div>

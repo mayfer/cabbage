@@ -139,8 +139,8 @@ define(function(require, exports) {
                                         </button>
                                     </div>
                                     <${Prompt} 
-                                        promptMode='imageAsResponse'
-                                        prompt='This is an example text prompt'
+                                        mode='imageAsResponse'
+                                        prompt='This is an example prompt'
                                     />
                                 </div>
                             </div>
