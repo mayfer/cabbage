@@ -157,7 +157,7 @@ define(function(require, exports) {
                 @media only screen and (min-width: 600px) {
                     #content-container {
                         display: flex;
-                        height: calc(100% - 40px - 5px - 10px);
+                        height: calc(100% - 60px - 5px - 10px);
                     }
                     #content-container .column {
                         flex-grow: 1;
