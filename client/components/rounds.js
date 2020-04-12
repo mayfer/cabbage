@@ -61,6 +61,7 @@ define(function(require, exports) {
                 .rounds-content { width: 600px; height: 400px; }
                 .stack-image { width: 100px}
                 .round-section-title { margin-top: 50px; margin-bottom: 15px;}
+                .footer-image { }
             `
         }
 

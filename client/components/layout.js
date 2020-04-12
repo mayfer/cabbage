@@ -13,7 +13,7 @@ define(function(require, exports) {
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
-    const Stacks = require("components/stacks");
+    const Rounds = require("components/rounds");
     const Common = require("lib/common");
 
     class Layout extends Component {
@@ -132,11 +132,10 @@ define(function(require, exports) {
                                             Copy sharable link
                                         </button>
                                     </div>
-                                    <${Prompt} 
+                                    <${Prompt}
                                         promptMode='imageResponse'
                                     />
                                 </div>
-                                <${Stacks} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
@@ -172,7 +171,7 @@ define(function(require, exports) {
                 }
 
                 .game-column.active.column {
-                    text-align: center;                    
+                    text-align: center; 
                 }
 
                 #content-container {
@@ -184,7 +183,7 @@ define(function(require, exports) {
                     position: relative;
                     box-sizing: border-box;
                     border-radius: 5px;
-                    overflow: hidden;
+                    overflow: auto;
                     z-index: 1;
                 }
 
