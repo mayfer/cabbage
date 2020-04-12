@@ -74,8 +74,9 @@ define(function(require, exports) {
                         ${channel ? html` 
                             <div class="game-column active column ">
                                 <div id="title-wrapper">
-                                    <span>
-                                        ${titleURLString}
+                                    Share the URL to bring others into
+                                    <span id="title-text">
+                                        ${s.lobbyName}
                                     </span>
                                     <span>
                                         <button onclick=${e => Common.copy_link(e)}>
@@ -131,10 +132,19 @@ define(function(require, exports) {
 
                 #title-wrapper {
                     color: grey;
+                    text-align: center;
+                    margin-top: 50px;
+                }
+
+                #title-text {
+                    margin-right: 10px;
+                    margin-left: 5px;
+                    font-weight: bolder;
+                    color: black;
                 }
 
                 button {
-                    border: 3px solid #000;
+                    border: 2px solid #000;
                 }
 
                 @media only screen and (min-width: 600px) {
