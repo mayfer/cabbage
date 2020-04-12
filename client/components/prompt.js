@@ -22,25 +22,29 @@ define(function(require, exports) {
         componentShouldUpdate(){
         }
 
+        submitPrompt(data){
+            console.log(data);
+        }
+
         render(props, s) {
             const { promptMode } = props;
             return html`
             	<div id="prompt-container">
 					${promptMode === 'draw' ? html`
-						<${DrawingCanvas} />
+						<${DrawingCanvas} submitPrompt=${this.submitPrompt}/>
 					` : ''}
 					${promptMode === 'text' ? html`
-						<${TextInput} />
+						<${TextInput} submitPrompt=${this.submitPrompt}/>
 					` : ''}
 					${promptMode === 'textResponse' ? html`
 						<img src='/client/assets/cabbage-af.png' id="prompt-image" />
-						<${TextInput} />
+						<${TextInput} submitPrompt=${this.submitPrompt}/>
 					` : ''}
 					${promptMode === 'imageResponse' ? html`
 						<div id='text-prompt-wrapper'>
 							<h2>This is an example prompt</h2>
 						</div>
-						<${DrawingCanvas} />
+						<${DrawingCanvas} submitPrompt=${this.submitPrompt}/>
 					` : ''}
 				</div>
             `

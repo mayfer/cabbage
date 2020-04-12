@@ -11,8 +11,9 @@ define(function(require, exports) {
             super();
             let channel = props.channel;
             this.state = {
+                currentImage: null,
             };
-            //css.load("draw", Draw.css())
+            this.handleSubmit = this.handleSubmit.bind(this)
         }
 
         componentDidMount() {
@@ -43,12 +44,16 @@ define(function(require, exports) {
             return false;
         }
 
-        submit(){
-            alert('submit!')
+        handleSubmit(){
+            const submitPrompt = this.props.submitPrompt;
+            const canvas = document.querySelector('.drawing-canvas');
+            const image = canvas.toDataURL();
+            const data = { type: 'image', contents: image };
+            submitPrompt(data);
         }
 
         render(props, s) {
-            const { channel } = props;
+            const { channel, handleSubmit } = props;
             return html`
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
@@ -57,7 +62,7 @@ define(function(require, exports) {
                             <button id='undoStrokeButton' class='control-button'>Undo</button>
                             <button id='redoStrokeButton' class='control-button'>Redo</button>
                         </div>
-                        <button id='prompt-submit' onClick=${this.submit}>Submit</button>
+                        <button id='prompt-submit' onClick=${this.handleSubmit}>Submit</button>
                     </div>
                 </div>
 

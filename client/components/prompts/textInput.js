@@ -7,8 +7,11 @@ define(function(require, exports) {
             super();
             let channel = props.channel;
             this.state = {
+                value: '',
             };
-            //css.load("draw", Draw.css())
+            this.handleTextChange = this.handleTextChange.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
+
         }
 
         componentDidMount() {
@@ -23,18 +26,26 @@ define(function(require, exports) {
 
         }
 
-        submit(){
-        	alert('bok bok bok!')
+        handleTextChange(e){
+            e.preventDefault();
+            this.setState({ value: e.target.value })
+        }
+
+        handleSubmit(){
+            const { submitPrompt } = this.props;
+            const data = { type: 'text', contents: this.state.value }
+            submitPrompt(data);
         }
 
         render(props, s) {
             const { channel } = props;
+            const { value } = s;
             return html`
                 <div class='main-textarea'>
-                	<textarea placeholder="Enter a prompt!" />
-                	<div class="button-grid">
+                	<textarea placeholder="Enter a prompt!" onInput=${this.handleTextChange}>${value}</textarea>
+                    <div class="button-grid">
                         <div></div>
-	                    <button id='prompt-submit' onClick=${this.submit}>Submit</button>
+	                    <button id='prompt-submit' onClick=${this.handleSubmit}>Submit</button>
                     </div>
                 </div>
             `
