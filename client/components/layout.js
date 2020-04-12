@@ -132,7 +132,7 @@ define(function(require, exports) {
                                         </button>
                                     </div>
                                     <${Prompt} 
-                                        promptMode='imageResponse'
+                                        promptMode='draw'
                                     />
                                 </div>
                             </div>
