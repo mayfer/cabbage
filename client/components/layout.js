@@ -132,7 +132,7 @@ define(function(require, exports) {
                                         </button>
                                     </div>
                                     <${Prompt} 
-                                        promptMode='textResponse'
+                                        promptMode='draw'
                                     />
                                 </div>
                             </div>
@@ -234,7 +234,7 @@ define(function(require, exports) {
                     left: 1px;
                 }
                 #game-wrapper {
-                    width: 700px;
+                    width: 600px;
                     margin: 50px auto;
                     justify-content: center;
                     align-items: center;

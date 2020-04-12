@@ -58,8 +58,8 @@ define(function(require, exports) {
 
         static css() {
             return `
-                .drawing-container { width: 600px; margin: 0 auto; display: block; }
-                .draw-area { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
+                .drawing-container { width: 100%; display: block; }
+                .draw-area { width: 100%; height: 400px; border: 3px solid #000; background: #fff; box-sizing: border-box;}
                 .draw-area:hover { cursor: url("/client/assets/pencil.svg") 0 29, auto; }
                 .control-button { margin: 10px; font-size: 15px; line-height: 20px; min-width: 55px; }
             `;

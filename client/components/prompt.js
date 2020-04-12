@@ -2,8 +2,8 @@ define(function(require, exports) {
 
     const css = require('core/css')
     const { Component, render, html, useRef, h } = require('preact');
-    const DrawingCanvas = require("components/canvas/draw");
-    const TextInput = require("components/textInput");
+    const DrawingCanvas = require("components/prompts/canvas/draw");
+    const TextInput = require("components/prompts/textInput");
 
     class Prompt extends Component {
         constructor(props) {
