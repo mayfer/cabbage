@@ -145,7 +145,7 @@ define(function(require, exports) {
                     #content-container .column { width: 100%; display: block; }
                     #content-container .column.hidden { display: none; }
                 }
-            ` + Header.css() + Channel.css() + DrawingCanvas.css(), CreateForm.css();
+            ` + Header.css() + Channel.css() + DrawingCanvas.css() + CreateForm.css();
         }
 
     }
