@@ -10,7 +10,6 @@ define(function(require, exports) {
     return class CreateForm extends Component {
         constructor(props) {
             super();
-            console.log("init create", props)
             this.state = {};
             css.load("create-form", CreateForm.css())
         }

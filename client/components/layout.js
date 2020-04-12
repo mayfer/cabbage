@@ -13,6 +13,7 @@ define(function(require, exports) {
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
+    const URLDisplayTile = require("components/urlDisplayTile");
 
     class Layout extends Component {
         constructor(props) {
@@ -58,7 +59,6 @@ define(function(require, exports) {
         }
         render(props, s) {
             const { channel } = s;
-            console.log(channel)
             return html`
                 <div id="layout">
                     <div id="header-container">
@@ -69,6 +69,9 @@ define(function(require, exports) {
                             <div class="game-column active column ">
                                 game area
                                 <${DrawingCanvas} />
+                            </div>
+                            <div class="active">
+                                <${URLDisplayTile} />
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
