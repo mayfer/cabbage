@@ -58,7 +58,7 @@ define(function(require, exports) {
 
         static css() {
             return `
-                .drawing-container { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; text-align: center; }
+                .drawing-container { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; display: block; }
                 .draw-area { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
                 #save { margin: 10px; font-size: 20px; line-height: 25px; }
             `;
