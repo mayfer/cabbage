@@ -23,13 +23,17 @@ define(function(require, exports) {
 
         }
 
+        bok(){
+        	alert('bok bok bok!')
+        }
+
         render(props, s) {
             const { channel } = props;
             return html`
                 <div class='main-textarea'>
                 	<textarea placeholder="Enter a prompt!" />
                 	<div>
-                    <button id='save' class='control-button'>Save</button>
+	                    <button id='save' class='control-button' onClick=${this.bok}>Save</button>
                     </div>
                 </div>
             `
@@ -37,8 +41,8 @@ define(function(require, exports) {
 
         static css() {
             return `
-            	.main-textarea { padding-top: 50px; display: flex; align-items: center; flex-flow: column;}
-            	.main-textarea textarea { width: 600px; height: 300px; resize: none; border: 2px solid black; font-size: 30px; padding: 20px;}
+            	.main-textarea { width: 100%; padding-top: 50px; display: flex; align-items: center; flex-flow: column;}
+            	.main-textarea textarea { width: 100%; height: 300px; resize: none; border: 2px solid black; font-size: 30px; padding: 20px; box-sizing: border-box;}
             	.main-textarea textarea:focus { outline: none; }
             `;
         }
