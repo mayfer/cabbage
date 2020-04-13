@@ -151,6 +151,19 @@ module.exports = function({app, io, websockets}) {
         }
     });
 
+    app.post("/api/round/create", async function(req, res){
+        const {channel, user} = req.body;
+        console.log(channel, user)
+
+        // try {
+        //     const channel = await cabbage.actions.start_new_round({channel});
+        //     res.json({ok: true, channel});
+        // } catch(e) {
+        //     res.status(403);
+        //     res.json({ok: false, error: e.message})
+        // }
+    });
+
     app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){
         let { spiel } = req.body;
 
