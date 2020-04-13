@@ -195,12 +195,10 @@ define(function(require, exports) {
                     position: relative;
                     box-sizing: border-box;
                     border-radius: 5px;
-<<<<<<< HEAD
-                    overflow: auto;
-=======
+
                     overflow-y: auto;
                     overflow-x: hidden;
->>>>>>> master
+
                     z-index: 1;
                 }
 
