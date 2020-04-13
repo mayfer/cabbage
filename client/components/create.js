@@ -55,7 +55,7 @@ define(function(require, exports) {
 
             
             this.setState({busy: true});
-            let {channel} = await API.request({method: "post", url: "/api/channel/create", body: {title: this.state.name}});
+            let {channel} = await API.request({method: "post", url: "/api/cabbage/channel/create", body: {title: this.state.name}});
             this.setState({busy: false});
 
             var url = `lobby/${channel.slug}`
