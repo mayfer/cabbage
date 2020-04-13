@@ -20,6 +20,9 @@ define(function(require, exports) {
                 {name: "adele", count: 2, lastTime: Date.now(), type: 'drawing'}, 
                 {name: "theo", count: 7, lastTime: Date.now(), type: 'caption' }
             ];
+            const completed_rounds = channel.rounds.filter(r => r.status == 'closed');
+            const available_rounds = channel.rounds.filter(r => r.status == 'open');
+
             return html`
             <div id="lobby">
                 <h1>Lobby</h1>
@@ -52,17 +55,19 @@ define(function(require, exports) {
                                 <span id="add-round-button" >+ Start a new round</span>
                             </a>
                             <div class="rounds">
-                                ${dummyData.map(d => html`
+                                ${available_rounds.length == 0 ? html`
+                                    No rounds are currently open. Feel free to start a new one.
+                                ` : available_rounds.map(d => html`
                                     <div class="single-round-wrapper">
                                         <a class="round-link" href='/'>
                                             <div class="stack paper-stack-wrapper" >
                                                 ${this.createPaperStack(d.count)}
                                             </div>
                                             <div class="round-description" >
-                                                Last <strong>${d.type}</strong> by <strong>${d.name}</strong>
-                                                <div class='time'>${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000))} ago</div>
+                                                Last <strong>${d.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                                <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
                                             </div>
-                                            <div class='since'>Round started ${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000000))} ago</div>
+                                            <div class='since'>Round started ${this.timeSince(d.timestamp)} ago</div>
                                         </a>
                                     </div>
                                 `)}
@@ -74,17 +79,19 @@ define(function(require, exports) {
                             Completed rounds
                         </div>
                         <div class="rounds">
-                            ${dummyData.map(d => html`
+                            ${completed_rounds.length == 0 ? html`
+                                No rounds have been completed yet.
+                            ` : completed_rounds.map(d => html`
                                 <div class="single-round-wrapper">
                                     <a class="round-link" href='/'>
                                         <div class="stack paper-stack-wrapper" >
                                             ${this.createPaperStack(d.count)}
                                         </div>
                                         <div class="round-description" >
-                                            Last <strong>${d.type}</strong> by <strong>${d.name}</strong>
-                                            <div class='time'>${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000))} ago</div>
+                                            Last <strong>${d.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                            <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
                                         </div>
-                                        <div class='since'>Round started ${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000000))} ago</div>
+                                        <div class='since'>Round started ${this.timeSince(d.timestamp)} ago</div>
                                     </a>
                                 </div>
                             `)}
@@ -96,6 +103,17 @@ define(function(require, exports) {
                 </div>
             </div>
             `;
+        }
+        createPaperStack(count) {
+            var countArray = Array(Math.min(count, 6)).fill(null)
+            return countArray.map((d, i) => {
+                return html `
+                <div class="paper-sheet" style="left:${i * 2}px; top:${i * 1}px">
+                    <div class="count-number">
+                        ${count}
+                    </div>
+                </div>`
+            })
         }
 
         static css() {
@@ -134,38 +152,27 @@ define(function(require, exports) {
             var interval = Math.floor(seconds / 31536000);
 
             if (interval > 1) {
-            return interval + " years";
+                return interval + " years";
             }
             interval = Math.floor(seconds / 2592000);
             if (interval > 1) {
-            return interval + " months";
+                return interval + " months";
             }
             interval = Math.floor(seconds / 86400);
             if (interval > 1) {
-            return interval + " days";
+                return interval + " days";
             }
             interval = Math.floor(seconds / 3600);
             if (interval > 1) {
-            return interval + " hours";
+                return interval + " hours";
             }
             interval = Math.floor(seconds / 60);
             if (interval > 1) {
-            return interval + " minutes";
+                return interval + " minutes";
             }
             return Math.floor(seconds) + " seconds";
         }
 
-        createPaperStack(count) {
-            var countArray = Array(Math.min(count, 6)).fill(null)
-            return countArray.map((d, i) => {
-                return html `
-                <div class="paper-sheet" style="left:${i * 2}px; top:${i * 1}px">
-                    <div class="count-number">
-                        ${count}
-                    </div>
-                </div>`
-            })
-        }
     }
 });
 

@@ -117,6 +117,12 @@ define(function(require, exports) {
                                         <p>Cabbage<span class='af'>AF</span> is a drawing game for groups.</p>
                                         <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
+                                        <div class='your-channels'>
+                                            ${props.user.channels.map(c => html`
+                                                <br /><a class='channel' href='/lobby/${c.slug}' onClick=${e => { e.preventDefault(); Router.navigate('/lobby/'+c.slug); }}>${c.title}</a>
+                                            `)}
+                                        </div>
+
                                         <p>It's a game we play among our friends with pen and paper IRL.</p>
                                         <p>It's sort of like paper telephone; every round begins with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
                                         <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
@@ -238,6 +244,8 @@ define(function(require, exports) {
                 .landing .newgame:hover { background: #000; }
                 .landing .newgame:active { background: #00a; }
                 .landing .authors-img { width: 600px; }
+
+                .landing .your-channels .channel { margin-top: 10px; text-decoration: none; display: inline-block; padding: 10px 30px; background: #26a; color: #fff; font-size: 30px; }
 
                 button {
                     outline: none;

@@ -87,6 +87,7 @@ module.exports = function({app, io, websockets}) {
                 return next(err);
             });
         } else {
+            req.user.channels = await cabbage.queries.get_user_channels({user_id: req.user.id});
             return next();
         }
     });
@@ -110,6 +111,8 @@ module.exports = function({app, io, websockets}) {
                 channel: props.channel.slug,
                 filters: {},
             }).results;
+
+            await cabbage.actions.add_user_to_channel({user_id: user.id, slug});
         }
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
@@ -150,9 +153,11 @@ module.exports = function({app, io, websockets}) {
     });
     app.post("/api/cabbage/channel/create", async function(req, res){
         const {title} = req.body;
+        const user_id = req.user.id;
         const slug = `${common.format_slug(title, false)}-${common.uuid(6)}`;
         try {
-            const channel = await cabbage.actions.create_channel({slug, title, settings: {}});
+            const channel = await cabbage.actions.create_channel({slug, title, user_id, settings: {}});
+            await cabbage.actions.add_user_to_channel({user_id, slug});
             res.json({ok: true, channel});
         } catch(e) {
             res.status(403);

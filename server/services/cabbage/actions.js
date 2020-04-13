@@ -5,7 +5,7 @@ const common = rfr('/client/lib/common');
 
 const queries = require('./queries');
 
-async function create_channel({title, slug, settings={}}) {    
+async function create_channel({title, slug, user_id, settings={}}) {    
     let existing = await db.return_one(`SELECT * FROM channels WHERE slug={slug}`, {slug});
     if(existing) {
         throw "A channel with this slug already exists";
@@ -13,25 +13,28 @@ async function create_channel({title, slug, settings={}}) {
 
         let res = await db.execute(`
             INSERT INTO channels
-            (title, slug, timestamp, settings)
+            (title, slug, user_id, timestamp, settings)
             VALUES
-            ({title}, {slug}, {timestamp}, {settings})
+            ({title}, {slug}, {user_id}, {timestamp}, {settings})
             RETURNING *
-        `, {title, slug, timestamp: Date.now(), settings: {}});
+        `, {title, slug, user_id, timestamp: Date.now(), settings: {}});
 
         return res.rows[0];
     }
 }
 
 
-async function add_user_to_channel({user, slug }) {
+async function add_user_to_channel({user_id, slug }) {
+    let channel = await queries.get_channel({slug});
+
     let res = await db.execute(`
         INSERT INTO channel_users
         (channel_id, user_id, timestamp)
         VALUES
         ({channel_id}, {user_id}, {timestamp})
+        ON CONFLICT DO NOTHING
         RETURNING *
-    `, {channel_id, user_id, timestamp: Date.now()});
+    `, {channel_id: channel.id, user_id, timestamp: Date.now()});
 
     return res.rows[0];
 
