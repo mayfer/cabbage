@@ -221,6 +221,11 @@ module.exports = function({app, io, websockets}) {
         return res.json({round});
     
     });
+    app.get("/api/me/?", async function(req, res){
+        let {user} = req;        
+        return res.json({user});
+    
+    });
 
     app.get("/api/channel/:channel([^/]+)(/?)", async function(req, res){
 

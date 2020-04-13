@@ -20,7 +20,7 @@ define(function(require, exports) {
     class Layout extends Component {
         constructor(props) {
             super();
-            let { channel, page, prompt_mode, view, round } = props;
+            let { channel, page, prompt_mode, view, round, user } = props;
             this.state = {
                 channel,
                 page,
@@ -29,6 +29,7 @@ define(function(require, exports) {
                 chat_open: false,
                 color: props.color,
                 round,
+                user,
             };
 
             const load_channel = async ({slug, force}) => {
@@ -44,7 +45,9 @@ define(function(require, exports) {
                 '/': {
                     as: 'home',
                     uses: async (...args) => {
-                        this.setState({page: 'home', channel: undefined}, () => {
+                        this.setState({page: 'home', channel: undefined}, async () => {
+                            const {user} = await API.request({url: `/api/me`});
+                            this.setState({user});
                         });
                     }
                 },
@@ -130,7 +133,7 @@ define(function(require, exports) {
                                         <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                         <div class='your-channels'>
-                                            ${props.user.channels.map(c => html`
+                                            ${s.user.channels.map(c => html`
                                                 <br /><a class='channel' href='/lobby/${c.slug}' onClick=${e => { e.preventDefault(); Router.navigate('/lobby/'+c.slug); }}>${c.title}</a>
                                             `)}
                                         </div>
