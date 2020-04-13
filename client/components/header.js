@@ -44,12 +44,6 @@ define(function(require, exports) {
 
                 #game-text { font-size: larger; margin-top: 16px; } 
 
-                @media only screen and (max-width: 600px) {
-                    #header { text-align: left; }
-                }
-                @media only screen and (min-width: 600px) {
-                    #header { text-align: center; }
-                }
                                 
             `
         }

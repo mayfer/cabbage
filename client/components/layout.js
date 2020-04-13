@@ -122,9 +122,9 @@ define(function(require, exports) {
 
 
                         ${(page == "channel" && channel) ? html`
-                            <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
 
                             <div class="game-column active column ">
+                                <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
                                 <div id="game-wrapper">
                                     <${Prompt} 
                                         mode='imageAsResponse'
@@ -133,7 +133,9 @@ define(function(require, exports) {
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
-                                <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
+                                <div class="padding">
+                                    <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
+                                </div>
                             </div>
                         ` : ``}
                     </div>
@@ -165,14 +167,39 @@ define(function(require, exports) {
                 #content-container {
                     position: relative;
                 }
+                #content-container {
+                    display: flex;
+                    height: calc(100%);
+                }
+                #content-container .column {
+                    flex-grow: 1;
+                    margin: 0;
+                }
+                #content-container .column.channel-column {
+                    position: relative;
+                    overflow: hidden;
+                }
+                #content-container .column.channel-column > .padding {
+                    margin: 10px;
+                    height: calc(100% - 20px);
+                    border-radius: 5px;
+                    overflow: hidden;
+                    position: relative;
+                }
+                #content-container .column:first-child {
+                    margin-left: ${params.column_gap};
+                }
+                #content-container .column.hidden {
+                    opacity: 1;
+                }
+                #content-container .column.channel-column { width: 25%; min-width: 350px; }
+                #content-container .column.game-column { width: 75%; }
 
                 #content-container .column {
                     height: 100%;
                     position: relative;
                     box-sizing: border-box;
-                    border-radius: 5px;
-                    overflow-y: auto;
-                    overflow-x: hidden;
+                    overflow: auto;
                     z-index: 1;
                 }
 
