@@ -76,7 +76,7 @@ define(function(require, exports) {
                             </div>
                             <a 
                                 href='/lobby/${channel.slug}/round/new/'
-                                onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
+                                onClick=${e => Router.hijack(e)}
                             >
                                 <span id="add-round-button" >+ Start a new round</span>
                             </a>

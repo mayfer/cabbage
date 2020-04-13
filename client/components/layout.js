@@ -24,7 +24,7 @@ define(function(require, exports) {
             this.state = {
                 channel,
                 page,
-                prompt_mode: round && round.last_turn && round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse',
+                prompt_mode: (round && round.last_turn) ? (round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse') : undefined,
                 view,
                 chat_open: false,
                 color: props.color,
@@ -62,6 +62,12 @@ define(function(require, exports) {
                     as: 'lobby',
                     uses: async ({slug}) => {
                         this.setState({page: 'channel', view: 'lobby', channel: await load_channel({slug, force: true})}, () => {});
+                    }
+                },
+                '/lobby/:slug/round/new': {
+                    as: 'round',
+                    uses: async ({slug, prompt_mode }) => {
+                        this.setState({ page: 'channel', view: 'round', channel: await load_channel({slug}), prompt_mode: undefined }, () => {});
                     }
                 },
                 '/lobby/:slug/round/new/:prompt_mode': {

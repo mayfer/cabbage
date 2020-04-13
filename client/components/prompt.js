@@ -56,6 +56,7 @@ define(function(require, exports) {
             return html`
             	<div id="prompt-container">
 					${mode === 'draw' ? html`
+                        Draw something
 						<${DrawingCanvas} submitPrompt=${this.submitFirstPrompt}/>
 					` : ''}
 					${mode === 'text' ? html`
