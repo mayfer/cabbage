@@ -19,11 +19,12 @@ define(function(require, exports) {
     class Layout extends Component {
         constructor(props) {
             super();
-            let { channel, page, prompt_mode } = props;
+            let { channel, page, prompt_mode, view } = props;
             this.state = {
                 channel,
                 page,
                 prompt_mode,
+                view,
                 chat_open: false,
                 color: props.color,
             };
@@ -45,15 +46,14 @@ define(function(require, exports) {
                 '/lobby/:channel': {
                     as: 'lobby',
                     uses: ({channel}) => {
-                        this.setState({page: 'channel', channel}, () => {
+                        this.setState({page: 'channel', view: 'lobby', channel}, () => {
                         });
                     }
                 },
-
                 '/lobby/:channel/round/new/:prompt_mode': {
                     as: 'round',
                     uses: ({channel, prompt_mode}) => {      
-                        this.setState({ page: 'channel', channel, prompt_mode }, () => {
+                        this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
                         });
                     }
                 },
@@ -61,7 +61,7 @@ define(function(require, exports) {
                 '/lobby/:channel/round/:round_id': {
                     as: 'round',
                     uses: ({channel, round_id}) => {
-                        this.setState({page: 'channel', channel}, () => {
+                        this.setState({page: 'channel', view: 'round', channel}, () => {
                         });
                     }
                 },
@@ -69,7 +69,7 @@ define(function(require, exports) {
                     as: 'newturn',
                     uses: ({ channel, round_id }) => {
                         // console.log(prompt_mode)
-                        this.setState({ page: 'channel', channel, prompt_mode }, () => {
+                        this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
                         });
                     }
                 },
@@ -90,7 +90,8 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { page, channel, prompt_mode } = s;
+            const { page, channel, prompt_mode, view } = s;
+            console.log(view)
             const titleURLString = `Share the URL to bring others into ${s.lobbyName}`;
             return html`
                 <div id="layout">
@@ -133,14 +134,19 @@ define(function(require, exports) {
 
 
                         ${(page == "channel" && channel) ? html`
-
                             <div class="game-column active column ">
                                 <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
                                 <div id="game-wrapper">
-                                    <${Prompt} 
-                                        mode='drawAsResponse'
-                                        prompt='This is an example prompt'
-                                    />
+                                    ${(view == "lobby") ? html`
+                                        <${Lobby} />
+                                    ` : ''}
+
+                                    ${(view == "round") ? html`
+                                        <${Prompt} 
+                                            mode='drawAsResponse'
+                                            prompt='This is an example prompt'
+                                        />
+                                    ` : ''}
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -250,7 +256,7 @@ define(function(require, exports) {
 
                 #game-wrapper {
                     width: 600px;
-                    margin: 50px auto;
+                    margin: 0px auto;
                     justify-content: center;
                     align-items: center;
                     flex-flow: column;

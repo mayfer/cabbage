@@ -100,7 +100,7 @@ module.exports = function({app, io, websockets}) {
             filters: {},
         });
 
-        let props = {channel, color, initial_spiels, user, page: 'channel'};
+        let props = {channel, color, initial_spiels, user, page: 'channel', view: 'lobby'};
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
