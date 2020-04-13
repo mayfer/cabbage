@@ -13,6 +13,7 @@ define(function(require, exports) {
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
+    const Rounds = require("components/rounds");
     const Common = require("lib/common");
 
     class Layout extends Component {
@@ -175,6 +176,10 @@ define(function(require, exports) {
 
             // #f9d49c
             // #e2806a
+
+                                       //         <${Prompt} 
+                                     //   promptMode='draw'
+                                   // />
             return `
                 .grecaptcha-badge { display: none; }
 
@@ -189,7 +194,7 @@ define(function(require, exports) {
                 }
 
                 .game-column.active.column {
-                    text-align: center;                    
+                    text-align: center; 
                 }
 
                 #content-container {
@@ -201,8 +206,10 @@ define(function(require, exports) {
                     position: relative;
                     box-sizing: border-box;
                     border-radius: 5px;
+
                     overflow-y: auto;
                     overflow-x: hidden;
+
                     z-index: 1;
                 }
 
