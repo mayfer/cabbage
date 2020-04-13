@@ -111,26 +111,21 @@ module.exports = function({app, io, websockets}) {
             filters: {},
         });
 
-        let props = {channel, color, initial_spiels, user, page: 'channel'};
+        let props = {channel, color, initial_spiels, user, page: 'channel', view: 'lobby'};
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
 
-    app.post('/api/auth/recaptcha_token', function(req, res, next) {
-        passport.authenticate('local', function(err, user, info) {
-            if (err) { return next(err);  }
-            if (!user) { return res.json({ok: false, info}); }
-            req.login(user, function(err) {
-                if (err) { return next(err); }
-                return res.json({ok: true, user});
-            });
-        })(req, res, next);
+    app.get("/lobby/:channel([^/]+)/round/new/:prompt_mode(draw|text)/?", function(req, res){
+        let {channel, prompt_mode} = req.params;
+        let props = {page: 'channel', channel, prompt_mode};
+        res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
+
     });
-    
+
 
 
     /* =============== API ============= */
-
 
     app.post("/api/channel", async function(req, res){
         const {slug} = req.query;
@@ -149,5 +144,17 @@ module.exports = function({app, io, websockets}) {
         res.json({spiel});
         
     });
+
+    app.post('/api/auth/recaptcha_token', function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { return next(err);  }
+            if (!user) { return res.json({ok: false, info}); }
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.json({ok: true, user});
+            });
+        })(req, res, next);
+    });
+    
 }
 
