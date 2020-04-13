@@ -18,6 +18,23 @@ define(function(require, exports) {
             var dummyData = [{name: "murat", count: 3}, {name: "adele", count: 2}, {name: "theo", count: 7 }];
             return html`
             <div id="lobby">
+
+                Send the URL of this page to invite others.<br />
+                <a class='copy-link' onClick=${e => {
+                    Common.copy_link(e);
+                    this.setState({copied: true})
+                    setTimeout( () => {
+                        this.setState({copied: false})
+                    }, 2000)
+                }}>
+                    Copy sharable link to this game
+                </a>
+                ${s.copied ? html`
+                    <span id="copied-text" >
+                        Copied ${window.location.href}
+                    </span>` : ''
+                }
+
                 <div class="rounds-content">
                     <div class="available-rounds-wrapper">
                         <div class="round-section-title">
@@ -74,11 +91,17 @@ define(function(require, exports) {
 
         static css() {
             return `
-                #lobby { width: 100%; margin: 0 auto; display: block; }
+                #lobby {  display: block; padding: 50px 0; }
+
+                #lobby .copy-link { font-size: 14px; background: #ccc; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #333; }
+                #lobby .copy-link:hover { background: #999; color: #000; }
+                #lobby .copy-link:active { background: #000; color: #fff; }
+                #copied-text { color: #666; margin-left: 15px; font-size: small;}
+
                 .stack-image { width: 100px}
                 .round-section-title { margin-top: 50px; margin-bottom: 15px;}
                 .footer-image { width: 100%; }
-                .stack { position: relative; text-align:center; height: 67px; width: 100px;}
+                .stack { position: relative; height: 67px; width: 100px;}
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute}
                 .paper-sheet {background-color: grey; width: 100%}

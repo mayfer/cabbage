@@ -2,6 +2,7 @@ define(function(require, exports) {
     const { Component, render, html, useRef, h } = require('preact');
 
     const Common = require("lib/common");
+    const Router = require("components/router");
     const { fonts } = require("components/theme");
 
     return class Header extends Component {
@@ -16,23 +17,9 @@ define(function(require, exports) {
                     </div>
                     ${this.props.channel ? html`
                         <div id='game-text'>
-                            <span id="lobbyName-text">
+                            <span id="title" onClick=${e => Router.navigate(`/lobby/${this.props.channel.slug}/`)}>
                                 ${this.props.channel.title}
                             </span>
-                            <button id="copy-link-button" onclick=${e => {
-                                Common.copy_link(e);
-                                this.setState({copied: true})
-                                setTimeout( () => {
-                                    this.setState({copied: false})
-                                }, 1000)
-                            }}>
-                                Copy sharable link
-                            </button> 
-                            ${s.copied ? html`
-                                <span id="copied-text" >
-                                    Copied!
-                                </span>` : ''
-                            }
                         </div>
                     ` : html``}
                 </div>
@@ -42,6 +29,10 @@ define(function(require, exports) {
         static css() {
             return `
                 #header {  height: 60px; padding: 0 15px; position: relative; display: flex; margin-top: 10px; }
+
+                #game-text { font-size: 25px; line-height: 60px; height: 60px; } 
+                #title { display: inline-block; font-weight: bolder; color: rgb(108, 108, 108); line-height: 60px; height: 60px; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif ;  cursor: pointer; }
+                #title:hover { color: #000;  }
             
                 #logo { display: inline-block; opacity: 0.9; margin-right: 30px; }
                 #logo:hover { opacity: 1; }
@@ -50,17 +41,10 @@ define(function(require, exports) {
                 #logo a { height: 60px; line-height: 60px; color: #000; text-decoration: none; display: inline-block; vertical-align: middle; font-family: ${fonts.mono}; opacity: 0.8; }
                 #logo a img { display: inline-block; height: 50px; margin: 5px 0; }
                 
-                #lobbyName-text { margin-right: 10px; margin-left: 5px; font-weight: bolder; color: black; }
-
-                #game-text { font-size: 25px; line-height: 60px; } 
-
-                #copied-text { color: gray; margin-left: 15px; font-size: small;}
 
                 @media only screen and (max-width: 600px) {
-                    #header { text-align: left; }
                 }
                 @media only screen and (min-width: 600px) {
-                    #header { text-align: center; }
                 }
                                 
             `
