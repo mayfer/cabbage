@@ -15,11 +15,15 @@ define(function(require, exports) {
 
         render(props, s) {
             const { channel } = props;
-            var dummyData = [{name: "murat", count: 3, lastTime: Date.now()}, {name: "adele", count: 2, lastTime: Date.now()}, {name: "theo", count: 7, lastTime: Date.now() }];
+            var dummyData = [
+                {name: "murat", count: 32, lastTime: Date.now(), type: 'caption'}, 
+                {name: "adele", count: 2, lastTime: Date.now(), type: 'drawing'}, 
+                {name: "theo", count: 7, lastTime: Date.now(), type: 'caption' }
+            ];
             return html`
             <div id="lobby">
-
-                Send the URL of this page to invite others.<br />
+                <h1>Lobby</h1>
+                <div class="round-section-title">Send the URL of this page to invite others.</div>
                 <a class='copy-link' onClick=${e => {
                     Common.copy_link(e);
                     this.setState({copied: true})
@@ -38,14 +42,14 @@ define(function(require, exports) {
                 <div class="rounds-content">
                     <div class="available-rounds-wrapper">
                         <div class="round-section-title">
-                            Available Rounds
+                            Available rounds
                         </div>
                         <div class="rounds">
                             <a 
                                 href='/lobby/${channel.slug}/round/new/'
                                 onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
                             >
-                                <button id="add-round-button" >Add Round +</button>
+                                <span id="add-round-button" >+ Start a new round</span>
                             </a>
                             <div class="rounds">
                                 ${dummyData.map(d => html`
@@ -55,8 +59,10 @@ define(function(require, exports) {
                                                 ${this.createPaperStack(d.count)}
                                             </div>
                                             <div class="round-description" >
-                                                Last turn: ${d.name}, ${this.timeSince(d.lastTime)} ago
+                                                Last <strong>${d.type}</strong> by <strong>${d.name}</strong>
+                                                <div class='time'>${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000))} ago</div>
                                             </div>
+                                            <div class='since'>Round started ${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000000))} ago</div>
                                         </a>
                                     </div>
                                 `)}
@@ -65,7 +71,7 @@ define(function(require, exports) {
                     </div>
                     <div class="complete-rounds-wrapper">
                         <div class="round-section-title">
-                            Complete Rounds
+                            Completed rounds
                         </div>
                         <div class="rounds">
                             ${dummyData.map(d => html`
@@ -75,8 +81,10 @@ define(function(require, exports) {
                                             ${this.createPaperStack(d.count)}
                                         </div>
                                         <div class="round-description" >
-                                            Last turn: ${d.name}, ${this.timeSince(d.lastTime)} ago
+                                            Last <strong>${d.type}</strong> by <strong>${d.name}</strong>
+                                            <div class='time'>${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000))} ago</div>
                                         </div>
+                                        <div class='since'>Round started ${this.timeSince(d.lastTime-Math.abs(Math.random()*1000000000))} ago</div>
                                     </a>
                                 </div>
                             `)}
@@ -92,26 +100,31 @@ define(function(require, exports) {
 
         static css() {
             return `
-                #lobby {  display: block; padding: 50px 0; }
+                #lobby {  display: block; }
 
-                #lobby .copy-link { font-size: 14px; background: #ccc; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #333; }
+                #lobby .copy-link { font-size: 14px; background: #ccc; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #000; }
                 #lobby .copy-link:hover { background: #999; color: #000; }
                 #lobby .copy-link:active { background: #000; color: #fff; }
                 #copied-text { color: #666; margin-left: 15px; font-size: small;}
 
-                .stack-image { width: 100px}
-                .round-section-title { margin-top: 70px; margin-bottom: 15px; color: black; font-size: large;}
+                .stack-image { width: 50px; }
+                .round-section-title { margin-top: 30px; margin-bottom: 15px; color: black; font-size: large;}
                 .footer-image { width: 100%; }
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute ;}
                 .paper-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 50px; height: 50px; }
-                .paper-stack-wrapper { position: relative; width: 100px; height: 50px; }
-                .count-number { position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
-                .single-round-wrapper { display: flex; flex-direction: row; margin-top: 12px; padding: 10px; background-color: rgba(130, 120, 120, 0.1);}
-                .round-link { display: inline-flex; text-decoration: none; }
-                .round-link:visited { color: black; }
-                .round-description { transform: translateY(68%); }
-                #add-round-button { margin-bottom: 20px; }
+                .paper-stack-wrapper { display: inline-block; position: relative; width: 50px; height: 50px; margin-right: 30px; }
+                .count-number { text-align: center; position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
+
+                .round-link, .round-link:visited { color: #000; border-radius: 5px; margin-top: 12px; padding: 10px; background-color: rgba(130, 120, 120, 0.1); line-height: 25px; font-size: 17px; cursor: pointer; display: block; text-decoration: none; }
+                .round-link .time { color: #666; }
+                .round-link .since { color: #666; float: right; font-size: 16px; }
+                .round-link:hover { background: #0f0; }
+
+            
+                .round-description { display: inline-block; vertical-align: top; }
+                #add-round-button { background: #efe; color: #040; line-height: 25px; padding: 0 10px; display: inline-block; }
+                #add-round-button:hover { background: #707; color: #fff; }
 
             `
         }
@@ -143,15 +156,13 @@ define(function(require, exports) {
         }
 
         createPaperStack(count) {
-            var countArray = Array(count).fill(null)
+            var countArray = Array(Math.min(count, 6)).fill(null)
             return countArray.map((d, i) => {
                 return html `
                 <div class="paper-sheet" style="left:${i * 2}px; top:${i * 1}px">
-                    ${(i + 1) == count ? html `
-                        <div class="count-number">
-                            ${i + 1}
-                        </div>
-                        `: ""}
+                    <div class="count-number">
+                        ${count}
+                    </div>
                 </div>`
             })
         }

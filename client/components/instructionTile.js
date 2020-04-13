@@ -24,9 +24,9 @@ define(function(require, exports) {
             const { channel } = props;
             return html`
             <div class="instruction-tile">
+                <h1>Start a new round</h1>
                 <div class="instruction-tile-inner">
                     <div class="instruction-title">
-                        Everyone starts by creating a prompt 
                         <div id="rounds-input-wrapper" >
                             Set a minimum number of rounds
                             <input id="rounds-count-input" type="Number" min="2" defaultValue="5" placeholder="5" ref=${r => this.input=r} 
@@ -40,21 +40,21 @@ define(function(require, exports) {
                             class="button-wrapper"
                             onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/text`);}}
                         >
-                            <button id="start-writing-button" class="prompt-start-button">
+                            <div id="start-writing-button" class="prompt-start-button">
                                 Write something for a friend to draw
                                 <p class="eg-text">
                                     e.g. despair, ankles, beef stew bath
                                 </p>
-                            </button>
+                            </div>
                         </a>
                         <a 
                             href="/lobby/${channel.slug}/round/new/draw" 
                             onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/draw`);}}
                             class="button-wrapper"
                         >
-                            <button id="start-drawing-button" class="prompt-start-button">
+                            <div id="start-drawing-button" class="prompt-start-button">
                                 Draw something for a friend to caption 
-                            </button>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -64,19 +64,20 @@ define(function(require, exports) {
 
         static css() {
             return `
-                .instruction-tile { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; display: block; }
-                .instruction-tile-inner { width: 600px; height: 400px; border: 3px solid #000; background: #fff; padding: 15px; }
+                .instruction-tile { width: 600px; margin: 40px auto; display: block; text-align: center; }
+                .instruction-tile-inner { width: 600px; height: 400px; border-radius: 5px; background: #fff; padding: 15px; }
+                .button-wrapper { text-decoration: none; color: #000; }
                 .prompt-start-buttons { display: flex; justify-content : space-around; }
-                .prompt-start-button { width: 250px; height: 250px; font-size: medium; cursor: pointer; }
-                .instruction-title { margin-top: 25px; margin-bottom: 20px}
+                .prompt-start-button { width: 250px; height: 250px; font-size: medium; cursor: pointer; display: table-cell; vertical-align: middle; padding: 10px; border-radius: 5px; font-size: 25px; }
+                .instruction-title { }
                 #start-drawing-button {background-color: #f9d49c; opacity: 0.9;}
                 #start-writing-button {background-color: #76ba8d; opacity: 0.9;}
                 .eg-text { color: ##383636; font-size: small;}
-                #start-drawing-button:hover { opacity: 1; border: 2px solid #fff;}
-                #start-drawing-button:active { position: relative; top: 2px; left: 2px; border: 2px solid #fff;}
+                #start-drawing-button:hover { opacity: 1; }
+                #start-drawing-button:active { position: relative; top: 2px; left: 2px; border-radius: 5px;}
                 #start-drawing-button:focus { outline:0;}
-                #start-writing-button:hover { opacity: 1; border: 2px solid #fff;}
-                #start-writing-button:active { position: relative; top: 2px; left: 2px; border: 2px solid #fff;}
+                #start-writing-button:hover { opacity: 1; }
+                #start-writing-button:active { position: relative; top: 2px; left: 2px; border-radius: 5px;}
                 #start-writing-button:focus { outline:0;}
                 #rounds-count-input { margin-left: 10px; text-align: center; border: 1px solid #000; width: 50px;}
                 #rounds-count-input:focus { outline:none !important; outline-width: 0 !important; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;}

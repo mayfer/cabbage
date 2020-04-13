@@ -126,9 +126,8 @@ define(function(require, exports) {
                                             <li>During the rounds, you only see what you are passed off from the other player; you don't get to see the full chain of submissions until the round ends.</li>
                                             <li>A round ends when either (a) every player has made a submission, or (b) the round times out.</li>
                                         </ul>
-                                        <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
                                     `}
-                                    <hr />
+                                    <hr style="margin: 100px;" />
                                     <p>Cabbage<span class='af'>af</span> was made for the <a href='https://pioneer.app/hackathon'>Pioneer hackathon</a> on April 11-12, 2020</p>
                                     <p>by Murat, Adele, Madeleine and Theo.<br />contact@probablymurat.com</p>
 
@@ -230,7 +229,7 @@ define(function(require, exports) {
                     width: 100%;
                 }
 
-                .landing { text-align: center; font-size: 20px; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 24px; }
+                .landing { text-align: center; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 21px; }
                 .landing .af { color: rgba(126, 86, 86, 0.9); font-weight: bold; font-size: 13px; transform: rotate(-20deg); display: inline-block; position: relative; top: 5px;}
                 .landing .home-logo { height: 125px; }
                 .landing ul {text-align: left; }
@@ -258,7 +257,7 @@ define(function(require, exports) {
 
                 #game-wrapper {
                     min-width: 600px;
-                    max-width: 900px;
+                    max-width: 700px;
                     margin: 0px auto;
                     justify-content: center;
                     align-items: center;
