@@ -51,10 +51,36 @@ async function get_rounds({channel_id}) {
     return result.rows;
 }
 
-async function get_round({user, round_id}) {
+async function get_round({ round_id}) {
     // available, pending and completed
-    //let result = await db.execute(`SELECT * FROM rounds r JOIN channels c WHERE r.channel_id=c.id AND c.slug={slug}`, {slug});
-    return result.rows;
+    // available, pending and completed
+    let result = await db.execute(`
+        SELECT r.id, r.timestamp, r.status, COUNT(r.id) as count, array_agg(u.handle) as users FROM rounds r
+        LEFT JOIN turns t ON r.id = t.round_id
+        JOIN users u on u.id = t.user_id
+        WHERE r.id={round_id}
+        GROUP BY r.id, r.timestamp
+        ORDER BY r.timestamp DESC
+    `, {round_id});
+
+    let last_posts = {};
+    let last_posts_result = await db.execute(`
+        SELECT DISTINCT ON(r.id) t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
+        LEFT JOIN turns t ON r.id = t.round_id
+        JOIN users u on u.id = t.user_id
+        WHERE r.id={round_id}
+        ORDER BY r.id, t.timestamp DESC
+    `, {round_id});
+
+    last_posts_result.rows.forEach((t) => {
+        last_posts[t.round_id] = t;
+    });
+    result.rows.forEach((r) => {
+        if(last_posts[r.id]) {
+            r.last_turn = last_posts[r.id];
+        }
+    });
+    return result.rows[0];
 }
 
 module.exports = {

@@ -41,7 +41,7 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { mode, prompt, channel } = props;
+            const { mode, prompt, channel, round } = props;
             return html`
             	<div id="prompt-container">
 					${mode === 'draw' ? html`
@@ -51,14 +51,24 @@ define(function(require, exports) {
 						<${TextInput} submitPrompt=${this.submitFirstPrompt}/>
 					` : ''}
 					${mode === 'textAsResponse' ? html`
-						<img src=${prompt} id="prompt-image" />
-						<${TextInput} submitPrompt=${this.submitPromptResponse} />
+						${round && round.last_turn && round.last_turn.type == 'drawing' ?  html`
+                            ${round && round.last_turn ? round.last_turn.handle : ''}'s drawing for you to caption:
+                            <div class="drawing-frame">
+                                <img src=${round.last_turn.contents} id="prompt-image" />
+                            </div>
+                        ` : ``}
+						<${TextInput} round=${round} submitPrompt=${this.submitPromptResponse} />
 					` : ''}
 					${mode === 'drawAsResponse' ? html`
 						<div id='text-prompt-wrapper'>
-							<h2>${prompt}</h2>
+                            ${round && round.last_turn ? round.last_turn.handle : ''}'s prompt for you to draw:
+							<h2 class='prompt'>
+                                ${round && round.last_turn && round.last_turn.type == 'caption' ? round.last_turn.contents : ''}
+
+
+                            </h2>
 						</div>
-						<${DrawingCanvas} submitPrompt=${this.submitPromptResponse} />
+						<${DrawingCanvas} round=${round} submitPrompt=${this.submitPromptResponse} />
 					` : ''}
 				</div>
             `
@@ -66,6 +76,8 @@ define(function(require, exports) {
 
         static css() {
             return `
+                .drawing-frame { background: #fff; border: 3px solid #aaa; }
+                h2.prompt { color: #000; }
             	#prompt-container {
             		padding-top: 20px;
             	}

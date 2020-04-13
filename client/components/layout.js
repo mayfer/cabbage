@@ -20,14 +20,15 @@ define(function(require, exports) {
     class Layout extends Component {
         constructor(props) {
             super();
-            let { channel, page, prompt_mode, view } = props;
+            let { channel, page, prompt_mode, view, round } = props;
             this.state = {
                 channel,
                 page,
-                prompt_mode,
+                prompt_mode: round && round.last_turn && round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse',
                 view,
                 chat_open: false,
                 color: props.color,
+                round,
             };
 
             const load_channel = async ({slug, force}) => {
@@ -69,7 +70,14 @@ define(function(require, exports) {
                 '/lobby/:slug/round/:round_id': {
                     as: 'round',
                     uses: async ({slug, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}), prompt_mode }, () => {});
+                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}) }, async () => {
+                            const {round} = await API.request({method: 'get', url: '/api/round/'+round_id,})
+                            if(round) {
+                                let prompt_mode = round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse';
+                                this.setState({prompt_mode, round})
+                            }
+                            console.log({round})
+                        });
                     }
                 },
             });
@@ -89,7 +97,7 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { page, channel, prompt_mode, view } = s;
+            const { page, channel, prompt_mode, view, round } = s;
 
             let initial_spiels;
             if(channel) {
@@ -159,7 +167,7 @@ define(function(require, exports) {
                                         <${Prompt} 
                                             channel=${channel}
                                             mode=${prompt_mode}
-                                            prompt='This is an example prompt'
+                                            round=${round}
                                         />
                                     ` : ''}
                                 </div>

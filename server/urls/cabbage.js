@@ -126,7 +126,7 @@ module.exports = function({app, io, websockets}) {
         let custom_props = {page: 'newgame'};
         load_channel({req, res, custom_props});
     });
-    app.get("/lobby/:slug([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
+    app.get("/lobby/:slug([^/]+)(/?)", async function(req, res) {
 
         let custom_props = {page: 'channel', view: 'lobby'};
         load_channel({req, res, custom_props});
@@ -134,6 +134,13 @@ module.exports = function({app, io, websockets}) {
     app.get("/lobby/:slug([^/]+)/round/new/?", function(req, res){
         let { prompt_mode } = req.params;
         let custom_props = {page: 'channel', view: 'round', prompt_mode};
+        load_channel({req, res, custom_props});
+    });
+    app.get("/lobby/:slug([^/]+)/round/:round_id([^/]+)/?", async function(req, res){
+        let { round_id } = req.params;
+
+        let round = await cabbage.queries.get_round({round_id}); 
+        let custom_props = {page: 'channel', view: 'round', round};
         load_channel({req, res, custom_props});
     });
     app.get("/lobby/:slug([^/]+)/round/new/:prompt_mode(draw|text|$)/?", function(req, res){
@@ -197,6 +204,16 @@ module.exports = function({app, io, websockets}) {
 
         res.json({spiel});
         
+    });
+
+    app.get("/api/round/:round_id([^/]+)(/?)", async function(req, res){
+
+        let {round_id} = req.params;
+        //let opts = {channel, filters, since, until, center_timestamp, user_id, spiel_id};
+        
+        let round = await cabbage.queries.get_round({round_id});
+        return res.json({round});
+    
     });
 
     app.get("/api/channel/:channel([^/]+)(/?)", async function(req, res){
