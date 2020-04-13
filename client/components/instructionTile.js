@@ -28,7 +28,7 @@ define(function(require, exports) {
                             <button id="start-writing-button" class="prompt-start-button">
                                 Write something for a friend to draw
                                 <p class="eg-text">
-                                    e.g. dispair, ankles, beef stew bath
+                                    e.g. despair, ankles, beef stew bath
                                 </p>
                             </button>
                         </span>
