@@ -75,6 +75,8 @@ function genColor (seed) {
 
 module.exports = function({app, io, websockets}) {
 
+    app.disable('etag');
+
     app.use(async function(req, res, next) {
         // auto anon login
         if(!req.user) {
@@ -141,12 +143,12 @@ module.exports = function({app, io, websockets}) {
 
     /* =============== API ============= */
 
-    app.get("/api/channel", async function(req, res){
+    app.get("/api/cabbage/channel", async function(req, res){
         const {slug} = req.query;
         const channel = await cabbage.queries.get_channel({slug});
         res.json({channel});
     });
-    app.post("/api/channel/create", async function(req, res){
+    app.post("/api/cabbage/channel/create", async function(req, res){
         const {title} = req.body;
         const slug = `${common.format_slug(title, false)}-${common.uuid(6)}`;
         try {
@@ -168,6 +170,19 @@ module.exports = function({app, io, websockets}) {
 
         res.json({spiel});
         
+    });
+
+    app.get("/api/channel/:channel([^/]+)(/?)", async function(req, res){
+
+        let {channel} = req.params;
+        //let opts = {channel, filters, since, until, center_timestamp, user_id, spiel_id};
+        
+        let result = await es.filter({
+            channel,
+            filters: {},
+        });
+        return res.json({channel, spiels: result.results});
+    
     });
 
     app.post('/api/auth/recaptcha_token', function(req, res, next) {
