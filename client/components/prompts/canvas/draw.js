@@ -62,7 +62,7 @@ define(function(require, exports) {
                             <button id='undoStrokeButton' class='control-button'>Undo</button>
                             <button id='redoStrokeButton' class='control-button'>Redo</button>
                         </div>
-                        <button id='prompt-submit' onClick=${this.handleSubmit} disable=${!disableSubmit}>Submit</button>
+                        <button id='prompt-submit' onClick=${this.handleSubmit}>Submit</button>
                     </div>
                 </div>
 

@@ -39,7 +39,6 @@ async function add_user_to_channel({user, slug }) {
 }
 
 async function create_new_turn({round_id, user_id, previous_turn_id, type, contents }) {
-    console.log(round_id, user_id, previous_turn_id, type, contents)
     let res = await db.execute(`
         INSERT INTO turns
         (round_id, user_id, previous_turn_id, timestamp, type, contents)

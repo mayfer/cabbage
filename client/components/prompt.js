@@ -28,16 +28,12 @@ define(function(require, exports) {
 
         async submitFirstPrompt(data){
             const { channel } = this.props; 
-            this.setState({ disableSubmit: true })
             const round_res = await API.request({method: "post", url: "/api/round/create", body: { channel }})
             const body = { ...data, round_id: round_res.round.id, previous_turn_id: null }
             const turn_res = await API.request({method: "post", url: "/api/turn/create", body})
             if (turn_res.ok) {
                 Router.navigate(`/lobby/${channel.slug}`)
-            } else {
-                alert('coult not save')
-                this.setState({ disableSubmit: false })
-            }              
+            }
         }
 
         submitPromptResponse(data){
