@@ -7,6 +7,7 @@ define(function(require, exports) {
     return class Header extends Component {
 
         render(props, s) {
+            var name = "beans"
             return html`
                 <div id='header'>
                     <div id='logo'>
@@ -14,14 +15,17 @@ define(function(require, exports) {
                             <img src="/client/assets/cabbage.png" id='logo' />
                         </a>
                     </div>
-                    ${props.lobbyName ? html`
+                    ${name ? html`
                         <div id='game-text'>
                             <span id="lobbyName-text">
-                                ${props.lobbyName}
+                                ${name}
                             </span>
                             <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
                                 Copy sharable link
-                            </button>
+                            </button> 
+                            <span id="copied-text" >
+                                Copied!
+                            </span>
                         </div>
                     ` : html``}
                 </div>
@@ -44,8 +48,21 @@ define(function(require, exports) {
 
                 #game-text { font-size: larger; margin-top: 16px; } 
 
+                #copied-text { color: gray; visibility: none; margin-left: 15px; font-size: small;}
+
+                @media only screen and (max-width: 600px) {
+                    #header { text-align: left; }
+                }
+                @media only screen and (min-width: 600px) {
+                    #header { text-align: center; }
+                }
                                 
             `
+        }
+
+        async makeCopiedTextAppear() {
+            var copiedText = $("#copied-text")
+            
         }
     }
 });

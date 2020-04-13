@@ -247,9 +247,7 @@ define(function(require, exports) {
                     display: inline-block;
                 }
 
-
                 @media only screen and (min-width: 600px) {
-
 
                 }
                 @media only screen and (max-width: 600px) {
