@@ -24,14 +24,25 @@ define(function(require, exports) {
                             Available Rounds
                         </div>
                         <div class="rounds">
-                            
-                            <div class="stack" >
-                                <a 
-                                    href='/lobby/${channel.slug}/round/new/'
-                                    onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
-                                >
-                                    <button>Add Round +</button>
-                                </a>
+                            <a 
+                                href='/lobby/${channel.slug}/round/new/'
+                                onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
+                            >
+                                <button>Add Round +</button>
+                            </a>
+                            <div class="rounds">
+                                ${dummyData.map(d => html`
+                                    <div class="single-round-wrapper">
+                                        <a class="round-link" href='/'>
+                                            <div class="stack paper-stack-wrapper" >
+                                                ${this.createPaperStack(d.count)}
+                                            </div>
+                                            <div class="round-description" >
+                                                Last turn: ${d.name}, ${this.timeSince(d.lastTime)} ago
+                                            </div>
+                                        </a>
+                                    </div>
+                                `)}
                             </div>
                         </div>
                     </div>
@@ -41,12 +52,16 @@ define(function(require, exports) {
                         </div>
                         <div class="rounds">
                             ${dummyData.map(d => html`
-                                <a href='/'>
-                                    <div class="stack paper-stack-wrapper" >
-                                        ${this.createPaperStack(d.count)}
-                                        ${this.timeSince(d.lastTime)}
-                                    </div>
-                                </a>
+                                <div class="single-round-wrapper">
+                                    <a class="round-link" href='/'>
+                                        <div class="stack paper-stack-wrapper" >
+                                            ${this.createPaperStack(d.count)}
+                                        </div>
+                                        <div class="round-description" >
+                                            Last turn: ${d.name}, ${this.timeSince(d.lastTime)} ago
+                                        </div>
+                                    </a>
+                                </div>
                             `)}
                         </div>
                     </div>
@@ -62,14 +77,17 @@ define(function(require, exports) {
             return `
                 #lobby { width: 100%; margin: 0 auto; display: block; }
                 .stack-image { width: 100px}
-                .round-section-title { margin-top: 50px; margin-bottom: 15px;}
+                .round-section-title { margin-top: 70px; margin-bottom: 15px; color: black; font-size: large;}
                 .footer-image { width: 100%; }
-                .stack { height: 100px; width: 100px;}
                 .stack-image { width: 100%; position: absolute; }
-                .stack-count {postion: absolute}
-                .paper-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 50px; height: 50px;}
-                .paper-stack-wrapper { position: relative; width: 100px; height: 100px;}
-                .count-number { position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%);}
+                .stack-count {postion: absolute ;}
+                .paper-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 50px; height: 50px; }
+                .paper-stack-wrapper { position: relative; width: 100px; height: 100px; }
+                .count-number { position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
+                .single-round-wrapper { display: flex; flex-direction: row;  }
+                .round-link { display: inline-flex; text-decoration: none; }
+                .round-link:visited { color: black; }
+                .round-description { transform: translateY(68%); }
 
             `
         }
@@ -104,7 +122,7 @@ define(function(require, exports) {
             var countArray = Array(count).fill(null)
             return countArray.map((d, i) => {
                 return html `
-                <div class="paper-sheet" style="left:${i * 2}px; bottom:${i * 3}px">
+                <div class="paper-sheet" style="left:${i * 2}px; bottom:${i * 1}px">
                     ${(i + 1) == count ? html `
                         <div class="count-number">
                             ${i + 1}
