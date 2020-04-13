@@ -99,10 +99,9 @@ module.exports = function({app, io, websockets}) {
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
 
     });
-    app.get("/lobby/:channel([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
+    app.get("/lobby/:slug([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
         let {user} = req;
-        let {channel} = req.params;
-        if(!channel) channel = 'index';
+        let {slug} = req.params;
         
         let seed = parseInt(("1"+(req.headers['x-forwarded-for'] || req.connection.remoteAddress)).replace(/[^0-9]/g, ''));
 
@@ -110,12 +109,16 @@ module.exports = function({app, io, websockets}) {
 
         req.session.color = color;
 
-        let { results: initial_spiels } = await es.filter({
-            channel,
-            filters: {},
-        });
 
-        let props = {channel, color, initial_spiels, user, page: 'channel', view: 'lobby'};
+        let props = {color, user, page: 'channel', view: 'lobby'};
+
+        if(slug) {
+            props.channel = await cabbage.queries.get_channel({slug});
+            props.initial_spiels = await es.filter({
+                channel: props.channel.slug,
+                filters: {},
+            }).results;
+        }
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });

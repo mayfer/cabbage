@@ -14,10 +14,10 @@ define(function(require, exports) {
                             <img src="/client/assets/cabbage.png" id='logo' />
                         </a>
                     </div>
-                    ${this.props.lobbyName ? html`
+                    ${this.props.channel ? html`
                         <div id='game-text'>
                             <span id="lobbyName-text">
-                                ${this.props.lobbyName}
+                                ${this.props.channel.title}
                             </span>
                             <button id="copy-link-button" onclick=${e => {
                                 Common.copy_link(e);

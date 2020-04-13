@@ -43,24 +43,25 @@ define(function(require, exports) {
                         });
                     }
                 },
-                '/lobby/:channel': {
+                '/lobby/:slug': {
                     as: 'lobby',
-                    uses: ({channel}) => {
-                        this.setState({page: 'channel', view: 'lobby', channel}, () => {
+                    uses: async ({slug}) => {
+                        this.setState({page: 'channel', view: 'lobby', channel: {slug}}, () => {});
+                        const {channel} = await API.request({url: `/api/channel?slug=${slug}`});
+                        this.setState({page: 'channel', view: 'lobby', channel: channel}, () => {});
+                    }
+                },
+                '/lobby/:slug/round/new/:prompt_mode': {
+                    as: 'round',
+                    uses: ({slug, prompt_mode }) => {      
+                        this.setState({ page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {
                         });
                     }
                 },
-                '/lobby/:channel/round/new/:prompt_mode': {
+                '/lobby/:slug/round/:round_id': {
                     as: 'round',
-                    uses: ({channel, prompt_mode }) => {      
-                        this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
-                        });
-                    }
-                },
-                '/lobby/:channel/round/:round_id': {
-                    as: 'round',
-                    uses: ({channel, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel, prompt_mode }, () => {
+                    uses: ({slug, round_id }) => {
+                        this.setState({page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {
                         });
                     }
                 },
@@ -73,7 +74,7 @@ define(function(require, exports) {
         }
 
         setLobbyDetails({lobbyName, lobbySlug}) {
-            this.setState({lobbyName: lobbyName, slug: lobbySlug});
+            this.setState({channel: {title :lobbyName, slug: lobbySlug}});
         }
 
         log_in ({detail: {user}})  {
@@ -82,12 +83,14 @@ define(function(require, exports) {
 
         render(props, s) {
             const { page, channel, prompt_mode, view } = s;
-            const titleURLString = `Share the URL to bring others into ${s.lobbyName}`;
 
-            const initial_spiels = props.initial_spiels && props.initial_spiels.length ? props.initial_spiels : [
-                {name: "lobby slug", color: "#ffa", spiel: "Hello, this is the shared chat area for anyone who joins your game.", timestamp: Date.now(), channel, },
-                {name: "lobby slug", color: "#ffa", spiel: "Pick a name and type away.", timestamp: Date.now(), channel, },
-            ]
+            let initial_spiels;
+            if(channel) {
+                initial_spiels = props.initial_spiels && props.initial_spiels.length ? props.initial_spiels : [
+                    {name: "lobby slug", color: "#ffa", spiel: "Hello, this is the shared chat area for anyone who joins your game.", timestamp: Date.now(), channel: channel.slug, },
+                    {name: "lobby slug", color: "#ffa", spiel: "Pick a name and type away.", timestamp: Date.now(), channel: channel.slug, },
+                ]
+            }
             return html`
                 <div id="layout">
                     <div id="content-container">
@@ -130,7 +133,7 @@ define(function(require, exports) {
 
                         ${(page == "channel" && channel) ? html`
                             <div class="game-column active column ">
-                                <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
+                                <${Header} channel=${channel} page=${page} />
                                 <div id="game-wrapper">
                                     ${(view == "lobby") ? html`
                                         <${Lobby} channel=${channel}/>
@@ -150,7 +153,7 @@ define(function(require, exports) {
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <div class="padding">
-                                    <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
+                                    <${Channel} channel=${channel.slug} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
                                 </div>
                             </div>
                         ` : ``}
@@ -268,7 +271,7 @@ define(function(require, exports) {
                 }
                 @media only screen and (max-width: 600px) {
                 }
-            ` + Header.css() + Channel.css() + Prompt.css() + CreateForm.css();
+            ` + Header.css() + Channel.css() + Prompt.css() + CreateForm.css() + Lobby.css();
         }
 
     }
