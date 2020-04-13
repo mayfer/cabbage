@@ -120,9 +120,9 @@ module.exports = function({app, io, websockets}) {
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
 
-    app.get("/lobby/:channel([^/]+)/round/new/:prompt_mode(draw|text)/?", function(req, res){
-        let {channel, prompt_mode} = req.params;
-        let props = {page: 'channel', channel, prompt_mode};
+    app.get("/lobby/:channel([^/]+)/round/new/:prompt_mode(draw|text|$)/?", function(req, res){
+        let {channel, prompt_mode } = req.params;
+        let props = {page: 'channel', view: 'round', channel, prompt_mode };
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
 
     });

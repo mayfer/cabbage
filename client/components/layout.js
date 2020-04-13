@@ -52,23 +52,15 @@ define(function(require, exports) {
                 },
                 '/lobby/:channel/round/new/:prompt_mode': {
                     as: 'round',
-                    uses: ({channel, prompt_mode}) => {      
+                    uses: ({channel, prompt_mode }) => {      
                         this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
                         });
                     }
                 },
-
                 '/lobby/:channel/round/:round_id': {
                     as: 'round',
-                    uses: ({channel, round_id}) => {
-                        this.setState({page: 'channel', view: 'round', channel}, () => {
-                        });
-                    }
-                },
-                '/lobby/:channel/round/:round_id/newturn': {
-                    as: 'newturn',
-                    uses: ({ channel, round_id }) => {
-                        this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
+                    uses: ({channel, round_id }) => {
+                        this.setState({page: 'channel', view: 'round', channel, prompt_mode }, () => {
                         });
                     }
                 },
@@ -141,12 +133,16 @@ define(function(require, exports) {
                                 <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
                                 <div id="game-wrapper">
                                     ${(view == "lobby") ? html`
-                                        <${Lobby} />
+                                        <${Lobby} channel=${channel}/>
                                     ` : ''}
 
-                                    ${(view == "round") ? html`
+                                    ${(view == "round" && !prompt_mode) ? html`
+                                        <${InstructionTile} channel=${channel} />                          
+                                    ` : ''}
+
+                                    ${(view == "round" && prompt_mode) ? html`                                     
                                         <${Prompt} 
-                                            mode='drawAsResponse'
+                                            mode=${prompt_mode}
                                             prompt='This is an example prompt'
                                         />
                                     ` : ''}
