@@ -13,8 +13,11 @@ define(function(require, exports) {
             this.state = {};
             css.load("instruction-tile", InstructionTile.css())
         }
+        componentDidMount() {
+        }
 
         render(props, s) {
+            const { channel } = props;
             return html`
             <div class="instruction-tile">
                 <div class="instruction-tile-inner">
@@ -24,19 +27,19 @@ define(function(require, exports) {
                         <p>Choose one:</p>
                     </div>
                     <div class="prompt-start-buttons">
-                        <span class="button-wrapper">
+                        <a href="/lobby/${channel}/round/new/text" class="button-wrapper">
                             <button id="start-writing-button" class="prompt-start-button">
                                 Write something for a friend to draw
                                 <p class="eg-text">
                                     e.g. despair, ankles, beef stew bath
                                 </p>
                             </button>
-                        </span>
-                        <span class="button-wrapper">
+                        </a>
+                        <a href="/lobby/${channel}/round/new/draw" class="button-wrapper">
                             <button id="start-drawing-button" class="prompt-start-button">
                                 Draw something for a friend to caption 
                             </button>
-                        </span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -17,6 +17,7 @@ define(function(require, exports) {
         // availableRounds = getAvailableRounds.map((i) => <div> i.name</div>)
 
         render(props, s) {
+            const { channel } = props;
             var dummyData = [{name: "murat", count: 3}, {name: "adele", count: 2}, {name: "theo", count: 7 }];
             return html`
             <div id="lobby">
@@ -38,6 +39,13 @@ define(function(require, exports) {
                                     </div>
                                 </a>
                             `)}
+                            
+                            <div class="stack" >
+                                <a href='/lobby/${channel}/round/new/'>
+                                    <button>Add Round +</button>
+                                </a>
+                            </div>
+                            
                             
                         </div>
                     </div>
