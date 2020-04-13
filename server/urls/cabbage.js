@@ -161,16 +161,25 @@ module.exports = function({app, io, websockets}) {
     });
 
     app.post("/api/round/create", async function(req, res){
-        const {channel, user} = req.body;
-        console.log(channel, user)
+        const user_id = req.user.id;
+        const channel_id = req.body.channel.id;
+        try {
+            const round = await cabbage.actions.start_new_round({channel_id, user_id});
+            res.json({ok: true, round});
+        } catch(e) {
+            res.status(403);
+            res.json({ok: false, error: e.message})
+        }
+    });
 
-        // try {
-        //     const channel = await cabbage.actions.start_new_round({channel});
-        //     res.json({ok: true, channel});
-        // } catch(e) {
-        //     res.status(403);
-        //     res.json({ok: false, error: e.message})
-        // }
+    app.post("/api/turn/create", async function(req, res){
+        try {
+            const turn = await cabbage.actions.create_new_turn({...req.body, user_id: req.user.id});
+            res.json({ok: true, turn});
+        } catch(e) {
+            res.status(403);
+            res.json({ok: false, error: e.message})
+        }
     });
 
     app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){
