@@ -27,7 +27,11 @@ define(function(require, exports) {
                         <p>Choose one:</p>
                     </div>
                     <div class="prompt-start-buttons">
-                        <a href="/lobby/${channel}/round/new/text" class="button-wrapper">
+                        <a 
+                            href="/lobby/${channel}/round/new/text" 
+                            class="button-wrapper"
+                            onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel}/round/new/text`);}}
+                        >
                             <button id="start-writing-button" class="prompt-start-button">
                                 Write something for a friend to draw
                                 <p class="eg-text">
@@ -35,7 +39,11 @@ define(function(require, exports) {
                                 </p>
                             </button>
                         </a>
-                        <a href="/lobby/${channel}/round/new/draw" class="button-wrapper">
+                        <a 
+                            href="/lobby/${channel}/round/new/draw" 
+                            onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel}/round/new/draw`);}}
+                            class="button-wrapper"
+                        >
                             <button id="start-drawing-button" class="prompt-start-button">
                                 Draw something for a friend to caption 
                             </button>

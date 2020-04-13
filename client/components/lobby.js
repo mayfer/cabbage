@@ -41,7 +41,10 @@ define(function(require, exports) {
                             `)}
                             
                             <div class="stack" >
-                                <a href='/lobby/${channel}/round/new/'>
+                                <a 
+                                    href='/lobby/${channel}/round/new/'
+                                    onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel}/round/new/`);}}
+                                >
                                     <button>Add Round +</button>
                                 </a>
                             </div>
