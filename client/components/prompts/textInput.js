@@ -42,7 +42,7 @@ define(function(require, exports) {
             const { value } = s;
             return html`
                 <div class='main-textarea'>
-                	<textarea placeholder="${props.round ? "Caption the drawing" : "Enter a drawing prompt, anything you like"}" onInput=${this.handleTextChange}>
+                	<textarea placeholder="${props.round ? "Caption the drawing" : "Type a drawing prompt, anything you like"}" onInput=${this.handleTextChange}>
                         ${value}
                     </textarea>
                     <div class="button-grid">
