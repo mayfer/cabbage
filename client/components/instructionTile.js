@@ -13,8 +13,6 @@ define(function(require, exports) {
             this.state = {};
             css.load("instruction-tile", InstructionTile.css())
         }
-        componentDidMount() {
-        }
 
         componentDidMount(){
             this.input.focus()

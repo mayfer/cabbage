@@ -4,13 +4,17 @@ define(function(require, exports) {
     const { Component, render, html, useRef, h } = require('preact');
     const DrawingCanvas = require("components/prompts/canvas/draw");
     const TextInput = require("components/prompts/textInput");
+    const API = require("components/api");
+    const Router = require("components/router");
 
     class Prompt extends Component {
         constructor(props) {
             super();
-            let channel = props.channel;
             this.state = {
+                disableSubmit: false,
             };
+            this.submitFirstPrompt = this.submitFirstPrompt.bind(this)
+            this.submitPromptResponse = this.submitPromptResponse.bind(this)
         }
 
         componentDidMount() {
@@ -22,29 +26,39 @@ define(function(require, exports) {
         componentShouldUpdate(){
         }
 
-        submitPrompt(data){
-            console.log("submit", data);
+        async submitFirstPrompt(data){
+            const { channel } = this.props; 
+            const round_res = await API.request({method: "post", url: "/api/round/create", body: { channel }})
+            const body = { ...data, round_id: round_res.round.id, previous_turn_id: null }
+            const turn_res = await API.request({method: "post", url: "/api/turn/create", body})
+            if (turn_res.ok) {
+                Router.navigate(`/lobby/${channel.slug}`)
+            }
+        }
+
+        submitPromptResponse(data){
+
         }
 
         render(props, s) {
-            const { mode, prompt } = props;
+            const { mode, prompt, channel } = props;
             return html`
             	<div id="prompt-container">
 					${mode === 'draw' ? html`
-						<${DrawingCanvas} submitPrompt=${this.submitPrompt}/>
+						<${DrawingCanvas} submitPrompt=${this.submitFirstPrompt}/>
 					` : ''}
 					${mode === 'text' ? html`
-						<${TextInput} submitPrompt=${this.submitPrompt}/>
+						<${TextInput} submitPrompt=${this.submitFirstPrompt}/>
 					` : ''}
 					${mode === 'textAsResponse' ? html`
 						<img src=${prompt} id="prompt-image" />
-						<${TextInput} submitPrompt=${this.submitPrompt} />
+						<${TextInput} submitPrompt=${this.submitPromptResponse} />
 					` : ''}
 					${mode === 'drawAsResponse' ? html`
 						<div id='text-prompt-wrapper'>
 							<h2>${prompt}</h2>
 						</div>
-						<${DrawingCanvas} submitPrompt=${this.submitPrompt} />
+						<${DrawingCanvas} submitPrompt=${this.submitPromptResponse} />
 					` : ''}
 				</div>
             `

@@ -38,15 +38,14 @@ async function add_user_to_channel({user, slug }) {
 
 }
 
-async function create_new_turn({user, slug, round_id, previous_turn_id, }) {
-
+async function create_new_turn({round_id, user_id, previous_turn_id, type, contents }) {
     let res = await db.execute(`
         INSERT INTO turns
-        (round_id, user_id, previous_turn_id, timestamp)
+        (round_id, user_id, previous_turn_id, timestamp, type, contents)
         VALUES
-        ({round_id}, {user_id}, {previous_turn_id}, {timestamp})
+        ({round_id}, {user_id}, {previous_turn_id}, {timestamp}, {type}, {contents})
         RETURNING *
-    `, {round_id, user_id, previous_turn_id, timestamp: Date.now()});
+    `, {round_id, user_id, previous_turn_id, timestamp: Date.now(), type, contents});
 
     return res.rows[0];
     // if all members submitted finish round
@@ -55,14 +54,14 @@ async function create_new_turn({user, slug, round_id, previous_turn_id, }) {
 
 }
 
-async function start_new_round({user, slug, settings={} }) {
+async function start_new_round({channel_id, user_id, settings={} }) {
     let res = await db.execute(`
         INSERT INTO rounds
-        (channel_id, user_id, timestamp, settings, status)
+        (channel_id, user_id, timestamp, settings)
         VALUES
-        ({title}, {slug}, {timestamp}, {settings})
+        ({channel_id}, {user_id}, {timestamp}, {settings})
         RETURNING *
-    `, {title, slug, timestamp: Date.now(), settings});
+    `, {channel_id, user_id, timestamp: Date.now(), settings});
 
     const round = res.rows[0];
 
