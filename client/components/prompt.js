@@ -40,7 +40,7 @@ define(function(require, exports) {
 						<img src=${prompt} id="prompt-image" />
 						<${TextInput} submitPrompt=${this.submitPrompt} />
 					` : ''}
-					${mode === 'imageAsResponse' ? html`
+					${mode === 'drawAsResponse' ? html`
 						<div id='text-prompt-wrapper'>
 							<h2>${prompt}</h2>
 						</div>

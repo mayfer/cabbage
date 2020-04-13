@@ -100,9 +100,16 @@ module.exports = function({app, io, websockets}) {
             filters: {},
         });
 
-        let props = {channel, color, initial_spiels, user, page: 'channel'};
+        let props = {channel, color, initial_spiels, user, page: 'channel', view: 'lobby'};
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
+    });
+
+    app.get("/lobby/:channel([^/]+)/round/new/:prompt_mode(draw|text)/?", function(req, res){
+        let {channel, prompt_mode} = req.params;
+        let props = {page: 'channel', channel, prompt_mode};
+        res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
+
     });
 
     app.post("/api/channel", async function(req, res){

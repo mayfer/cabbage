@@ -13,16 +13,18 @@ define(function(require, exports) {
     const { fonts } = require("components/theme");
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
-    const Rounds = require("components/rounds");
+    const Lobby = require("components/lobby");
     const Common = require("lib/common");
 
     class Layout extends Component {
         constructor(props) {
             super();
-            let { channel, page } = props;
+            let { channel, page, prompt_mode, view } = props;
             this.state = {
                 channel,
                 page,
+                prompt_mode,
+                view,
                 chat_open: false,
                 color: props.color,
             };
@@ -44,21 +46,30 @@ define(function(require, exports) {
                 '/lobby/:channel': {
                     as: 'lobby',
                     uses: ({channel}) => {
-                        this.setState({page: 'channel', channel}, () => {
+                        this.setState({page: 'channel', view: 'lobby', channel}, () => {
                         });
                     }
                 },
+                '/lobby/:channel/round/new/:prompt_mode': {
+                    as: 'round',
+                    uses: ({channel, prompt_mode}) => {      
+                        this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
+                        });
+                    }
+                },
+
                 '/lobby/:channel/round/:round_id': {
                     as: 'round',
                     uses: ({channel, round_id}) => {
-                        this.setState({page: 'round', channel}, () => {
+                        this.setState({page: 'channel', view: 'round', channel}, () => {
                         });
                     }
                 },
-                '/lobby/:channel/newturn/:round_id': {
+                '/lobby/:channel/round/:round_id/newturn': {
                     as: 'newturn',
-                    uses: ({channel, round_id}) => {
-                        this.setState({page: 'round', channel}, () => {
+                    uses: ({ channel, round_id }) => {
+                        // console.log(prompt_mode)
+                        this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
                         });
                     }
                 },
@@ -79,7 +90,8 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { page, channel } = s;
+            const { page, channel, prompt_mode, view } = s;
+            console.log(view)
             const titleURLString = `Share the URL to bring others into ${s.lobbyName}`;
             return html`
                 <div id="layout">
@@ -125,10 +137,16 @@ define(function(require, exports) {
                             <div class="game-column active column ">
                                 <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
                                 <div id="game-wrapper">
-                                    <${Prompt} 
-                                        mode='imageAsResponse'
-                                        prompt='This is an example prompt'
-                                    />
+                                    ${(view == "lobby") ? html`
+                                        <${Lobby} />
+                                    ` : ''}
+
+                                    ${(view == "round") ? html`
+                                        <${Prompt} 
+                                            mode='drawAsResponse'
+                                            prompt='This is an example prompt'
+                                        />
+                                    ` : ''}
                                 </div>
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -238,7 +256,7 @@ define(function(require, exports) {
 
                 #game-wrapper {
                     width: 600px;
-                    margin: 50px auto;
+                    margin: 0px auto;
                     justify-content: center;
                     align-items: center;
                     flex-flow: column;
