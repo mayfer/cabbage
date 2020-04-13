@@ -14,12 +14,17 @@ define(function(require, exports) {
             //css.load("create-form", CreateForm.css())
         }
 
+        componentDidMount(){
+            this.input.focus()
+        }
+
         render(props, s) {
             return html`
                 <div class="create form-container">
                     <form class='create-form' onSubmit=${e => this.submit_name(e)}>
                         <div class="form-title" >Pick a name for your game room</div>
-                        <input class="text-input" id="game-title-input" type="text" onInput=${e => this.setState({name: e.target.value})} placeholder="e.g. Adams Family Cabbage House" />
+                        <input class="text-input" id="game-title-input" type="text" onInput=${e => this.setState({name: e.target.value})} placeholder="e.g. Adams Family Cabbage House"
+                        ref=${r => this.input=r}/>
                         <br />
                         <button type="submit" ${s.busy ? 'disabled' : ''}>Create Room</button>
                         <br />
@@ -36,7 +41,8 @@ define(function(require, exports) {
                 .text-input { font-size: 18px; padding: 10px; line-height: 20px; width: 300px; border: 3px solid #000; } 
                 .text-input:focus { border-color: #03f; }
                 button { display: inline-block; padding: 10px 30px; margin: 10px; background: #0a0; color: #fff; font-size: 30px; cursor: pointer; border: none; }
-
+                #game-title-input { text-align: center; outline: none;}
+                #game-title-input:focus { border: 3px solid #000;}
                 button:active { background: #3a0; }
                 .form-title { margin: 20px;  }
                 .img.carrot { margin: 30px 0; width: 400px; display: inline-block; }

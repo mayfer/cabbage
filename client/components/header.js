@@ -14,20 +14,30 @@ define(function(require, exports) {
                             <img src="/client/assets/cabbage.png" id='logo' />
                         </a>
                     </div>
-                    ${props.lobbyName ? html`
+                    ${this.props.lobbyName ? html`
                         <div id='game-text'>
                             <span id="lobbyName-text">
-                                ${props.lobbyName}
+                                ${this.props.lobbyName}
                             </span>
-                            <button id="copy-link-button" onclick=${e => Common.copy_link(e)}>
+                            <button id="copy-link-button" onclick=${e => {
+                                Common.copy_link(e);
+                                this.setState({copied: true})
+                                setTimeout( () => {
+                                    this.setState({copied: false})
+                                }, 1000)
+                            }}>
                                 Copy sharable link
-                            </button>
+                            </button> 
+                            ${s.copied ? html`
+                                <span id="copied-text" >
+                                    Copied!
+                                </span>` : ''
+                            }
                         </div>
                     ` : html``}
                 </div>
             `;
         }
-
 
         static css() {
             return `
@@ -44,6 +54,14 @@ define(function(require, exports) {
 
                 #game-text { font-size: larger; margin-top: 16px; } 
 
+                #copied-text { color: gray; margin-left: 15px; font-size: small;}
+
+                @media only screen and (max-width: 600px) {
+                    #header { text-align: left; }
+                }
+                @media only screen and (min-width: 600px) {
+                    #header { text-align: center; }
+                }
                                 
             `
         }
