@@ -28,16 +28,27 @@ define(function(require, exports) {
 
         async submitFirstPrompt(data){
             const { channel } = this.props; 
-            const round_res = await API.request({method: "post", url: "/api/round/create", body: { channel }})
-            const body = { ...data, round_id: round_res.round.id, previous_turn_id: null }
-            const turn_res = await API.request({method: "post", url: "/api/turn/create", body})
+            const turn_res = await API.request({method: "post", url: "/api/round/create", body: { channel }})
             if (turn_res.ok) {
                 Router.navigate(`/lobby/${channel.slug}`)
+            } else {
+                alert("error")
             }
         }
 
-        submitPromptResponse(data){
+        async submitPromptResponse(data){
+            const { channel, round } = this.props; 
+            const previous_turn_id = round.last_turn.id;
+            const {type, contents} = data;
 
+            const body = { type, contents, channel, round_id: round.id, previous_turn_id }
+
+            const turn_res = await API.request({method: "post", url: "/api/turn/create", body})
+            if (turn_res.ok) {
+                Router.navigate(`/lobby/${channel.slug}`)
+            } else {
+                alert("error")
+            }
         }
 
         render(props, s) {
@@ -64,8 +75,6 @@ define(function(require, exports) {
                             ${round && round.last_turn ? round.last_turn.handle : ''}'s prompt for you to draw:
 							<h2 class='prompt'>
                                 ${round && round.last_turn && round.last_turn.type == 'caption' ? round.last_turn.contents : ''}
-
-
                             </h2>
 						</div>
 						<${DrawingCanvas} round=${round} submitPrompt=${this.submitPromptResponse} />

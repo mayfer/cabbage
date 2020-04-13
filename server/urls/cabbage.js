@@ -175,24 +175,30 @@ module.exports = function({app, io, websockets}) {
     app.post("/api/round/create", async function(req, res){
         const user_id = req.user.id;
         const channel_id = req.body.channel.id;
+        const { contents, type, previous_turn_id } = req.body;
         try {
             const round = await cabbage.actions.start_new_round({channel_id, user_id});
-            res.json({ok: true, round});
+            const turn = await cabbage.actions.create_new_turn({round_id: round.id, user_id: req.user.id, contents, type, previous_turn_id});
+            res.json({ok: true, round, turn});
+        } catch(e) {
+            res.status(403);
+            res.json({ok: false, error: e.message})
+        }
+    });
+    app.post("/api/turn/create", async function(req, res){
+        const user_id = req.user.id;
+        const channel_id = req.body.channel.id;
+        const { contents, type, previous_turn_id, round_id } = req.body;
+        let round = await cabbage.queries.get_round({round_id}); 
+        try {
+            const turn = await cabbage.actions.create_new_turn({round_id: round_id, user_id: req.user.id, contents, type, previous_turn_id});
+            res.json({ok: true, round, turn});
         } catch(e) {
             res.status(403);
             res.json({ok: false, error: e.message})
         }
     });
 
-    app.post("/api/turn/create", async function(req, res){
-        try {
-            const turn = await cabbage.actions.create_new_turn({...req.body, user_id: req.user.id});
-            res.json({ok: true, turn});
-        } catch(e) {
-            res.status(403);
-            res.json({ok: false, error: e.message})
-        }
-    });
 
     app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){
         let { spiel } = req.body;

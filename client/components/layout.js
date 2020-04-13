@@ -70,14 +70,18 @@ define(function(require, exports) {
                 '/lobby/:slug/round/:round_id': {
                     as: 'round',
                     uses: async ({slug, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}) }, async () => {
+                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}), round: undefined }, async () => {
                             const {round} = await API.request({method: 'get', url: '/api/round/'+round_id,})
                             if(round) {
                                 let prompt_mode = round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse';
                                 this.setState({prompt_mode, round})
                             }
-                            console.log({round})
                         });
+                    }
+                },
+                '/lobby/:slug/peek/:round_id': {
+                    as: 'round',
+                    uses: async ({slug, round_id }) => {
                     }
                 },
             });

@@ -65,7 +65,11 @@ define(function(require, exports) {
                                                 Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.handle}</strong>
                                                 <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
                                             </div>
-                                            <div class='since'>Round started ${this.timeSince(d.timestamp)} ago</div>
+                                            <div class='since'>
+                                                Round started ${this.timeSince(d.timestamp)} ago
+                                                <br />
+
+                                            </div>
                                         </a>
                                     </div>
                                 `)}
@@ -109,10 +113,11 @@ define(function(require, exports) {
             `;
         }
         createPaperStack(count) {
-            var countArray = Array(Math.min(count, 6)).fill(null)
+            const maxcount = Math.min(count, 6);
+            const countArray = Array(maxcount).fill(null)
             return countArray.map((d, i) => {
                 return html `
-                <div class="paper-sheet" style="left:${i * 2}px; top:${i * 1}px">
+                <div class="paper-sheet" style="left:${i * 2}px; top:${i * 1}px; transform: rotate(${Math.floor(i*2-maxcount/2)}deg);">
                     <div class="count-number">
                         ${count}
                     </div>
@@ -141,7 +146,7 @@ define(function(require, exports) {
                 .round-link, .round-link:visited { color: #000; border-radius: 5px; margin: 6px 0; padding: 10px; background-color: rgba(130, 120, 120, 0.1); line-height: 25px; font-size: 17px; cursor: pointer; display: block; text-decoration: none; }
                 .round-link .time { color: #666; }
                 .round-link .since { color: #666; float: right; font-size: 16px; }
-                .round-link:hover { background: #0f0; }
+                .round-link:hover { background: #cec; }
 
             
                 .round-description { display: inline-block; vertical-align: top; }
