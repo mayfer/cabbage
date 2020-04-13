@@ -34,7 +34,7 @@ define(function(require, exports) {
                 #header {  height: 60px; padding: 0 15px; position: relative; display: flex; margin-top: 10px; }
 
                 #game-text { font-size: 25px; line-height: 60px; height: 60px; } 
-                #title { display: inline-block; font-weight: bolder; color: rgb(108, 108, 108); line-height: 60px; height: 60px; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif ;  cursor: pointer; }
+                #title { display: inline-block; font-weight: bolder; color: rgb(33, 85, 46); line-height: 60px; height: 60px; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif ;  cursor: pointer; }
                 #title:hover { color: #000;  }
             
                 #logo { display: inline-block; opacity: 0.9; margin-right: 30px; }

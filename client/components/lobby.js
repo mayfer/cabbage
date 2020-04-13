@@ -38,7 +38,7 @@ define(function(require, exports) {
                         this.setState({copied: false})
                     }, 2000)
                 }}>
-                    Copy sharable link to this game
+                    ⧉ Copy sharable link to this game
                 </a>
                 ${s.copied ? html`
                     <span id="copied-text" >
@@ -129,28 +129,28 @@ define(function(require, exports) {
             return `
                 #lobby {  display: block; }
 
-                #lobby .copy-link { font-size: 14px; background: #ccc; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #000; }
-                #lobby .copy-link:hover { background: #999; color: #000; }
+                #lobby .copy-link { background: #fff; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #000; }
+                #lobby .copy-link:hover { background: #df69ff; color: #000; }
                 #lobby .copy-link:active { background: #000; color: #fff; }
                 #copied-text { color: #666; margin-left: 15px; font-size: small;}
 
                 .stack-image { width: 50px; }
                 .round-section-title { margin-top: 30px; margin-bottom: 15px; color: black; font-size: large;}
-                .footer-image { width: 100%; }
+                .footer-image { width: 80%; margin: 0 10%; }
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute ;}
-                .paper-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 50px; height: 50px; }
+                .paper-sheet {position: absolute; box-shadow: inset 0 0 2px #000; background-color: #f5f0f0; width: 50px; height: 50px; }
                 .paper-stack-wrapper { display: inline-block; position: relative; width: 50px; height: 50px; margin-right: 30px; }
-                .count-number { text-align: center; position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
+                .count-number { font-size: 25px; color: #af6251; text-align: center; position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
 
                 .round-link, .round-link:visited { color: #000; border-radius: 5px; margin: 6px 0; padding: 10px; background-color: rgba(130, 120, 120, 0.1); line-height: 25px; font-size: 17px; cursor: pointer; display: block; text-decoration: none; }
                 .round-link .time { color: #666; }
                 .round-link .since { color: #666; float: right; font-size: 16px; }
-                .round-link:hover { background: #cec; }
+                .round-link:hover { background: #9ad6af;  }
 
             
                 .round-description { display: inline-block; vertical-align: top; }
-                #add-round-button { background: #efe; color: #040; line-height: 25px; padding: 0 10px; display: inline-block; }
+                #add-round-button { background: #efe; color: #040; line-height: 30px; padding: 0 10px; display: inline-block; }
                 #add-round-button:hover { background: #707; color: #fff; }
 
             `

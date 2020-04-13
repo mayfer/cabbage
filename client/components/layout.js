@@ -247,6 +247,8 @@ define(function(require, exports) {
                     width: 100%;
                 }
 
+                h1 { color: #e2806a; }
+
                 .landing { text-align: center; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 21px; }
                 .landing .af { color: rgba(126, 86, 86, 0.9); font-weight: bold; font-size: 13px; transform: rotate(-20deg); display: inline-block; position: relative; top: 5px;}
                 .landing .home-logo { height: 125px; }
@@ -281,7 +283,6 @@ define(function(require, exports) {
                     margin: 0px auto;
                     justify-content: center;
                     align-items: center;
-                    color: grey;
                     display: block;
                 }
 
