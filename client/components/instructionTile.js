@@ -14,13 +14,21 @@ define(function(require, exports) {
             css.load("instruction-tile", InstructionTile.css())
         }
 
+        componentDidMount(){
+            this.input.focus()
+        }
+
         render(props, s) {
             return html`
             <div class="instruction-tile">
                 <div class="instruction-tile-inner">
                     <div class="instruction-title">
                         Everyone starts by creating a prompt 
-
+                        <div id="rounds-input-wrapper" >
+                            Set a minimum number of rounds
+                            <input id="rounds-count-input" type="Number" min="2" defaultValue="5" placeholder="5" ref=${r => this.input=r} 
+                                onInput=${e => this.setState({count: e.target.value})} />
+                        </div>
                         <p>Choose one:</p>
                     </div>
                     <div class="prompt-start-buttons">
@@ -59,6 +67,9 @@ define(function(require, exports) {
                 #start-writing-button:hover { opacity: 1; border: 2px solid #fff;}
                 #start-writing-button:active { position: relative; top: 2px; left: 2px; border: 2px solid #fff;}
                 #start-writing-button:focus { outline:0;}
+                #rounds-count-input { margin-left: 10px; text-align: center; border: 1px solid #000; width: 50px;}
+                #rounds-count-input:focus { outline:none !important; outline-width: 0 !important; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;}
+                #rounds-input-wrapper { margin-top: 10px;}
 
             `
         }

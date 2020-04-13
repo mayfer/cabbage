@@ -40,9 +40,8 @@ define(function(require, exports) {
                 .text-input { font-size: 18px; padding: 10px; line-height: 20px; width: 300px; border: 3px solid #000; } 
                 .text-input:focus { border-color: #03f; }
                 button { display: inline-block; padding: 10px 30px; margin: 10px; background: #0a0; color: #fff; font-size: 30px; cursor: pointer; border: none; }
-
-                #game-title-input { outline: none;}
-                #game-title-input:focus { text-align: center; border: 3px solid #000;}
+                #game-title-input { text-align: center; outline: none;}
+                #game-title-input:focus { border: 3px solid #000;}
                 button:active { background: #3a0; }
                 .form-title { margin: 20px;  }
                 .img.carrot { margin: 30px 0; width: 400px; display: inline-block; }

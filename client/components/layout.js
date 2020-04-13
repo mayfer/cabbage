@@ -122,7 +122,6 @@ define(function(require, exports) {
 
 
                         ${(page == "channel" && channel) ? html`
-
                             <div class="game-column active column ">
                                 <${Header} lobbyName=${s.lobbyName} lobbySlug=${s.lobbySlug} page=${page} />
                                 <div id="game-wrapper">
