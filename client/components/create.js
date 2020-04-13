@@ -56,9 +56,8 @@ define(function(require, exports) {
             
             this.setState({busy: true});
             let {channel} = await API.request({method: "post", url: "/api/channel/create", body: {title: this.state.name}});
-            this.setState({busy: false, slug: channel.slug});
+            this.setState({busy: false});
 
-            this.props.setLobbyDetails({lobbyName: channel.title, lobbySlug: channel.slug})
             var url = `lobby/${channel.slug}`
             Router.navigate(url)
         }
