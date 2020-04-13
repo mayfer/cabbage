@@ -15,6 +15,7 @@ define(function(require, exports) {
     const InstructionTile = require("components/instructionTile");
     const Lobby = require("components/lobby");
     const Common = require("lib/common");
+    const API = require("components/api");
 
     class Layout extends Component {
         constructor(props) {
