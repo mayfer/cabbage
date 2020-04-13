@@ -5,12 +5,13 @@ define(function(require, exports) {
     const Common = require("lib/common");
     const { fonts } = require("components/theme");
     const Router = require("components/router");
-
+    const API = require("components/api");
 
     return class CreateForm extends Component {
         constructor(props) {
             super();
-            this.state = {};
+            this.state = {busy: false};
+            //css.load("create-form", CreateForm.css())
         }
 
         componentDidMount(){
@@ -25,7 +26,7 @@ define(function(require, exports) {
                         <input class="text-input" id="game-title-input" type="text" onInput=${e => this.setState({name: e.target.value})} placeholder="e.g. Adams Family Cabbage House"
                         ref=${r => this.input=r}/>
                         <br />
-                        <button type="submit">Create Room</button>
+                        <button type="submit" ${s.busy ? 'disabled' : ''}>Create Room</button>
                         <br />
                         <img class="img carrot" src="/client/assets/carrot.svg" />
                     </form>
@@ -51,21 +52,14 @@ define(function(require, exports) {
 
         async submit_name(e) {
             e.preventDefault()
-            var slug = this.format_slug(this.state.name, false)
-            var slugURL = `${slug}-${Common.uuid(6)}`
-            await this.setState({slug: slugURL})
-            this.props.setLobbyDetails({lobbyName: this.state.name, lobbySlug: this.state.slug})
-            var url = `lobby/${this.state.slug}`
-            Router.navigate(url)
-        }
 
-        format_slug(text, keep_trailing_space) {
-            var slug = text.trim().toLowerCase().split(' ').join('-');
-            slug = slug.replace(/[^A-Za-z0-9-]/g,'').replace(/\s/g,'').replace(/\-{2,}/g,'-');
-            if(!keep_trailing_space) {
-                slug = slug.replace(/-$/,'');
-            }
-                return slug;
+            
+            this.setState({busy: true});
+            let {channel} = await API.request({method: "post", url: "/api/channel/create", body: {title: this.state.name}});
+            this.setState({busy: false});
+
+            var url = `lobby/${channel.slug}`
+            Router.navigate(url)
         }
     }
 });

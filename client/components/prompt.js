@@ -23,7 +23,7 @@ define(function(require, exports) {
         }
 
         submitPrompt(data){
-            console.log(data);
+            console.log("submit", data);
         }
 
         render(props, s) {

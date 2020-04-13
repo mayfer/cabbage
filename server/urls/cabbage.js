@@ -19,6 +19,8 @@ const Layout = rfr('/client/components/layout.js');
 const { html } = rfr('/client/core/preact-htm-umd.js');
 const credentials = rfr('/credentials.json');
 
+const cabbage = rfr('/server/services/cabbage');
+
 
 passport.use(new LocalStrategy({
         passReqToCallback:true,
@@ -56,7 +58,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(async function(public_id, done) {
-    const user = await user_queries.get_user({public_id});
+    const user = (await user_queries.get_user({public_id})) || {};
     done(null, user);
 });
 
@@ -73,6 +75,20 @@ function genColor (seed) {
 
 module.exports = function({app, io, websockets}) {
 
+    app.use(async function(req, res, next) {
+        // auto anon login
+        if(!req.user) {
+            const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            const request_headers = req.headers;
+            const user = await user_actions.create_anon_user({ip, request_headers});
+            req.login(user, function(err){
+                return next(err);
+            });
+        } else {
+            return next();
+        }
+    });
+
     app.get("/?", function(req, res){
         let props = {page: 'home'};
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
@@ -83,11 +99,9 @@ module.exports = function({app, io, websockets}) {
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
 
     });
-    app.get("/lobby/:channel([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
-        // console.log("session", req.session)
+    app.get("/lobby/:slug([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
         let {user} = req;
-        let {channel} = req.params;
-        if(!channel) channel = 'index';
+        let {slug} = req.params;
         
         let seed = parseInt(("1"+(req.headers['x-forwarded-for'] || req.connection.remoteAddress)).replace(/[^0-9]/g, ''));
 
@@ -95,12 +109,16 @@ module.exports = function({app, io, websockets}) {
 
         req.session.color = color;
 
-        let { results: initial_spiels } = await es.filter({
-            channel,
-            filters: {},
-        });
 
-        let props = {channel, color, initial_spiels, user, page: 'channel', view: 'lobby'};
+        let props = {color, user, page: 'channel', view: 'lobby'};
+
+        if(slug) {
+            props.channel = await cabbage.queries.get_channel({slug});
+            props.initial_spiels = await es.filter({
+                channel: props.channel.slug,
+                filters: {},
+            }).results;
+        }
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
@@ -112,14 +130,25 @@ module.exports = function({app, io, websockets}) {
 
     });
 
-    app.post("/api/channel", async function(req, res){
+
+
+    /* =============== API ============= */
+
+    app.get("/api/channel", async function(req, res){
         const {slug} = req.query;
-        const channel = await cabbage.get_channel({slug});
+        const channel = await cabbage.queries.get_channel({slug});
         res.json({channel});
     });
-    app.post("/get", async function(req, res){
-        let polygons = await redis.get("polygons");
-        res.json({polygons});
+    app.post("/api/channel/create", async function(req, res){
+        const {title} = req.body;
+        const slug = `${common.format_slug(title, false)}-${common.uuid(6)}`;
+        try {
+            const channel = await cabbage.actions.create_channel({slug, title, settings: {}});
+            res.json({ok: true, channel});
+        } catch(e) {
+            res.status(403);
+            res.json({ok: false, error: e.message})
+        }
     });
 
     app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){
@@ -145,6 +174,5 @@ module.exports = function({app, io, websockets}) {
         })(req, res, next);
     });
     
-
 }
 

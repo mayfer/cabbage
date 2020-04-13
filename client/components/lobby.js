@@ -11,10 +11,7 @@ define(function(require, exports) {
         constructor(props) {
             super();
             this.state = {};
-            css.load("rounds", Lobby.css())
         }
-
-        // availableRounds = getAvailableRounds.map((i) => <div> i.name</div>)
 
         render(props, s) {
             const { channel } = props;
@@ -30,8 +27,8 @@ define(function(require, exports) {
                             
                             <div class="stack" >
                                 <a 
-                                    href='/lobby/${channel}/round/new/'
-                                    onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel}/round/new/`);}}
+                                    href='/lobby/${channel.slug}/round/new/'
+                                    onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
                                 >
                                     <button>Add Round +</button>
                                 </a>
