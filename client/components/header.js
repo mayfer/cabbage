@@ -11,7 +11,10 @@ define(function(require, exports) {
             return html`
                 <div id='header'>
                     <div id='logo'>
-                        <a href='/' class="go-to" data-channel="">
+                        <a href='/' class="go-to" data-channel=""  onClick=${e => {
+                            e.preventDefault();
+                            Router.navigate(`/`);
+                        }}>
                             <img src="/client/assets/cabbage.png" id='logo' />
                         </a>
                     </div>

@@ -13,6 +13,10 @@ define(function(require, exports) {
             this.state = {};
         }
 
+        componentDidMount() {
+
+        }
+
         render(props, s) {
             const { channel } = props;
             var dummyData = [
@@ -48,15 +52,9 @@ define(function(require, exports) {
                             Available rounds
                         </div>
                         <div class="rounds">
-                            <a 
-                                href='/lobby/${channel.slug}/round/new/'
-                                onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
-                            >
-                                <span id="add-round-button" >+ Start a new round</span>
-                            </a>
                             <div class="rounds">
                                 ${available_rounds.length == 0 ? html`
-                                    No rounds are currently open. Feel free to start a new one.
+                                    <p>No rounds are currently open.</p>
                                 ` : available_rounds.map(d => html`
                                     <div class="single-round-wrapper">
                                         <a class="round-link" href='/'>
@@ -64,7 +62,7 @@ define(function(require, exports) {
                                                 ${this.createPaperStack(d.count)}
                                             </div>
                                             <div class="round-description" >
-                                                Last <strong>${d.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                                Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.handle}</strong>
                                                 <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
                                             </div>
                                             <div class='since'>Round started ${this.timeSince(d.timestamp)} ago</div>
@@ -72,6 +70,12 @@ define(function(require, exports) {
                                     </div>
                                 `)}
                             </div>
+                            <a 
+                                href='/lobby/${channel.slug}/round/new/'
+                                onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
+                            >
+                                <span id="add-round-button" >+ Start a new round</span>
+                            </a>
                         </div>
                     </div>
                     <div class="complete-rounds-wrapper">
@@ -134,7 +138,7 @@ define(function(require, exports) {
                 .paper-stack-wrapper { display: inline-block; position: relative; width: 50px; height: 50px; margin-right: 30px; }
                 .count-number { text-align: center; position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
 
-                .round-link, .round-link:visited { color: #000; border-radius: 5px; margin-top: 12px; padding: 10px; background-color: rgba(130, 120, 120, 0.1); line-height: 25px; font-size: 17px; cursor: pointer; display: block; text-decoration: none; }
+                .round-link, .round-link:visited { color: #000; border-radius: 5px; margin: 6px 0; padding: 10px; background-color: rgba(130, 120, 120, 0.1); line-height: 25px; font-size: 17px; cursor: pointer; display: block; text-decoration: none; }
                 .round-link .time { color: #666; }
                 .round-link .since { color: #666; float: right; font-size: 16px; }
                 .round-link:hover { background: #0f0; }

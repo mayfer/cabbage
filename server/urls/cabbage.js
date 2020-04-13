@@ -107,10 +107,10 @@ module.exports = function({app, io, websockets}) {
 
         if(slug) {
             props.channel = await cabbage.queries.get_channel({slug});
-            props.initial_spiels = await es.filter({
-                channel: props.channel.slug,
+            props.initial_spiels = (await es.filter({
+                channel: slug,
                 filters: {},
-            }).results;
+            })).results;
 
             await cabbage.actions.add_user_to_channel({user_id: user.id, slug});
         }

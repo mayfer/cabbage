@@ -100,7 +100,7 @@ define(function(require, exports) {
                     this.setState({text: ''});
                     this.textarea.focus();
                     
-                    this.validate_token(async () => {
+                    // this.validate_token(async () => {
 
                         const rawResponse = await fetch("/api/spiels/post", {
                             method: 'POST',
@@ -114,7 +114,8 @@ define(function(require, exports) {
 
 
                         this.props.handle_new_spiel({ spiel: response.spiel });
-                    });
+
+                    // });
                 }
             }
         }

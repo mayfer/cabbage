@@ -30,8 +30,8 @@ define(function(require, exports) {
                 color: props.color,
             };
 
-            const load_channel = async ({slug}) => {
-                if(this.state.channel && this.state.channel.title && this.state.channel.slug == slug) {
+            const load_channel = async ({slug, force}) => {
+                if(!force && this.state.channel && this.state.channel.title && this.state.channel.slug == slug) {
                     return this.state.channel;
                 } else {
                     const {channel} = await API.request({url: `/api/cabbage/channel?slug=${slug}`});
@@ -57,7 +57,7 @@ define(function(require, exports) {
                 '/lobby/:slug': {
                     as: 'lobby',
                     uses: async ({slug}) => {
-                        this.setState({page: 'channel', view: 'lobby', channel: await load_channel({slug})}, () => {});
+                        this.setState({page: 'channel', view: 'lobby', channel: await load_channel({slug, force: true})}, () => {});
                     }
                 },
                 '/lobby/:slug/round/new/:prompt_mode': {

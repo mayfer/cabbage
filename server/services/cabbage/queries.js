@@ -28,6 +28,7 @@ async function get_rounds({channel_id}) {
         JOIN users u on u.id = t.user_id
         WHERE r.channel_id={channel_id}
         GROUP BY r.id, r.timestamp
+        ORDER BY r.timestamp DESC
     `, {channel_id});
 
     let last_posts = {};

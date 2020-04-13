@@ -33,7 +33,7 @@ define(function(require, exports) {
 
         handleSubmit(){
             const { submitPrompt } = this.props;
-            const data = { type: 'text', contents: this.state.value }
+            const data = { type: 'caption', contents: this.state.value }
             submitPrompt(data);
         }
 
