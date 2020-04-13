@@ -5,7 +5,7 @@ define(function(require, exports) {
     const Common = require("lib/common");
     const { fonts } = require("components/theme");
     const Router = require("components/router");
-    const API = require("components/api");
+
 
     return class InstructionTile extends Component {
         constructor(props) {
@@ -14,18 +14,8 @@ define(function(require, exports) {
             css.load("instruction-tile", InstructionTile.css())
         }
 
-
         componentDidMount(){
             this.input.focus()
-        }
-
-        handleCreateRound(opts){
-            const {channel, startingPromptType} = opts;
-            console.log(opts)
-            API.request({method: "post", url: "/api/round/create", body: {channel}}).then(res => {
-                // console.log(res);
-                // Router.navigate(`/lobby/${channel}/round/new/${startingPromptType}`)
-            })
         }
 
         render(props, s) {
@@ -46,7 +36,7 @@ define(function(require, exports) {
                         <a 
                             href="/lobby/${channel.slug}/round/new/text" 
                             class="button-wrapper"
-                            onClick=${e => { e.preventDefault(); this.handleCreateRound({ channel, startingPromptType: 'text'});}}
+                            onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/text`);}}
                         >
                             <button id="start-writing-button" class="prompt-start-button">
                                 Write something for a friend to draw
@@ -57,7 +47,7 @@ define(function(require, exports) {
                         </a>
                         <a 
                             href="/lobby/${channel.slug}/round/new/draw" 
-                            onClick=${e => { e.preventDefault(); this.handleCreateRound({ channel, startingPromptType: 'draw'});}}
+                            onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/draw`);}}
                             class="button-wrapper"
                         >
                             <button id="start-drawing-button" class="prompt-start-button">
