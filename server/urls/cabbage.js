@@ -75,6 +75,8 @@ function genColor (seed) {
 
 module.exports = function({app, io, websockets}) {
 
+    app.disable('etag');
+
     app.use(async function(req, res, next) {
         // auto anon login
         if(!req.user) {
@@ -89,17 +91,7 @@ module.exports = function({app, io, websockets}) {
         }
     });
 
-    app.get("/?", function(req, res){
-        let props = {page: 'home'};
-        res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
-
-    });
-    app.get("/newgame/?", function(req, res){
-        let props = {page: 'newgame'};
-        res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
-
-    });
-    app.get("/lobby/:slug([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
+    async function load_channel({req, res, custom_props}) {
         let {user} = req;
         let {slug} = req.params;
         
@@ -110,7 +102,7 @@ module.exports = function({app, io, websockets}) {
         req.session.color = color;
 
 
-        let props = {color, user, page: 'channel', view: 'lobby'};
+        let props = Object.assign(custom_props, {color, user});
 
         if(slug) {
             props.channel = await cabbage.queries.get_channel({slug});
@@ -121,25 +113,42 @@ module.exports = function({app, io, websockets}) {
         }
 
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
+    }
+
+    app.get("/?", function(req, res){
+        let custom_props = {page: 'home'};
+        load_channel({req, res, custom_props});
     });
+    app.get("/newgame/?", function(req, res){
+        let custom_props = {page: 'newgame'};
+        load_channel({req, res, custom_props});
+    });
+    app.get("/lobby/:slug([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
 
-    app.get("/lobby/:channel([^/]+)/round/new/:prompt_mode(draw|text|$)/?", function(req, res){
-        let {channel, prompt_mode } = req.params;
-        let props = {page: 'channel', view: 'round', channel, prompt_mode };
-        res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
-
+        let custom_props = {page: 'channel', view: 'lobby'};
+        load_channel({req, res, custom_props});
+    });
+    app.get("/lobby/:slug([^/]+)/round/new/?", function(req, res){
+        let { prompt_mode } = req.params;
+        let custom_props = {page: 'channel', view: 'round', prompt_mode};
+        load_channel({req, res, custom_props});
+    });
+    app.get("/lobby/:slug([^/]+)/round/new/:prompt_mode(draw|text|$)/?", function(req, res){
+        let { prompt_mode } = req.params;
+        let custom_props = {page: 'channel', view: 'round', prompt_mode};
+        load_channel({req, res, custom_props});
     });
 
 
 
     /* =============== API ============= */
 
-    app.get("/api/channel", async function(req, res){
+    app.get("/api/cabbage/channel", async function(req, res){
         const {slug} = req.query;
         const channel = await cabbage.queries.get_channel({slug});
         res.json({channel});
     });
-    app.post("/api/channel/create", async function(req, res){
+    app.post("/api/cabbage/channel/create", async function(req, res){
         const {title} = req.body;
         const slug = `${common.format_slug(title, false)}-${common.uuid(6)}`;
         try {
@@ -161,6 +170,19 @@ module.exports = function({app, io, websockets}) {
 
         res.json({spiel});
         
+    });
+
+    app.get("/api/channel/:channel([^/]+)(/?)", async function(req, res){
+
+        let {channel} = req.params;
+        //let opts = {channel, filters, since, until, center_timestamp, user_id, spiel_id};
+        
+        let result = await es.filter({
+            channel,
+            filters: {},
+        });
+        return res.json({channel, spiels: result.results});
+    
     });
 
     app.post('/api/auth/recaptcha_token', function(req, res, next) {

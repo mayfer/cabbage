@@ -29,17 +29,27 @@ define(function(require, exports) {
                 chat_open: false,
                 color: props.color,
             };
+
+            const load_channel = async ({slug}) => {
+                if(this.state.channel && this.state.channel.title && this.state.channel.slug == slug) {
+                    return this.state.channel;
+                } else {
+                    const {channel} = await API.request({url: `/api/cabbage/channel?slug=${slug}`});
+                    return channel;
+                }
+            }
+
             Router.on({
                 '/': {
                     as: 'home',
-                    uses: (...args) => {
+                    uses: async (...args) => {
                         this.setState({page: 'home', channel: undefined}, () => {
                         });
                     }
                 },
                 '/newgame': {
                     as: 'newgame',
-                    uses: (...args) => {
+                    uses: async (...args) => {
                         this.setState({page: 'newgame', channel: undefined}, () => {
                         });
                     }
@@ -47,23 +57,19 @@ define(function(require, exports) {
                 '/lobby/:slug': {
                     as: 'lobby',
                     uses: async ({slug}) => {
-                        this.setState({page: 'channel', view: 'lobby', channel: {slug}}, () => {});
-                        const {channel} = await API.request({url: `/api/channel?slug=${slug}`});
-                        this.setState({page: 'channel', view: 'lobby', channel: channel}, () => {});
+                        this.setState({page: 'channel', view: 'lobby', channel: await load_channel({slug})}, () => {});
                     }
                 },
                 '/lobby/:slug/round/new/:prompt_mode': {
                     as: 'round',
-                    uses: ({slug, prompt_mode }) => {      
-                        this.setState({ page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {
-                        });
+                    uses: async ({slug, prompt_mode }) => {
+                        this.setState({ page: 'channel', view: 'round', channel: await load_channel({slug}), prompt_mode }, () => {});
                     }
                 },
                 '/lobby/:slug/round/:round_id': {
                     as: 'round',
-                    uses: ({slug, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {
-                        });
+                    uses: async ({slug, round_id }) => {
+                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}), prompt_mode }, () => {});
                     }
                 },
             });
@@ -146,6 +152,7 @@ define(function(require, exports) {
 
                                     ${(view == "round" && prompt_mode) ? html`                                     
                                         <${Prompt} 
+                                            channel=${channel}
                                             mode=${prompt_mode}
                                             prompt='This is an example prompt'
                                         />

@@ -56,7 +56,7 @@ define(function(require, exports) {
         }
 
         componentDidUpdate(prevProps, prevState) {
-            if(this.props.force || prevProps.channel !== this.props.channel) {
+            if(this.props.channel && (this.props.force || prevProps.channel !== this.props.channel)) {
                 /*
                 window.events.emit("loading_channel", {channel});
 
