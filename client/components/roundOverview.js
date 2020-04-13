@@ -16,15 +16,28 @@ define(function(require, exports) {
 
         render(props, s) {
             return html`
-            <div class="">
+            <div class="flipbook-wrapper">
+                <div class="stack paper-stack-wrapper" >
+                    ${this.createPaperStack(7)}
+                </div>
             </div>
             `;
         }
 
         static css() {
             return `
-
+                .flipbook-wrapper { margin: 60px;}
+                .flipbook-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; }
             `
+        }
+
+        createPaperStack(count) {
+            var countArray = Array(count).fill(null)
+            return countArray.map((d, i) => {
+                return html `
+                <div class="flipbook-sheet" style="left:${i * 2}px; top:${i * 1}px">
+                </div>`
+            })
         }
     }
 });
