@@ -19,6 +19,8 @@ const Layout = rfr('/client/components/layout.js');
 const { html } = rfr('/client/core/preact-htm-umd.js');
 const credentials = rfr('/credentials.json');
 
+const cabbage = rfr('/server/services/cabbage');
+
 
 passport.use(new LocalStrategy({
         passReqToCallback:true,
@@ -73,6 +75,15 @@ function genColor (seed) {
 
 module.exports = function({app, io, websockets}) {
 
+    app.use(async function(req, res, next) {
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        const request_headers = req.headers;
+        const user = await user_actions.create_anon_user({ip, request_headers});
+        req.login(user, function(err){
+            return next(err);
+        });
+    });
+
     app.get("/?", function(req, res){
         let props = {page: 'home'};
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
@@ -105,14 +116,26 @@ module.exports = function({app, io, websockets}) {
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     });
 
+    app.post('/api/auth/recaptcha_token', function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) { return next(err);  }
+            if (!user) { return res.json({ok: false, info}); }
+            req.login(user, function(err) {
+                if (err) { return next(err); }
+                return res.json({ok: true, user});
+            });
+        })(req, res, next);
+    });
+    
+
+
+    /* =============== API ============= */
+
+
     app.post("/api/channel", async function(req, res){
         const {slug} = req.query;
-        const channel = await cabbage.get_channel({slug});
+        const channel = await cabbage.queries.get_channel({slug});
         res.json({channel});
-    });
-    app.post("/get", async function(req, res){
-        let polygons = await redis.get("polygons");
-        res.json({polygons});
     });
 
     app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){
@@ -126,18 +149,5 @@ module.exports = function({app, io, websockets}) {
         res.json({spiel});
         
     });
-
-    app.post('/api/auth/recaptcha_token', function(req, res, next) {
-        passport.authenticate('local', function(err, user, info) {
-            if (err) { return next(err);  }
-            if (!user) { return res.json({ok: false, info}); }
-            req.login(user, function(err) {
-                if (err) { return next(err); }
-                return res.json({ok: true, user});
-            });
-        })(req, res, next);
-    });
-    
-
 }
 
