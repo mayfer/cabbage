@@ -68,7 +68,6 @@ define(function(require, exports) {
                 '/lobby/:channel/round/:round_id/newturn': {
                     as: 'newturn',
                     uses: ({ channel, round_id }) => {
-                        // console.log(prompt_mode)
                         this.setState({ page: 'channel', view: 'round', channel, prompt_mode }, () => {
                         });
                     }
@@ -91,8 +90,12 @@ define(function(require, exports) {
 
         render(props, s) {
             const { page, channel, prompt_mode, view } = s;
-            console.log(view)
             const titleURLString = `Share the URL to bring others into ${s.lobbyName}`;
+
+            const initial_spiels = props.initial_spiels && props.initial_spiels.length ? props.initial_spiels : [
+                {name: "lobby slug", color: "#ffa", spiel: "Hello, this is the shared chat area for anyone who joins your game.", timestamp: Date.now(), channel, },
+                {name: "lobby slug", color: "#ffa", spiel: "Pick a name and type away.", timestamp: Date.now(), channel, },
+            ]
             return html`
                 <div id="layout">
                     <div id="content-container">
@@ -151,7 +154,7 @@ define(function(require, exports) {
                             </div>
                             <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
                                 <div class="padding">
-                                    <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${props.initial_spiels || []} />
+                                    <${Channel} channel=${s.channel} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
                                 </div>
                             </div>
                         ` : ``}

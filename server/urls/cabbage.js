@@ -58,7 +58,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(async function(public_id, done) {
-    const user = await user_queries.get_user({public_id});
+    const user = (await user_queries.get_user({public_id})) || {};
     done(null, user);
 });
 
@@ -76,12 +76,17 @@ function genColor (seed) {
 module.exports = function({app, io, websockets}) {
 
     app.use(async function(req, res, next) {
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        const request_headers = req.headers;
-        const user = await user_actions.create_anon_user({ip, request_headers});
-        req.login(user, function(err){
-            return next(err);
-        });
+        // auto anon login
+        if(!req.user) {
+            const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            const request_headers = req.headers;
+            const user = await user_actions.create_anon_user({ip, request_headers});
+            req.login(user, function(err){
+                return next(err);
+            });
+        } else {
+            return next();
+        }
     });
 
     app.get("/?", function(req, res){
@@ -95,7 +100,6 @@ module.exports = function({app, io, websockets}) {
 
     });
     app.get("/lobby/:channel([^/]+)(/?)", passport.authenticate('session'), async function(req, res) {
-        // console.log("session", req.session)
         let {user} = req;
         let {channel} = req.params;
         if(!channel) channel = 'index';
@@ -127,10 +131,21 @@ module.exports = function({app, io, websockets}) {
 
     /* =============== API ============= */
 
-    app.post("/api/channel", async function(req, res){
+    app.get("/api/channel", async function(req, res){
         const {slug} = req.query;
         const channel = await cabbage.queries.get_channel({slug});
         res.json({channel});
+    });
+    app.post("/api/channel/create", async function(req, res){
+        const {title} = req.body;
+        const slug = `${common.format_slug(title, false)}-${common.uuid(6)}`;
+        try {
+            const channel = await cabbage.actions.create_channel({slug, title, settings: {}});
+            res.json({ok: true, channel});
+        } catch(e) {
+            res.status(403);
+            res.json({ok: false, error: e.message})
+        }
     });
 
     app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){

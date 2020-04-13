@@ -5,9 +5,7 @@ const common = rfr('/client/lib/common');
 
 const queries = require('./queries');
 
-async function create_channel({title, slug, settings={}}) {
-    let props = {anon_score, ip, request_headers}
-    
+async function create_channel({title, slug, settings={}}) {    
     let existing = await db.return_one(`SELECT * FROM channels WHERE slug={slug}`, {slug});
     if(existing) {
         throw "A channel with this slug already exists";
@@ -19,7 +17,7 @@ async function create_channel({title, slug, settings={}}) {
             VALUES
             ({title}, {slug}, {timestamp}, {settings})
             RETURNING *
-        `, {title, slug, timestamp: Date.now(), settings});
+        `, {title, slug, timestamp: Date.now(), settings: {}});
 
         return res.rows[0];
     }
