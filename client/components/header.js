@@ -43,7 +43,7 @@ define(function(require, exports) {
             return `
                 #header {  height: 60px; padding: 0 15px; position: relative; display: flex; margin-top: 10px; }
             
-                #logo { height: 90px; display: inline-block; opacity: 0.9; margin-right: 190px; }
+                #logo { display: inline-block; opacity: 0.9; margin-right: 30px; }
                 #logo:hover { opacity: 1; }
                 #logo:active { position: relative; top: 1px; left: 1px; }
                 
@@ -52,7 +52,7 @@ define(function(require, exports) {
                 
                 #lobbyName-text { margin-right: 10px; margin-left: 5px; font-weight: bolder; color: black; }
 
-                #game-text { font-size: larger; margin-top: 16px; } 
+                #game-text { font-size: 25px; line-height: 60px; } 
 
                 #copied-text { color: gray; margin-left: 15px; font-size: small;}
 

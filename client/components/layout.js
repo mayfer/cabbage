@@ -29,6 +29,15 @@ define(function(require, exports) {
                 chat_open: false,
                 color: props.color,
             };
+
+            const load_channel = async function({slug}) {
+                if(this.state.channel && this.state.channel.slug == slug) {
+                    return this.state.channel;
+                } else {
+                    const {channel} = await API.request({url: `/api/channel?slug=${slug}`});
+                    return channel;
+                }
+            };
             Router.on({
                 '/': {
                     as: 'home',
@@ -48,22 +57,21 @@ define(function(require, exports) {
                     as: 'lobby',
                     uses: async ({slug}) => {
                         this.setState({page: 'channel', view: 'lobby', channel: {slug}}, () => {});
-                        const {channel} = await API.request({url: `/api/channel?slug=${slug}`});
-                        this.setState({page: 'channel', view: 'lobby', channel: channel}, () => {});
+                        this.setState({page: 'channel', view: 'lobby', channel: load_channel({slug})}, () => {});
                     }
                 },
                 '/lobby/:slug/round/new/:prompt_mode': {
                     as: 'round',
                     uses: ({slug, prompt_mode }) => {      
-                        this.setState({ page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {
-                        });
+                        this.setState({ page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {});
+                        this.setState({ page: 'channel', view: 'round', channel: load_channel({slug}), prompt_mode }, () => {});
                     }
                 },
                 '/lobby/:slug/round/:round_id': {
                     as: 'round',
                     uses: ({slug, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {
-                        });
+                        this.setState({page: 'channel', view: 'round', channel: {slug}, prompt_mode }, () => {});
+                        this.setState({page: 'channel', view: 'round', channel: load_channel({slug}), prompt_mode }, () => {});
                     }
                 },
             });
