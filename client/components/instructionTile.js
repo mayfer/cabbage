@@ -63,9 +63,9 @@ define(function(require, exports) {
         static css() {
             return `
                 .instruction-tile { width: 600px; margin: 0 auto; padding: 40px 50px 48px 50px; display: block; }
-                .instruction-tile-inner { width: 600px; height: 400px; border: 3px solid #000; background: #fff; }
-                .prompt-start-buttons { display: flex; justify-content : space-around}
-                .prompt-start-button { width: 250px; height: 250px; font-size: medium;}
+                .instruction-tile-inner { width: 600px; height: 400px; border: 3px solid #000; background: #fff; padding: 15px; }
+                .prompt-start-buttons { display: flex; justify-content : space-around; }
+                .prompt-start-button { width: 250px; height: 250px; font-size: medium; cursor: pointer; }
                 .instruction-title { margin-top: 25px; margin-bottom: 20px}
                 #start-drawing-button {background-color: #f9d49c; opacity: 0.9;}
                 #start-writing-button {background-color: #76ba8d; opacity: 0.9;}

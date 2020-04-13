@@ -187,10 +187,6 @@ define(function(require, exports) {
                     overflow: scroll;
                 }
 
-                .game-column.active.column {
-                    text-align: center; 
-                }
-
                 #content-container {
                     position: relative;
                 }
@@ -220,7 +216,7 @@ define(function(require, exports) {
                     opacity: 1;
                 }
                 #content-container .column.channel-column { width: 25%; min-width: 350px; }
-                #content-container .column.game-column { width: 75%; }
+                #content-container .column.game-column { width: 75%; position: relative; }
 
                 #content-container .column {
                     height: 100%;
@@ -244,10 +240,6 @@ define(function(require, exports) {
                 .landing .newgame:active { background: #00a; }
                 .landing .authors-img { width: 600px; }
 
-                #copy-link-button {
-                    margin-top: 10px;
-                }
-
                 button {
                     outline: none;
                     border: 2px solid #000;
@@ -265,13 +257,13 @@ define(function(require, exports) {
                 }
 
                 #game-wrapper {
-                    width: 600px;
+                    min-width: 600px;
+                    max-width: 900px;
                     margin: 0px auto;
                     justify-content: center;
                     align-items: center;
-                    flex-flow: column;
                     color: grey;
-                    display: inline-block;
+                    display: block;
                 }
 
                 @media only screen and (min-width: 600px) {

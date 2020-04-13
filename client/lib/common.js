@@ -447,6 +447,7 @@ define(function(require, exports) {
             dummy.select();
             document.execCommand("copy");
             document.body.removeChild(dummy);
+            return window.location.href;
         }
     }
     return common;
