@@ -28,7 +28,7 @@ define(function(require, exports) {
                                 href='/lobby/${channel.slug}/round/new/'
                                 onClick=${e => { e.preventDefault(); Router.navigate(`/lobby/${channel.slug}/round/new/`);}}
                             >
-                                <button>Add Round +</button>
+                                <button id="add-round-button" >Add Round +</button>
                             </a>
                             <div class="rounds">
                                 ${dummyData.map(d => html`
@@ -82,12 +82,13 @@ define(function(require, exports) {
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute ;}
                 .paper-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 50px; height: 50px; }
-                .paper-stack-wrapper { position: relative; width: 100px; height: 100px; }
+                .paper-stack-wrapper { position: relative; width: 100px; height: 50px; }
                 .count-number { position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%); }
-                .single-round-wrapper { display: flex; flex-direction: row;  }
+                .single-round-wrapper { display: flex; flex-direction: row; margin-top: 12px; padding: 10px; background-color: rgba(130, 120, 120, 0.1);}
                 .round-link { display: inline-flex; text-decoration: none; }
                 .round-link:visited { color: black; }
                 .round-description { transform: translateY(68%); }
+                #add-round-button { margin-bottom: 20px; }
 
             `
         }
@@ -122,7 +123,7 @@ define(function(require, exports) {
             var countArray = Array(count).fill(null)
             return countArray.map((d, i) => {
                 return html `
-                <div class="paper-sheet" style="left:${i * 2}px; bottom:${i * 1}px">
+                <div class="paper-sheet" style="left:${i * 2}px; top:${i * 1}px">
                     ${(i + 1) == count ? html `
                         <div class="count-number">
                             ${i + 1}
