@@ -67,8 +67,9 @@ define(function(require, exports) {
                 .stack { height: 100px; width: 100px;}
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute}
-                .paper-sheet {position: absolute; box-shadow: inset 0 0 10px #000; background-color: #f5f3f3; width: 50px; height: 50px;}
+                .paper-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 50px; height: 50px;}
                 .paper-stack-wrapper { position: relative; width: 100px; height: 100px;}
+                .count-number { position: absolute; height: 100%; width: 100%; top: 50%; transform: translateY(-25%);}
 
             `
         }
@@ -104,6 +105,11 @@ define(function(require, exports) {
             return countArray.map((d, i) => {
                 return html `
                 <div class="paper-sheet" style="left:${i * 2}px; bottom:${i * 3}px">
+                    ${(i + 1) == count ? html `
+                        <div class="count-number">
+                            ${i + 1}
+                        </div>
+                        `: ""}
                 </div>`
             })
         }
