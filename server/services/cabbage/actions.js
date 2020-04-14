@@ -71,9 +71,18 @@ async function start_new_round({channel_id, user_id, settings={} }) {
     return round;
 }
 
+async function set_user_email({user_id, email}) {
+    let res = await db.execute(`
+        UPDATE users
+        SET email={email}
+        WHERE id={user_id}
+    `, {email, user_id});
+}
+
 module.exports = {
     create_channel,
     add_user_to_channel,
     create_new_turn,
     start_new_round,
+    set_user_email,
 }

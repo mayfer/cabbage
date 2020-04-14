@@ -104,6 +104,11 @@ define(function(require, exports) {
         setLobbyDetails({lobbyName, lobbySlug}) {
             this.setState({channel: {title :lobbyName, slug: lobbySlug}});
         }
+        async setEmailAddress(e) {
+            e.preventDefault();
+            const email = this.state.email;
+            await API.request({"method": "post", "url": "/api/email", body: {email}})
+        }
 
         log_in ({detail: {user}})  {
             this.setState({user});
@@ -139,14 +144,21 @@ define(function(require, exports) {
                                         <a class='newgame' href='/newgame' onClick=${e => { e.preventDefault(); Router.navigate('/newgame'); }}>New Game</a>
 
                                         <div class='your-channels'>
-                                            ${s.user.channels.map(c => html`
+                                            ${s.user.channels ? s.user.channels.map(c => html`
                                                 <br /><a class='channel' href='/lobby/${c.slug}' onClick=${e => { e.preventDefault(); Router.navigate('/lobby/'+c.slug); }}>${c.title}</a>
-                                            `)}
+                                            `) : ''}
                                         </div>
 
                                         <p>It's a game we play among our friends with pen and paper IRL.</p>
                                         <p>It's sort of like paper telephone; every round begins with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
-                                        <div style="height: 150px; width: 100%; border: 3px solid #000; padding: 10px;">Placeholder - this will have an example round</div>
+                                        <div style=" width: 100%; border: 3px solid #000; padding: 10px;">
+                                            Warning -- the game is not fully ready yet.<br />
+                                            Enter your e-mail address if you'd like to be notified when it's done later this week.
+                                            <form onSubmit=${e => this.setEmailAddress(e)}>
+                                                <input type='text' name='email' placeholder='E-mail address'  onInput=${e => this.setState({email: e.target.value})} />
+                                                <br /><input type='submit' value="Submit" name='email' placeholder='E-mail address'/>
+                                            </form>
+                                        </div>
                                         <ul>
                                             <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
                                             <li>If you are <strong>prompted with a drawing</strong>, you <strong>caption it with text</strong>.</li>

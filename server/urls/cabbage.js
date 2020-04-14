@@ -200,7 +200,7 @@ module.exports = function({app, io, websockets}) {
     });
 
 
-    app.post("/api/spiels/post", passport.authenticate('session'), async function(req, res){
+    app.post("/api/spiels/post", /*passport.authenticate('session'),*/ async function(req, res){
         let { spiel } = req.body;
 
         spiel.timestamp = common.now();
@@ -225,6 +225,14 @@ module.exports = function({app, io, websockets}) {
         let {user} = req;        
         return res.json({user});
     
+    });
+    app.post("/api/email", async function(req, res){
+        let { email } = req.body;
+        let user_id = req.user.id;
+        await cabbage.actions.set_user_email({email, user_id});
+
+        res.json({ok: true});
+        
     });
 
     app.get("/api/channel/:channel([^/]+)(/?)", async function(req, res){
