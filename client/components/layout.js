@@ -108,6 +108,9 @@ define(function(require, exports) {
             e.preventDefault();
             const email = this.state.email;
             await API.request({"method": "post", "url": "/api/email", body: {email}})
+            const user = this.state.user;
+            user.email = email;
+            this.setState({user})
         }
 
         log_in ({detail: {user}})  {
@@ -153,11 +156,13 @@ define(function(require, exports) {
                                         <p>It's sort of like paper telephone; every round begins with a prompt (text or drawing), which the next player then has to follow up with the other type (drawing or text)</p>
                                         <div style=" width: 100%; border: 3px solid #000; padding: 10px;">
                                             Warning -- the game is not fully ready yet.<br />
-                                            Enter your e-mail address if you'd like to be notified when it's done later this week.
-                                            <form onSubmit=${e => this.setEmailAddress(e)}>
-                                                <input type='text' name='email' placeholder='E-mail address'  onInput=${e => this.setState({email: e.target.value})} />
-                                                <br /><input type='submit' value="Submit" name='email' placeholder='E-mail address'/>
-                                            </form>
+                                            ${s.user.email ? html`We will e-mail you when we launch. Thanks!` : html`
+                                                Enter your e-mail address if you'd like to be notified when it's done later this week.
+                                                <form onSubmit=${e => this.setEmailAddress(e)}>
+                                                    <input type='text' name='email' placeholder='E-mail address'  onInput=${e => this.setState({email: e.target.value})} />
+                                                    <br /><input type='submit' value="Submit" name='email' placeholder='E-mail address'/>
+                                                </form>
+                                            `}
                                         </div>
                                         <ul>
                                             <li>If you are <strong>prompted with text</strong>, you <strong>draw</strong> your version of it.</li>
