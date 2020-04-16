@@ -30,15 +30,23 @@ define(function(require, exports) {
         static css() {
             return `
                 .flipbook-wrapper { margin: 60px;}
-                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; }
+                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; margin-top: 20px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center;}
                 .turn-image { max-width: 600px; }
+                .turn-prompt-text { font-size: larger; }
             `
         }
 
         createSheet(turn, i) {
             return html `
                 <div class="flipbook-sheet">
-                    <img class="turn-image" src="${turn.contents}" />
+                    ${turn.type == "drawing" ? html`
+                        <img class="turn-image" src="${turn.contents}" />
+                    ` : html `
+                        <div class="turn-prompt-text"> 
+                            ${turn.contents}
+                        </div>
+                    `
+                }
                 </div>
             `
         }
