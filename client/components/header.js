@@ -20,10 +20,15 @@ define(function(require, exports) {
                     </div>
                     ${this.props.channel ? html`
                         <div id='game-text'>
-                            <span id="title" onClick=${e => Router.navigate(`/lobby/${this.props.channel.slug}/`)}>
+                            Lobby for <span id="title" onClick=${e => Router.navigate(`/lobby/${this.props.channel.slug}/`)}>
                                 ${this.props.channel.title}
                             </span>
                         </div>
+
+
+                        ${props.channel.username ? html`
+                            <span class="current-profile">👤 ${props.channel.username}</a>
+                        ` : ``}
                     ` : html``}
                 </div>
             `;
@@ -31,9 +36,11 @@ define(function(require, exports) {
 
         static css() {
             return `
-                #header {  height: 60px; padding: 0 15px; position: relative; display: flex; margin-top: 10px; }
+                #header {  height: 60px; padding: 10px 15px; position: relative; display: flex; justify-content: space-between; margin-top: 0px; background: rgba(255, 255, 255, 0.4); }
 
-                #game-text { font-size: 25px; line-height: 60px; height: 60px; } 
+                #header .current-profile { float: right;font-size: 20px; line-height: 60px; height: 60px; margin-right: 10px; }
+
+                #game-text { font-size: 25px; line-height: 60px; height: 60px; max-width: 70%; } 
                 #title { display: inline-block; font-weight: bolder; color: rgb(33, 85, 46); line-height: 60px; height: 60px; font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif ;  cursor: pointer; }
                 #title:hover { color: #000;  }
             

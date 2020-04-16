@@ -84,29 +84,33 @@ module.exports = function({app, io, websockets}) {
             const request_headers = req.headers;
             const user = await user_actions.create_anon_user({ip, request_headers});
             req.login(user, function(err){
-                return next(err);
+                next(err);
             });
         } else {
             req.user.channels = await cabbage.queries.get_user_channels({user_id: req.user.id});
-            return next();
+            //setTimeout(() => {
+                next();
+            //}, 1000)
         }
     });
 
     async function load_channel({req, res, custom_props}) {
-        let {user} = req;
-        let {slug} = req.params;
-        
-        let seed = parseInt(("1"+(req.headers['x-forwarded-for'] || req.connection.remoteAddress)).replace(/[^0-9]/g, ''));
+        const {user} = req;
+        const {slug} = req.params;
 
-        let color = "#"+genColor(seed);
+        const user_id = user.id;
+        
+        const seed = parseInt(("1"+(req.headers['x-forwarded-for'] || req.connection.remoteAddress)).replace(/[^0-9]/g, ''));
+
+        const color = "#"+genColor(seed);
 
         req.session.color = color;
 
 
-        let props = Object.assign(custom_props, {color, user});
+        const props = Object.assign(custom_props, {color, user});
 
         if(slug) {
-            props.channel = await cabbage.queries.get_channel({slug});
+            props.channel = await cabbage.queries.get_channel({user_id, slug});
             props.initial_spiels = (await es.filter({
                 channel: slug,
                 filters: {},
@@ -114,38 +118,37 @@ module.exports = function({app, io, websockets}) {
 
             await cabbage.actions.add_user_to_channel({user_id: user.id, slug});
         }
-
         res.send(Root(render_preact(html`<${Layout} ...${props} />`), props));
     }
 
     app.get("/?", function(req, res){
-        let custom_props = {page: 'home'};
+        const custom_props = {page: 'home'};
         load_channel({req, res, custom_props});
     });
     app.get("/newgame/?", function(req, res){
-        let custom_props = {page: 'newgame'};
+        const custom_props = {page: 'newgame'};
         load_channel({req, res, custom_props});
     });
     app.get("/lobby/:slug([^/]+)(/?)", async function(req, res) {
 
-        let custom_props = {page: 'channel', view: 'lobby'};
+        const custom_props = {page: 'channel', view: 'lobby'};
         load_channel({req, res, custom_props});
     });
-    app.get("/lobby/:slug([^/]+)/round/new/?", function(req, res){
-        let { prompt_mode } = req.params;
-        let custom_props = {page: 'channel', view: 'round', prompt_mode};
+    app.get("/lobby/:slug([^/]+)/round/new/?$", function(req, res){
+        const { prompt_mode } = req.params;
+        const custom_props = {page: 'channel', view: 'round', prompt_mode};
+        load_channel({req, res, custom_props});
+    });
+    app.get("/lobby/:slug([^/]+)/round/new/:prompt_mode(draw|text)/?", function(req, res){
+        const { prompt_mode } = req.params;
+        const custom_props = {page: 'channel', view: 'round', prompt_mode};
         load_channel({req, res, custom_props});
     });
     app.get("/lobby/:slug([^/]+)/round/:round_id([^/]+)/?", async function(req, res){
-        let { round_id } = req.params;
+        const { round_id } = req.params;
 
-        let round = await cabbage.queries.get_round({round_id}); 
-        let custom_props = {page: 'channel', view: 'round', round};
-        load_channel({req, res, custom_props});
-    });
-    app.get("/lobby/:slug([^/]+)/round/new/:prompt_mode(draw|text|$)/?", function(req, res){
-        let { prompt_mode } = req.params;
-        let custom_props = {page: 'channel', view: 'round', prompt_mode};
+        const round = await cabbage.queries.get_round({round_id}); 
+        const custom_props = {page: 'channel', view: 'round', round};
         load_channel({req, res, custom_props});
     });
 
@@ -155,7 +158,8 @@ module.exports = function({app, io, websockets}) {
 
     app.get("/api/cabbage/channel", async function(req, res){
         const {slug} = req.query;
-        const channel = await cabbage.queries.get_channel({slug});
+        const user_id = req.user.id;
+        const channel = await cabbage.queries.get_channel({user_id, slug});
         res.json({channel});
     });
     app.post("/api/cabbage/channel/create", async function(req, res){
@@ -165,6 +169,18 @@ module.exports = function({app, io, websockets}) {
         try {
             const channel = await cabbage.actions.create_channel({slug, title, user_id, settings: {}});
             await cabbage.actions.add_user_to_channel({user_id, slug});
+            res.json({ok: true, channel});
+        } catch(e) {
+            res.status(403);
+            res.json({ok: false, error: e.message})
+        }
+    });
+    app.post("/api/cabbage/channel/pick-name", async function(req, res){
+        const {slug, username} = req.body;
+        const user_id = req.user.id;
+        try {
+            await cabbage.actions.update_channel_user({user_id, slug, name: username});
+            const channel = await cabbage.queries.get_channel({user_id, slug});
             res.json({ok: true, channel});
         } catch(e) {
             res.status(403);
@@ -215,6 +231,7 @@ module.exports = function({app, io, websockets}) {
     app.get("/api/round/:round_id([^/]+)(/?)", async function(req, res){
 
         let {round_id} = req.params;
+        const user_id = req.user.id;
         //let opts = {channel, filters, since, until, center_timestamp, user_id, spiel_id};
         
         let round = await cabbage.queries.get_round({round_id});

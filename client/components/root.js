@@ -28,7 +28,7 @@ define(function(require, exports) {
                     <style type="text/css" id="css-Root">
                         body, html { height: 100%; margin: 0; padding: 0; position: relative; overflow: hidden; -webkit-text-size-adjust: none; text-rendering: optimizeLegibility;  -webkit-font-smoothing: subpixel-antialiased;  -webkit-tap-highlight-color: rgba(0,0,0,0); }
 
-                        body { background: #f9d49c; }
+                        body { background: #fff; }
                     </style>
 
                     ${css_preloads.map( c => `

@@ -25,7 +25,7 @@ define(function(require, exports) {
             this.state = {
                 channel,
                 page,
-                prompt_mode: (round && round.last_turn) ? (round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse') : undefined,
+                prompt_mode: prompt_mode || ((round && round.last_turn) ? (round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse') : undefined),
                 view,
                 chat_open: false,
                 color: props.color,
@@ -37,7 +37,9 @@ define(function(require, exports) {
                 if(!force && this.state.channel && this.state.channel.title && this.state.channel.slug == slug) {
                     return this.state.channel;
                 } else {
+                    this.setState({loading: true})
                     const {channel} = await API.request({url: `/api/cabbage/channel?slug=${slug}`});
+                    this.setState({loading: false})
                     return channel;
                 }
             }
@@ -80,11 +82,11 @@ define(function(require, exports) {
                 '/lobby/:slug/round/:round_id': {
                     as: 'round',
                     uses: async ({slug, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}), round: undefined }, async () => {
+                        this.setState({loading: true, page: 'channel', view: 'round', channel: await load_channel({slug}), round: undefined }, async () => {
                             const {round} = await API.request({method: 'get', url: '/api/round/'+round_id,})
                             if(round) {
                                 let prompt_mode = round.last_turn && round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse';
-                                this.setState({prompt_mode, round})
+                                this.setState({loading: false, prompt_mode, round})
                             }
                         });
                     }
@@ -100,6 +102,7 @@ define(function(require, exports) {
 
         componentDidMount() {
             Events.on("logged_in", e => this.log_in(e));
+            if(this.pick_name) setTimeout(() => this.pick_name.focus(), 500);
         }
 
         setLobbyDetails({lobbyName, lobbySlug}) {
@@ -120,6 +123,7 @@ define(function(require, exports) {
 
         render(props, s) {
             const { page, channel, prompt_mode, view, round } = s;
+            const users = channel && channel.users ? channel.users.filter(u => u) : [];
 
             let initial_spiels;
             if(channel) {
@@ -128,6 +132,8 @@ define(function(require, exports) {
                     {name: "lobby slug", color: "#ffa", spiel: "Pick a name and type away.", timestamp: Date.now(), channel: channel.slug, },
                 ]
             }
+
+
             return html`
                 <div id="layout">
                     <div id="content-container">
@@ -183,36 +189,73 @@ define(function(require, exports) {
 
 
                         ${(page == "channel" && channel) ? html`
-                            <div class="game-column active column ">
-                                <${Header} channel=${channel} page=${page} />
-                                <div id="game-wrapper">
-                                    ${(view == "lobby") ? html`
-                                        <${Lobby} channel=${channel}/>
-                                    ` : ''}
+                            <div class="columns">
+                                <div class="game-column active column">
+                                    <${Header} channel=${channel} page=${page} />
+                                        ${channel.username ? html`
+                                        ` : html`
+                                            <div class="pick-name">
+                                                <div class="inner">
+                                                    ${users && users.length > 0 ? html`
+                                                        Pick a name to join <strong>${channel.title}</strong>:
+                                                    ` : html`
+                                                        Pick a name for yourself in <strong>${channel.title}</strong>:
+                                                    `}
+                                                    <form onSubmit=${async (e) => {
+                                                        e.preventDefault();
+                                                        let {channel: updated_channel} = await API.request({method: "post", url: "/api/cabbage/channel/pick-name/", body: {slug: channel.slug, username: this.state.pick_name}})
+                                                        this.setState({channel: updated_channel});
+                                                    }}>
+                                                        <input type="text" onInput=${e => this.setState({pick_name: e.target.value})} ref=${r => this.pick_name=r} />
+                                                        <br />
+                                                        <button type="submit">Pick name</button>
+                                                    </form>
+                                                    ${users && users.length > 0 ? html`
+                                                        <div class='members'>
+                                                            Members:
+                                                            ${users.map(username => html`
+                                                                <div class="user"><strong>${username}</strong></div>
+                                                            `)}
+                                                        </div>
+                                                     ` : html``}
+                                                </div>
+                                            </div>
+                                        `}
+                                    <div id="game-wrapper" class="${channel.username ? '' : 'disabled'}">
 
-                                    ${(view == "round" && !prompt_mode && !round) ? html`
-                                        <${InstructionTile} channel=${channel} />                          
-                                    ` : ''}
+                                        ${s.loading ? html`
+                                            <div class="loading">Loading</div>
+                                        ` : html`
+                                            ${(view == "lobby") ? html`
+                                                <${Lobby} channel=${channel} />
+                                            ` : ''}
 
-                                    ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
-                                        <${Prompt} 
-                                            channel=${channel}
-                                            mode=${prompt_mode}
-                                            round=${round}
-                                        />
-                                    ` : ''}
+                                            ${(view == "round" && !prompt_mode && !round) ? html`
+                                                <${InstructionTile} channel=${channel} />                          
+                                            ` : ''}
 
-                                    ${(view == "round" && round && round.status == "closed") ? html`                                     
-                                        <${RoundOverview} 
-                                            channel=${channel}
-                                            round=${round}
-                                        />
-                                    ` : ''}
+                                            ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
+                                                <${Prompt} 
+                                                    channel=${channel}
+                                                    mode=${prompt_mode}
+                                                    round=${round}
+                                                    loadingHandler=${({loading}) => this.setState({loading})}
+                                                />
+                                            ` : ''}
+
+                                            ${(view == "round" && round && round.status == "closed") ? html`                                     
+                                                <${RoundOverview} 
+                                                    channel=${channel}
+                                                    round=${round}
+                                                />
+                                            ` : ''}
+                                        `}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
-                                <div class="padding">
-                                    <${Channel} channel=${channel.slug} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
+                                <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
+                                    <div class="padding">
+                                        <${Channel} channel=${channel.slug} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
+                                    </div>
                                 </div>
                             </div>
                         ` : ``}
@@ -240,48 +283,95 @@ define(function(require, exports) {
 
                 #content-container {
                     position: relative;
-                }
-                #content-container {
-                    display: flex;
                     height: calc(100%);
+                }
+                #content-container .columns {
+                    background: #000;
+                    display: flex;
+                    position: relative;
+                    height: 100%;
                 }
                 #content-container .column {
                     flex-grow: 1;
-                    margin: 0;
+                    position: relative;
+                    box-sizing: border-box;
+                    overflow: auto;
+                    z-index: 1;
+                    margin: ${params.column_gap};
+                    margin-left: 0px;
                 }
+                #content-container .column:first-child {
+                    margin-left: ${params.column_gap};
+                }
+
                 #content-container .column.channel-column {
                     position: relative;
                     overflow: hidden;
                 }
                 #content-container .column.channel-column > .padding {
-                    margin: 10px;
-                    height: calc(100% - 20px);
+                    
+                    height: calc(100% - 0px);
                     border-radius: 5px;
                     overflow: hidden;
                     position: relative;
-                }
-                #content-container .column:first-child {
-                    margin-left: ${params.column_gap};
                 }
                 #content-container .column.hidden {
                     opacity: 1;
                 }
                 #content-container .column.channel-column { width: 25%; min-width: 350px; }
-                #content-container .column.game-column { width: 75%; position: relative; }
+                #content-container .column.game-column { width: 75%; position: relative; 
+                    background: #f9d49c; border-radius: 5px; }
 
-                #content-container .column {
-                    height: 100%;
-                    position: relative;
-                    box-sizing: border-box;
-                    overflow: auto;
-                    z-index: 1;
-                }
 
-                #content-container .inner {
+                #content-container > .inner {
                     width: 100%;
                 }
 
-                h1 { color: #e2806a; }
+                #content-container .pick-name {
+                    text-align: center;
+                }
+                #content-container .pick-name .inner {
+                    margin: 50px;
+                    font-size: 23px;
+                    padding: 30px;
+                    display: inline-block;
+                    background: rgba(255, 255, 255 ,0.4); 
+                }
+                #content-container .pick-name form {
+                    margin-top: 20px;
+                }
+                #content-container .pick-name input {
+                    font-size: 18px; padding: 10px; line-height: 20px; width: 300px; border: 3px solid #000;
+                    border-color: transparent;
+                }
+                #content-container .pick-name input:focus {
+                    border-color: #03f;
+                }
+                #content-container .pick-name button {
+                    display: inline-block;
+                    padding: 10px 30px;
+                    margin: 10px;
+                    background: #e2806a;
+                    color: #fff;
+                    font-size: 30px;
+                    cursor: pointer;
+                    border: none;
+                }
+                #content-container .pick-name .members {
+                    font-size: 17px;
+                    color: rgba(0, 0, 0, 0.9);
+                    margin-top: 30px;
+                }
+
+                #content-container .loading {
+                    margin: 50px;
+                    font-size: 60px;
+                    color: rgba(0, 0, 0, 0.2);
+                    text-align: center;
+                    display: block;
+                }
+
+                h1, h2, h3, h4, h5 { color: #e2806a; }
 
                 .landing { text-align: center; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 21px; }
                 .landing .af { color: rgba(126, 86, 86, 0.9); font-weight: bold; font-size: 13px; transform: rotate(-20deg); display: inline-block; position: relative; top: 5px;}
@@ -319,6 +409,16 @@ define(function(require, exports) {
                     align-items: center;
                     display: block;
                 }
+                #game-wrapper.disabled {
+                    opacity: 0.5;
+                    pointer-events: none;
+                    -webkit-filter: blur(5px) grayscale(100%);
+                    -moz-filter: blur(5px) grayscale(100%);
+                    -o-filter: blur(5px) grayscale(100%);
+                    -ms-filter: blur(5px) grayscale(100%);
+                    filter: blur(5px) grayscale(100%);
+                }
+
 
                 @media only screen and (min-width: 600px) {
 
