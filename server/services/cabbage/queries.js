@@ -64,22 +64,17 @@ async function get_round({ round_id}) {
     `, {round_id});
 
     if(result.rows[0] && result.rows[0].status == "closed") {
-        let all_posts = {};
         let all_posts_result = await db.execute(`
             SELECT t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
             LEFT JOIN turns t ON r.id = t.round_id
             JOIN users u on u.id = t.user_id
             WHERE r.id={round_id}
-            ORDER BY r.id, t.timestamp DESC
+            ORDER BY r.id, t.timestamp ASC
         `, {round_id});
 
-        all_posts_result.rows.forEach((t) => {
-            all_posts[t.round_id] = t;
-        });
+        let all_posts = all_posts_result.rows;
         result.rows.forEach((r) => {
-            if(all_posts[r.id]) {
-                r.turns = all_posts[r.id];
-            }
+            r.turns = all_posts;
         });
     } else {
         let last_posts = {};

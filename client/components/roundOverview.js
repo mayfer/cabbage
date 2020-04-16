@@ -15,13 +15,13 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            console.log(props.round)
             return html`
             <div class="flipbook-wrapper">
             ${JSON.stringify()}
                 <div class="stack paper-stack-wrapper" >
-
-                    ${this.createPaperStack(7)}
+                    ${this.props.round.turns.map((turn,i) => {
+                        return this.createSheet(turn, i)
+                    })}
                 </div>
             </div>
             `;
@@ -30,7 +30,16 @@ define(function(require, exports) {
         static css() {
             return `
                 .flipbook-wrapper { margin: 60px;}
-                .flipbook-sheet {position: absolute; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; }
+                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; }
+                .turn-image { max-width: 600px; }
+            `
+        }
+
+        createSheet(turn, i) {
+            return html `
+                <div class="flipbook-sheet">
+                    <img class="turn-image" src="${turn.contents}" />
+                </div>
             `
         }
 
@@ -45,9 +54,7 @@ define(function(require, exports) {
         }
 
         flipSheet(index) {
-            //console.log(sheet)
             this.setState({sheetIndex: index})
-            
         }
     }
 });

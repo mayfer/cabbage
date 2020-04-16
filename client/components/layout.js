@@ -68,13 +68,13 @@ define(function(require, exports) {
                 '/lobby/:slug/round/new': {
                     as: 'round',
                     uses: async ({slug, prompt_mode }) => {
-                        this.setState({ page: 'channel', view: 'round', channel: await load_channel({slug}), prompt_mode: undefined }, () => {});
+                        this.setState({ page: 'channel', view: 'round', round: undefined, channel: await load_channel({slug}), prompt_mode: undefined }, () => {});
                     }
                 },
                 '/lobby/:slug/round/new/:prompt_mode': {
                     as: 'round',
                     uses: async ({slug, prompt_mode }) => {
-                        this.setState({ page: 'channel', view: 'round', channel: await load_channel({slug}), prompt_mode }, () => {});
+                        this.setState({ page: 'channel', view: 'round', round: undefined, channel: await load_channel({slug}), prompt_mode }, () => {});
                     }
                 },
                 '/lobby/:slug/round/:round_id': {
@@ -194,7 +194,7 @@ define(function(require, exports) {
                                         <${InstructionTile} channel=${channel} />                          
                                     ` : ''}
 
-                                    ${(view == "round" && round && prompt_mode && round.status == 'open') ? html`                                     
+                                    ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
                                         <${Prompt} 
                                             channel=${channel}
                                             mode=${prompt_mode}
