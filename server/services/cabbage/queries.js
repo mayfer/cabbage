@@ -15,7 +15,14 @@ async function get_user_channels({user_id}) {
 }
 
 async function get_channel({user_id, slug}) {
-    let channel = await db.return_one(`SELECT c.*, cu.name FROM channels c LEFT JOIN channel_users cu ON (cu.id=c.id AND cu.user_id={user_id}) WHERE c.slug={slug}`, {slug});
+    let channel = await db.return_one(`
+        SELECT c.id, c.title, c.slug, c.timestamp, c.settings, cu.name AS username, array_agg(cux.name) as users 
+        FROM channels c
+        LEFT JOIN channel_users cu ON (cu.channel_id=c.id AND cu.user_id={user_id})
+        LEFT JOIN channel_users cux ON (cux.channel_id=c.id)
+        WHERE c.slug={slug}
+        GROUP BY c.id, cu.name
+    `, {slug, user_id});
     channel.rounds = await get_rounds({channel_id: channel.id});
     return channel;
 }
@@ -33,8 +40,9 @@ async function get_rounds({channel_id}) {
 
     let last_posts = {};
     let last_posts_result = await db.execute(`
-        SELECT DISTINCT ON(r.id) t.round_id, t.type, t.timestamp, u.handle FROM rounds r
+        SELECT DISTINCT ON(r.id) t.round_id, t.type, t.timestamp, cu.name AS username FROM rounds r
         LEFT JOIN turns t ON r.id = t.round_id
+        LEFT JOIN channel_users cu ON (r.channel_id = cu.channel_id AND t.user_id = cu.user_id)
         JOIN users u on u.id = t.user_id
         WHERE r.channel_id={channel_id}
         ORDER BY r.id, t.timestamp DESC
@@ -55,9 +63,9 @@ async function get_round({ round_id}) {
     // available, pending and completed
     // available, pending and completed
     let result = await db.execute(`
-        SELECT r.id, r.timestamp, r.status, COUNT(r.id) as count, array_agg(u.handle) as users FROM rounds r
+        SELECT r.id, r.timestamp, r.status, COUNT(r.id) as count, array_agg(cu.name) as users FROM rounds r
         LEFT JOIN turns t ON r.id = t.round_id
-        JOIN users u on u.id = t.user_id
+        LEFT JOIN channel_users cu ON (r.channel_id = cu.channel_id AND t.user_id = cu.user_id)
         WHERE r.id={round_id}
         GROUP BY r.id, r.timestamp
         ORDER BY r.timestamp DESC
@@ -65,9 +73,9 @@ async function get_round({ round_id}) {
 
     if(result.rows[0] && result.rows[0].status == "closed") {
         let all_posts_result = await db.execute(`
-            SELECT t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
+            SELECT t.round_id, t.type, t.contents, t.timestamp, cu.name AS username FROM rounds r
             LEFT JOIN turns t ON r.id = t.round_id
-            JOIN users u on u.id = t.user_id
+            LEFT JOIN channel_users cu ON (r.channel_id = cu.channel_id AND t.user_id = cu.user_id)
             WHERE r.id={round_id}
             ORDER BY r.id, t.timestamp ASC
         `, {round_id});
@@ -79,9 +87,9 @@ async function get_round({ round_id}) {
     } else {
         let last_posts = {};
         let last_posts_result = await db.execute(`
-            SELECT DISTINCT ON(r.id) t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
+            SELECT DISTINCT ON(r.id) t.round_id, t.type, t.contents, t.timestamp, cu.name AS username FROM rounds r
             LEFT JOIN turns t ON r.id = t.round_id
-            JOIN users u on u.id = t.user_id
+            LEFT JOIN channel_users cu ON (r.channel_id = cu.channel_id AND t.user_id = cu.user_id)
             WHERE r.id={round_id}
             ORDER BY r.id, t.timestamp DESC
         `, {round_id});

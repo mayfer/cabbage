@@ -64,7 +64,7 @@ define(function(require, exports) {
 					` : ''}
 					${mode === 'textAsResponse' ? html`
 						${round && round.last_turn && round.last_turn.type == 'drawing' ?  html`
-                            ${round && round.last_turn ? round.last_turn.handle : ''}'s drawing for you to caption:
+                            <strong>${round && round.last_turn ? round.last_turn.username : ''}</strong>'s drawing for you to caption:
                             <div class="drawing-frame">
                                 <img src=${round.last_turn.contents} id="prompt-image" />
                             </div>
@@ -73,7 +73,7 @@ define(function(require, exports) {
 					` : ''}
 					${mode === 'drawAsResponse' ? html`
 						<div id='text-prompt-wrapper'>
-                            ${round && round.last_turn ? round.last_turn.handle : ''}'s prompt for you to draw:
+                            <strong>${round && round.last_turn ? round.last_turn.username : ''}</strong>'s prompt for you to draw:
 							<h2 class='prompt'>
                                 ${round && round.last_turn && round.last_turn.type == 'caption' ? round.last_turn.contents : ''}
                             </h2>

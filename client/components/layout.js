@@ -100,6 +100,7 @@ define(function(require, exports) {
 
         componentDidMount() {
             Events.on("logged_in", e => this.log_in(e));
+            if(this.pick_name) setTimeout(() => this.pick_name.focus(), 500);
         }
 
         setLobbyDetails({lobbyName, lobbySlug}) {
@@ -120,6 +121,7 @@ define(function(require, exports) {
 
         render(props, s) {
             const { page, channel, prompt_mode, view, round } = s;
+            const users = channel && channel.users ? channel.users.filter(u => u) : [];
 
             let initial_spiels;
             if(channel) {
@@ -128,6 +130,8 @@ define(function(require, exports) {
                     {name: "lobby slug", color: "#ffa", spiel: "Pick a name and type away.", timestamp: Date.now(), channel: channel.slug, },
                 ]
             }
+
+
             return html`
                 <div id="layout">
                     <div id="content-container">
@@ -184,11 +188,41 @@ define(function(require, exports) {
 
                         ${(page == "channel" && channel) ? html`
                             <div class="columns">
-                                <div class="game-column active column ">
+                                <div class="game-column active column">
                                     <${Header} channel=${channel} page=${page} />
-                                    <div id="game-wrapper">
+                                        ${channel.username ? html`
+                                        ` : html`
+                                            <div class="pick-name">
+                                                <div class="inner">
+                                                    ${users && users.length > 0 ? html`
+                                                        Pick a name to join <strong>${channel.title}</strong>:
+                                                    ` : html`
+                                                        Pick a name for yourself in <strong>${channel.title}</strong>:
+                                                    `}
+                                                    <form onSubmit=${async (e) => {
+                                                        e.preventDefault();
+                                                        let {channel: updated_channel} = await API.request({method: "post", url: "/api/cabbage/channel/pick-name/", body: {slug: channel.slug, username: this.state.pick_name}})
+                                                        this.setState({channel: updated_channel});
+                                                    }}>
+                                                        <input type="text" onInput=${e => this.setState({pick_name: e.target.value})} ref=${r => this.pick_name=r} />
+                                                        <br />
+                                                        <button type="submit">Pick name</button>
+                                                    </form>
+                                                    ${users && users.length > 0 ? html`
+                                                        <div class='members'>
+                                                            Members:
+                                                            ${users.map(username => html`
+                                                                <div class="user"><strong>${username}</strong></div>
+                                                            `)}
+                                                        </div>
+                                                     ` : html``}
+                                                </div>
+                                            </div>
+                                        `}
+                                    <div id="game-wrapper" class="${channel.username ? '' : 'disabled'}">
+
                                         ${(view == "lobby") ? html`
-                                            <${Lobby} channel=${channel}/>
+                                            <${Lobby} channel=${channel} />
                                         ` : ''}
 
                                         ${(view == "round" && !prompt_mode && !round) ? html`
@@ -282,8 +316,44 @@ define(function(require, exports) {
                     background: #f9d49c; border-radius: 5px; }
 
 
-                #content-container .inner {
+                #content-container > .inner {
                     width: 100%;
+                }
+
+                #content-container .pick-name {
+                    text-align: center;
+                }
+                #content-container .pick-name .inner {
+                    margin: 50px;
+                    font-size: 23px;
+                    padding: 30px;
+                    display: inline-block;
+                    background: rgba(255, 255, 255 ,0.4); 
+                }
+                #content-container .pick-name form {
+                    margin-top: 20px;
+                }
+                #content-container .pick-name input {
+                    font-size: 18px; padding: 10px; line-height: 20px; width: 300px; border: 3px solid #000;
+                    border-color: transparent;
+                }
+                #content-container .pick-name input:focus {
+                    border-color: #03f;
+                }
+                #content-container .pick-name button {
+                    display: inline-block;
+                    padding: 10px 30px;
+                    margin: 10px;
+                    background: #e2806a;
+                    color: #fff;
+                    font-size: 30px;
+                    cursor: pointer;
+                    border: none;
+                }
+                #content-container .pick-name .members {
+                    font-size: 17px;
+                    color: rgba(0, 0, 0, 0.9);
+                    margin-top: 30px;
                 }
 
                 h1, h2, h3, h4, h5 { color: #e2806a; }
@@ -324,6 +394,16 @@ define(function(require, exports) {
                     align-items: center;
                     display: block;
                 }
+                #game-wrapper.disabled {
+                    opacity: 0.5;
+                    pointer-events: none;
+                    -webkit-filter: blur(5px) grayscale(100%);
+                    -moz-filter: blur(5px) grayscale(100%);
+                    -o-filter: blur(5px) grayscale(100%);
+                    -ms-filter: blur(5px) grayscale(100%);
+                    filter: blur(5px) grayscale(100%);
+                }
+
 
                 @media only screen and (min-width: 600px) {
 

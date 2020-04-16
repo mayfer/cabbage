@@ -19,16 +19,17 @@ define(function(require, exports) {
 
         render(props, s) {
             const { channel } = props;
-            var dummyData = [
-                {name: "murat", count: 32, lastTime: Date.now(), type: 'caption'}, 
-                {name: "adele", count: 2, lastTime: Date.now(), type: 'drawing'}, 
-                {name: "theo", count: 7, lastTime: Date.now(), type: 'caption' }
-            ];
             const completed_rounds = channel.rounds.filter(r => r.status == 'closed');
             const available_rounds = channel.rounds.filter(r => r.status == 'open');
 
             return html`
             <div id="lobby">
+
+                ${channel.username ? html`
+                    <div class="welcome">
+                        Hi, <strong>${channel.username}</strong>
+                    </div>
+                ` : ``}
                 <h3 class="round-section-title">Send the URL of this page to invite others</h3>
                 <a class='copy-link' onClick=${e => {
                     Common.copy_link(e);
@@ -61,7 +62,7 @@ define(function(require, exports) {
                                                 ${this.createPaperStack(d.count)}
                                             </div>
                                             <div class="round-description" >
-                                                Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                                Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.username}</strong>
                                                 <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
                                             </div>
                                             <div class='since'>
@@ -95,7 +96,7 @@ define(function(require, exports) {
                                             ${this.createPaperStack(d.count)}
                                         </div>
                                         <div class="round-description" >
-                                            Last <strong>${d.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                            Last <strong>${d.type}</strong> by <strong>${d.last_turn.username}</strong>
                                             <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
                                         </div>
                                         <div class='since'>Round started ${this.timeSince(d.timestamp)} ago</div>
@@ -134,7 +135,7 @@ define(function(require, exports) {
                 #copied-text { color: #666; margin-left: 15px; font-size: small;}
 
                 .stack-image { width: 50px; }
-                .round-section-title { margin-top: 30px; margin-bottom: 15px; font-size: 20px; }
+                .round-section-title { margin-top: 30px; margin-bottom: 5px; font-size: 20px; }
                 .footer-image { width: 80%; margin: 0 10%; }
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute ;}
@@ -152,6 +153,7 @@ define(function(require, exports) {
                 #add-round-button { background: #efe; color: #040; line-height: 30px; padding: 0 10px; display: inline-block; }
                 #add-round-button:hover { background: #707; color: #fff; }
 
+                #lobby .welcome { margin-top: 30px; }
             `
         }
 

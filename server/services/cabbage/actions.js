@@ -37,10 +37,22 @@ async function add_user_to_channel({user_id, slug }) {
     `, {channel_id: channel.id, user_id, timestamp: Date.now()});
 
     return res.rows[0];
+}
+
+async function update_channel_user({user_id, slug, name }) {
+    let channel = await queries.get_channel({slug});
+
+    let res = await db.execute(`
+        UPDATE channel_users
+        SET name={name}
+        WHERE channel_id={channel_id} AND user_id={user_id}
+        RETURNING *
+    `, {channel_id: channel.id, user_id, name});
+
+    return res.rows[0];
 
 
 }
-
 async function create_new_turn({round_id, user_id, previous_turn_id, type, contents }) {
     let res = await db.execute(`
         INSERT INTO turns
@@ -85,4 +97,5 @@ module.exports = {
     create_new_turn,
     start_new_round,
     set_user_email,
+    update_channel_user,
 }
