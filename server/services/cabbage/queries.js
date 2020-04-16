@@ -38,6 +38,7 @@ async function get_rounds({channel_id}) {
         ORDER BY r.timestamp DESC
     `, {channel_id});
 
+
     let last_posts = {};
     let last_posts_result = await db.execute(`
         SELECT DISTINCT ON(r.id) t.round_id, t.type, t.timestamp, cu.name AS username FROM rounds r
@@ -55,6 +56,10 @@ async function get_rounds({channel_id}) {
         if(last_posts[r.id]) {
             r.last_turn = last_posts[r.id];
         }
+    });
+
+    result.rows.sort((a, b) => { 
+        return a.last_turn && b.last_turn ? b.last_turn.timestamp - a.last_turn.timestamp : 0
     });
     return result.rows;
 }

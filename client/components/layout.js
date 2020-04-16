@@ -25,7 +25,7 @@ define(function(require, exports) {
             this.state = {
                 channel,
                 page,
-                prompt_mode: (round && round.last_turn) ? (round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse') : undefined,
+                prompt_mode: prompt_mode || ((round && round.last_turn) ? (round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse') : undefined),
                 view,
                 chat_open: false,
                 color: props.color,
@@ -37,7 +37,9 @@ define(function(require, exports) {
                 if(!force && this.state.channel && this.state.channel.title && this.state.channel.slug == slug) {
                     return this.state.channel;
                 } else {
+                    this.setState({loading: true})
                     const {channel} = await API.request({url: `/api/cabbage/channel?slug=${slug}`});
+                    this.setState({loading: false})
                     return channel;
                 }
             }
@@ -80,11 +82,11 @@ define(function(require, exports) {
                 '/lobby/:slug/round/:round_id': {
                     as: 'round',
                     uses: async ({slug, round_id }) => {
-                        this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}), round: undefined }, async () => {
+                        this.setState({loading: true, page: 'channel', view: 'round', channel: await load_channel({slug}), round: undefined }, async () => {
                             const {round} = await API.request({method: 'get', url: '/api/round/'+round_id,})
                             if(round) {
                                 let prompt_mode = round.last_turn && round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse';
-                                this.setState({prompt_mode, round})
+                                this.setState({loading: false, prompt_mode, round})
                             }
                         });
                     }
@@ -221,28 +223,33 @@ define(function(require, exports) {
                                         `}
                                     <div id="game-wrapper" class="${channel.username ? '' : 'disabled'}">
 
-                                        ${(view == "lobby") ? html`
-                                            <${Lobby} channel=${channel} />
-                                        ` : ''}
+                                        ${s.loading ? html`
+                                            <div class="loading">Loading</div>
+                                        ` : html`
+                                            ${(view == "lobby") ? html`
+                                                <${Lobby} channel=${channel} />
+                                            ` : ''}
 
-                                        ${(view == "round" && !prompt_mode && !round) ? html`
-                                            <${InstructionTile} channel=${channel} />                          
-                                        ` : ''}
+                                            ${(view == "round" && !prompt_mode && !round) ? html`
+                                                <${InstructionTile} channel=${channel} />                          
+                                            ` : ''}
 
-                                        ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
-                                            <${Prompt} 
-                                                channel=${channel}
-                                                mode=${prompt_mode}
-                                                round=${round}
-                                            />
-                                        ` : ''}
+                                            ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
+                                                <${Prompt} 
+                                                    channel=${channel}
+                                                    mode=${prompt_mode}
+                                                    round=${round}
+                                                    loadingHandler=${({loading}) => this.setState({loading})}
+                                                />
+                                            ` : ''}
 
-                                        ${(view == "round" && round && round.status == "closed") ? html`                                     
-                                            <${RoundOverview} 
-                                                channel=${channel}
-                                                round=${round}
-                                            />
-                                        ` : ''}
+                                            ${(view == "round" && round && round.status == "closed") ? html`                                     
+                                                <${RoundOverview} 
+                                                    channel=${channel}
+                                                    round=${round}
+                                                />
+                                            ` : ''}
+                                        `}
                                     </div>
                                 </div>
                                 <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
@@ -354,6 +361,14 @@ define(function(require, exports) {
                     font-size: 17px;
                     color: rgba(0, 0, 0, 0.9);
                     margin-top: 30px;
+                }
+
+                #content-container .loading {
+                    margin: 50px;
+                    font-size: 60px;
+                    color: rgba(0, 0, 0, 0.2);
+                    text-align: center;
+                    display: block;
                 }
 
                 h1, h2, h3, h4, h5 { color: #e2806a; }

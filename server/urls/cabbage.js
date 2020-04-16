@@ -84,11 +84,13 @@ module.exports = function({app, io, websockets}) {
             const request_headers = req.headers;
             const user = await user_actions.create_anon_user({ip, request_headers});
             req.login(user, function(err){
-                return next(err);
+                next(err);
             });
         } else {
             req.user.channels = await cabbage.queries.get_user_channels({user_id: req.user.id});
-            return next();
+            //setTimeout(() => {
+                next();
+            //}, 1000)
         }
     });
 
@@ -132,7 +134,12 @@ module.exports = function({app, io, websockets}) {
         const custom_props = {page: 'channel', view: 'lobby'};
         load_channel({req, res, custom_props});
     });
-    app.get("/lobby/:slug([^/]+)/round/new/?", function(req, res){
+    app.get("/lobby/:slug([^/]+)/round/new/?$", function(req, res){
+        const { prompt_mode } = req.params;
+        const custom_props = {page: 'channel', view: 'round', prompt_mode};
+        load_channel({req, res, custom_props});
+    });
+    app.get("/lobby/:slug([^/]+)/round/new/:prompt_mode(draw|text)/?", function(req, res){
         const { prompt_mode } = req.params;
         const custom_props = {page: 'channel', view: 'round', prompt_mode};
         load_channel({req, res, custom_props});
@@ -142,11 +149,6 @@ module.exports = function({app, io, websockets}) {
 
         const round = await cabbage.queries.get_round({round_id}); 
         const custom_props = {page: 'channel', view: 'round', round};
-        load_channel({req, res, custom_props});
-    });
-    app.get("/lobby/:slug([^/]+)/round/new/:prompt_mode(draw|text|$)/?", function(req, res){
-        const { prompt_mode } = req.params;
-        const custom_props = {page: 'channel', view: 'round', prompt_mode};
         load_channel({req, res, custom_props});
     });
 

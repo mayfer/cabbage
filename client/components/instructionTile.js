@@ -10,12 +10,12 @@ define(function(require, exports) {
     return class InstructionTile extends Component {
         constructor(props) {
             super();
-            this.state = {};
+            this.state = {
+            };
             css.load("instruction-tile", InstructionTile.css())
         }
 
         componentDidMount(){
-            this.input.focus()
         }
 
         render(props, s) {
@@ -24,14 +24,6 @@ define(function(require, exports) {
             <div class="instruction-tile">
                 <h1>Start a new round</h1>
                 <div class="instruction-tile-inner">
-                    <div class="instruction-title">
-                        <div id="rounds-input-wrapper" >
-                            Set a minimum number of rounds
-                            <input id="rounds-count-input" type="Number" min="2" defaultValue="5" placeholder="5" ref=${r => this.input=r} 
-                                onInput=${e => this.setState({count: e.target.value})} />
-                        </div>
-                        <p>Choose one:</p>
-                    </div>
                     <div class="prompt-start-buttons">
                         <a 
                             href="/lobby/${channel.slug}/round/new/text" 
@@ -39,9 +31,11 @@ define(function(require, exports) {
                             onClick=${e => Router.hijack(e)}
                         >
                             <div id="start-writing-button" class="prompt-start-button">
-                                Write something for a friend to draw
-                                <p class="eg-text">
-                                    e.g. despair, ankles, beef stew bath
+                                <strong>Write</strong> something for a friend to draw
+                                <p class="eg-text" style="height: 200px; margin: 0;">
+                                    <!-- e.g. despair, ankles, beef stew bath -->
+                                    <img src="/client/assets/typing_lizard.svg" style="height: 200px; display: block;" />
+
                                 </p>
                             </div>
                         </a>
@@ -51,11 +45,13 @@ define(function(require, exports) {
                             class="button-wrapper"
                         >
                             <div id="start-drawing-button" class="prompt-start-button">
-                                Draw something for a friend to caption 
+                                <strong>Draw</strong> something for a friend to caption 
+                                <img src="/client/assets/slug_pencil.svg" style="height: 200px; display: block;" />
                             </div>
                         </a>
                     </div>
                 </div>
+                <img src="/client/assets/cobraBetch.svg" style="width: 100%; margin-top: 50px;" />
             </div>
             `;
         }
@@ -63,7 +59,7 @@ define(function(require, exports) {
         static css() {
             return `
                 .instruction-tile { width: 600px; margin: 40px auto; display: block; text-align: center; }
-                .instruction-tile-inner { width: 600px; height: 400px; border-radius: 5px; background: #fff; padding: 15px; }
+                .instruction-tile-inner { width: 600px; border-radius: 5px; background: #fff; padding: 15px; }
                 .button-wrapper { text-decoration: none; color: #000; }
                 .prompt-start-buttons { display: flex; justify-content : space-around; }
                 .prompt-start-button { width: 250px; height: 250px; font-size: medium; cursor: pointer; display: table-cell; vertical-align: middle; padding: 10px; border-radius: 5px; font-size: 25px; }
@@ -77,9 +73,6 @@ define(function(require, exports) {
                 #start-writing-button:hover { opacity: 1; }
                 #start-writing-button:active { position: relative; top: 2px; left: 2px; border-radius: 5px;}
                 #start-writing-button:focus { outline:0;}
-                #rounds-count-input { margin-left: 10px; text-align: center; border: 1px solid #000; width: 50px;}
-                #rounds-count-input:focus { outline:none !important; outline-width: 0 !important; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;}
-                #rounds-input-wrapper { margin-top: 10px;}
 
             `
         }
