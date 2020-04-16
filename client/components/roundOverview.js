@@ -30,14 +30,19 @@ define(function(require, exports) {
         static css() {
             return `
                 .flipbook-wrapper { margin: 60px;}
-                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; margin-top: 20px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center;}
+                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; margin-top: 6px; margin-bottom: 45px; display: flex; justify-content: center; align-items: center;}
                 .turn-image { max-width: 600px; }
                 .turn-prompt-text { font-size: larger; }
+                .user-handle { }
             `
         }
 
         createSheet(turn, i) {
+            console.log(turn)
             return html `
+                <div class="user-handle">
+                    ${turn.handle}
+                </div>
                 <div class="flipbook-sheet">
                     ${turn.type == "drawing" ? html`
                         <img class="turn-image" src="${turn.contents}" />
