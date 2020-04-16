@@ -7,17 +7,20 @@ define(function(require, exports) {
     const Router = require("components/router");
 
 
-    return class InstructionTile extends Component {
+    return class RoundOverview extends Component {
         constructor(props) {
             super();
             this.state = {};
-            css.load("instruction-tile", InstructionTile.css())
+            css.load("round-overview", RoundOverview.css())
         }
 
         render(props, s) {
+            console.log(props.round)
             return html`
             <div class="flipbook-wrapper">
+            ${JSON.stringify()}
                 <div class="stack paper-stack-wrapper" >
+
                     ${this.createPaperStack(7)}
                 </div>
             </div>
@@ -35,9 +38,16 @@ define(function(require, exports) {
             var countArray = Array(count).fill(null)
             return countArray.map((d, i) => {
                 return html `
-                <div class="flipbook-sheet" style="left:${i * 2}px; top:${i * 1}px">
+                <div class="flipbook-sheet" onClick=${e => { this.flipSheet(count - i)}} style="left:${i * 2}px; top:${i * 1}px">
+                    ${count - i}
                 </div>`
             })
+        }
+
+        flipSheet(index) {
+            //console.log(sheet)
+            this.setState({sheetIndex: index})
+            
         }
     }
 });

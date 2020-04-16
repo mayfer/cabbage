@@ -5,7 +5,7 @@ CREATE TABLE public.channel_users (
     "timestamp" bigint,
     name text
 );
-ALTER TABLE public.channel_users OWNER TO murat;
+ALTER TABLE public.channel_users OWNER TO madeleine;
 CREATE SEQUENCE public.channel_users_id_seq
     AS integer
     START WITH 1
@@ -13,7 +13,7 @@ CREATE SEQUENCE public.channel_users_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.channel_users_id_seq OWNER TO murat;
+ALTER TABLE public.channel_users_id_seq OWNER TO madeleine;
 ALTER SEQUENCE public.channel_users_id_seq OWNED BY public.channel_users.id;
 CREATE TABLE public.channels (
     id integer NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE public.channels (
     settings jsonb,
     user_id integer
 );
-ALTER TABLE public.channels OWNER TO murat;
+ALTER TABLE public.channels OWNER TO madeleine;
 CREATE SEQUENCE public.channels_id_seq
     AS integer
     START WITH 1
@@ -32,7 +32,7 @@ CREATE SEQUENCE public.channels_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.channels_id_seq OWNER TO murat;
+ALTER TABLE public.channels_id_seq OWNER TO madeleine;
 ALTER SEQUENCE public.channels_id_seq OWNED BY public.channels.id;
 CREATE TABLE public.rounds (
     id integer NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE public.rounds (
     status text DEFAULT 'open'::text,
     settings jsonb
 );
-ALTER TABLE public.rounds OWNER TO murat;
+ALTER TABLE public.rounds OWNER TO madeleine;
 CREATE SEQUENCE public.rounds_id_seq
     AS integer
     START WITH 1
@@ -50,7 +50,7 @@ CREATE SEQUENCE public.rounds_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.rounds_id_seq OWNER TO murat;
+ALTER TABLE public.rounds_id_seq OWNER TO madeleine;
 ALTER SEQUENCE public.rounds_id_seq OWNED BY public.rounds.id;
 CREATE TABLE public.turns (
     id integer NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE public.turns (
     type text,
     contents text
 );
-ALTER TABLE public.turns OWNER TO murat;
+ALTER TABLE public.turns OWNER TO madeleine;
 CREATE SEQUENCE public.turns_id_seq
     AS integer
     START WITH 1
@@ -69,7 +69,7 @@ CREATE SEQUENCE public.turns_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.turns_id_seq OWNER TO murat;
+ALTER TABLE public.turns_id_seq OWNER TO madeleine;
 ALTER SEQUENCE public.turns_id_seq OWNED BY public.turns.id;
 CREATE TABLE public.users (
     id integer NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE public.users (
     props jsonb DEFAULT '{}'::jsonb,
     deleted boolean DEFAULT false
 );
-ALTER TABLE public.users OWNER TO murat;
+ALTER TABLE public.users OWNER TO madeleine;
 CREATE SEQUENCE public.users_id_seq
     AS integer
     START WITH 1
@@ -88,7 +88,7 @@ CREATE SEQUENCE public.users_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-ALTER TABLE public.users_id_seq OWNER TO murat;
+ALTER TABLE public.users_id_seq OWNER TO madeleine;
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 ALTER TABLE ONLY public.channel_users ALTER COLUMN id SET DEFAULT nextval('public.channel_users_id_seq'::regclass);
 ALTER TABLE ONLY public.channels ALTER COLUMN id SET DEFAULT nextval('public.channels_id_seq'::regclass);

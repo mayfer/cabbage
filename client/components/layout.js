@@ -14,6 +14,7 @@ define(function(require, exports) {
     const CreateForm = require("components/create");
     const InstructionTile = require("components/instructionTile");
     const Lobby = require("components/lobby");
+    const RoundOverview = require("components/roundOverview");
     const Common = require("lib/common");
     const API = require("components/api");
 
@@ -82,7 +83,7 @@ define(function(require, exports) {
                         this.setState({page: 'channel', view: 'round', channel: await load_channel({slug}), round: undefined }, async () => {
                             const {round} = await API.request({method: 'get', url: '/api/round/'+round_id,})
                             if(round) {
-                                let prompt_mode = round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse';
+                                let prompt_mode = round.last_turn && round.last_turn.type == 'drawing' ? 'textAsResponse' : 'drawAsResponse';
                                 this.setState({prompt_mode, round})
                             }
                         });
@@ -189,14 +190,21 @@ define(function(require, exports) {
                                         <${Lobby} channel=${channel}/>
                                     ` : ''}
 
-                                    ${(view == "round" && !prompt_mode) ? html`
+                                    ${(view == "round" && !prompt_mode && !round) ? html`
                                         <${InstructionTile} channel=${channel} />                          
                                     ` : ''}
 
-                                    ${(view == "round" && prompt_mode) ? html`                                     
+                                    ${(view == "round" && round && prompt_mode && round.status == 'open') ? html`                                     
                                         <${Prompt} 
                                             channel=${channel}
                                             mode=${prompt_mode}
+                                            round=${round}
+                                        />
+                                    ` : ''}
+
+                                    ${(view == "round" && round && round.status == "closed") ? html`                                     
+                                        <${RoundOverview} 
+                                            channel=${channel}
                                             round=${round}
                                         />
                                     ` : ''}

@@ -91,7 +91,7 @@ define(function(require, exports) {
                                 No rounds have been completed yet.
                             ` : completed_rounds.map(d => html`
                                 <div class="single-round-wrapper">
-                                    <a class="round-link" href='/'>
+                                    <a class="round-link" href="/lobby/${channel.slug}/round/${d.id}" onClick=${e => Router.hijack(e)}>
                                         <div class="stack paper-stack-wrapper" >
                                             ${this.createPaperStack(d.count)}
                                         </div>

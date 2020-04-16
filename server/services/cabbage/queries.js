@@ -63,23 +63,45 @@ async function get_round({ round_id}) {
         ORDER BY r.timestamp DESC
     `, {round_id});
 
-    let last_posts = {};
-    let last_posts_result = await db.execute(`
-        SELECT DISTINCT ON(r.id) t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
-        LEFT JOIN turns t ON r.id = t.round_id
-        JOIN users u on u.id = t.user_id
-        WHERE r.id={round_id}
-        ORDER BY r.id, t.timestamp DESC
-    `, {round_id});
+    if(result.rows[0] && result.rows[0].status == "closed") {
+        let all_posts = {};
+        let all_posts_result = await db.execute(`
+            SELECT t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
+            LEFT JOIN turns t ON r.id = t.round_id
+            JOIN users u on u.id = t.user_id
+            WHERE r.id={round_id}
+            ORDER BY r.id, t.timestamp DESC
+        `, {round_id});
 
-    last_posts_result.rows.forEach((t) => {
-        last_posts[t.round_id] = t;
-    });
-    result.rows.forEach((r) => {
-        if(last_posts[r.id]) {
-            r.last_turn = last_posts[r.id];
-        }
-    });
+        all_posts_result.rows.forEach((t) => {
+            all_posts[t.round_id] = t;
+        });
+        result.rows.forEach((r) => {
+            if(all_posts[r.id]) {
+                r.turns = all_posts[r.id];
+            }
+        });
+    } else {
+        let last_posts = {};
+        let last_posts_result = await db.execute(`
+            SELECT DISTINCT ON(r.id) t.round_id, t.type, t.contents, t.timestamp, u.handle FROM rounds r
+            LEFT JOIN turns t ON r.id = t.round_id
+            JOIN users u on u.id = t.user_id
+            WHERE r.id={round_id}
+            ORDER BY r.id, t.timestamp DESC
+        `, {round_id});
+
+        last_posts_result.rows.forEach((t) => {
+            last_posts[t.round_id] = t;
+        });
+        result.rows.forEach((r) => {
+            if(last_posts[r.id]) {
+                r.last_turn = last_posts[r.id];
+            }
+        });
+
+    }
+
     return result.rows[0];
 }
 
