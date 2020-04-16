@@ -14,8 +14,8 @@ async function get_user_channels({user_id}) {
     return rows;
 }
 
-async function get_channel({slug}) {
-    let channel = await db.return_one(`SELECT * FROM channels WHERE slug={slug}`, {slug});
+async function get_channel({user_id, slug}) {
+    let channel = await db.return_one(`SELECT c.*, cu.name FROM channels c LEFT JOIN channel_users cu ON (cu.id=c.id AND cu.user_id={user_id}) WHERE c.slug={slug}`, {slug});
     channel.rounds = await get_rounds({channel_id: channel.id});
     return channel;
 }

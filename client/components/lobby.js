@@ -29,8 +29,7 @@ define(function(require, exports) {
 
             return html`
             <div id="lobby">
-                <h1>Lobby</h1>
-                <div class="round-section-title">Send the URL of this page to invite others.</div>
+                <h3 class="round-section-title">Send the URL of this page to invite others</h3>
                 <a class='copy-link' onClick=${e => {
                     Common.copy_link(e);
                     this.setState({copied: true})
@@ -48,9 +47,9 @@ define(function(require, exports) {
 
                 <div class="rounds-content">
                     <div class="available-rounds-wrapper">
-                        <div class="round-section-title">
+                        <h3 class="round-section-title">
                             Available rounds
-                        </div>
+                        </h3>
                         <div class="rounds">
                             <div class="rounds">
                                 ${available_rounds.length == 0 ? html`
@@ -83,9 +82,9 @@ define(function(require, exports) {
                         </div>
                     </div>
                     <div class="complete-rounds-wrapper">
-                        <div class="round-section-title">
+                        <h3 class="round-section-title">
                             Completed rounds
-                        </div>
+                        </h3>
                         <div class="rounds">
                             ${completed_rounds.length == 0 ? html`
                                 No rounds have been completed yet.
@@ -135,7 +134,7 @@ define(function(require, exports) {
                 #copied-text { color: #666; margin-left: 15px; font-size: small;}
 
                 .stack-image { width: 50px; }
-                .round-section-title { margin-top: 30px; margin-bottom: 15px; color: black; font-size: large;}
+                .round-section-title { margin-top: 30px; margin-bottom: 15px; font-size: 20px; }
                 .footer-image { width: 80%; margin: 0 10%; }
                 .stack-image { width: 100%; position: absolute; }
                 .stack-count {postion: absolute ;}

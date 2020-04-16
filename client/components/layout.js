@@ -183,36 +183,38 @@ define(function(require, exports) {
 
 
                         ${(page == "channel" && channel) ? html`
-                            <div class="game-column active column ">
-                                <${Header} channel=${channel} page=${page} />
-                                <div id="game-wrapper">
-                                    ${(view == "lobby") ? html`
-                                        <${Lobby} channel=${channel}/>
-                                    ` : ''}
+                            <div class="columns">
+                                <div class="game-column active column ">
+                                    <${Header} channel=${channel} page=${page} />
+                                    <div id="game-wrapper">
+                                        ${(view == "lobby") ? html`
+                                            <${Lobby} channel=${channel}/>
+                                        ` : ''}
 
-                                    ${(view == "round" && !prompt_mode && !round) ? html`
-                                        <${InstructionTile} channel=${channel} />                          
-                                    ` : ''}
+                                        ${(view == "round" && !prompt_mode && !round) ? html`
+                                            <${InstructionTile} channel=${channel} />                          
+                                        ` : ''}
 
-                                    ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
-                                        <${Prompt} 
-                                            channel=${channel}
-                                            mode=${prompt_mode}
-                                            round=${round}
-                                        />
-                                    ` : ''}
+                                        ${(view == "round" && prompt_mode && (!round || round.status == 'open')) ? html`                                     
+                                            <${Prompt} 
+                                                channel=${channel}
+                                                mode=${prompt_mode}
+                                                round=${round}
+                                            />
+                                        ` : ''}
 
-                                    ${(view == "round" && round && round.status == "closed") ? html`                                     
-                                        <${RoundOverview} 
-                                            channel=${channel}
-                                            round=${round}
-                                        />
-                                    ` : ''}
+                                        ${(view == "round" && round && round.status == "closed") ? html`                                     
+                                            <${RoundOverview} 
+                                                channel=${channel}
+                                                round=${round}
+                                            />
+                                        ` : ''}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
-                                <div class="padding">
-                                    <${Channel} channel=${channel.slug} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
+                                <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
+                                    <div class="padding">
+                                        <${Channel} channel=${channel.slug} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
+                                    </div>
                                 </div>
                             </div>
                         ` : ``}
@@ -240,48 +242,51 @@ define(function(require, exports) {
 
                 #content-container {
                     position: relative;
-                }
-                #content-container {
-                    display: flex;
                     height: calc(100%);
+                }
+                #content-container .columns {
+                    background: #000;
+                    display: flex;
+                    position: relative;
+                    height: 100%;
                 }
                 #content-container .column {
                     flex-grow: 1;
-                    margin: 0;
+                    position: relative;
+                    box-sizing: border-box;
+                    overflow: auto;
+                    z-index: 1;
+                    margin: ${params.column_gap};
+                    margin-left: 0px;
                 }
+                #content-container .column:first-child {
+                    margin-left: ${params.column_gap};
+                }
+
                 #content-container .column.channel-column {
                     position: relative;
                     overflow: hidden;
                 }
                 #content-container .column.channel-column > .padding {
-                    margin: 10px;
-                    height: calc(100% - 20px);
+                    
+                    height: calc(100% - 0px);
                     border-radius: 5px;
                     overflow: hidden;
                     position: relative;
-                }
-                #content-container .column:first-child {
-                    margin-left: ${params.column_gap};
                 }
                 #content-container .column.hidden {
                     opacity: 1;
                 }
                 #content-container .column.channel-column { width: 25%; min-width: 350px; }
-                #content-container .column.game-column { width: 75%; position: relative; }
+                #content-container .column.game-column { width: 75%; position: relative; 
+                    background: #f9d49c; border-radius: 5px; }
 
-                #content-container .column {
-                    height: 100%;
-                    position: relative;
-                    box-sizing: border-box;
-                    overflow: auto;
-                    z-index: 1;
-                }
 
                 #content-container .inner {
                     width: 100%;
                 }
 
-                h1 { color: #e2806a; }
+                h1, h2, h3, h4, h5 { color: #e2806a; }
 
                 .landing { text-align: center; margin: 30px; display: inline-block;  max-width: 900px; margin: 30px auto; display: block; line-height: 35px; font-size: 21px; }
                 .landing .af { color: rgba(126, 86, 86, 0.9); font-weight: bold; font-size: 13px; transform: rotate(-20deg); display: inline-block; position: relative; top: 5px;}
