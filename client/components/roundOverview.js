@@ -20,7 +20,7 @@ define(function(require, exports) {
             ${JSON.stringify()}
                 <div class="stack paper-stack-wrapper overview" >
                     ${this.props.round.turns.map((turn,i) => {
-                        return this.createSheet(turn, i)
+                        return this.createSheet(turn, i, this.props.round.turns.length)
                     })}
                 </div>
             </div>
@@ -39,14 +39,15 @@ define(function(require, exports) {
             `
         }
 
-        createSheet(turn, i) {
+        createSheet(turn, i, denom) {
             return html `
                 <div class="handle-wrapper">
-                    By
+                    ${i + 1}/${denom + " -     By"}
                     <span class="handle-text"> 
-                      ${" " + turn.handle} 
+                      ${" " + turn.handle + " "} 
                     </span>
-                    <span class="turn-timestamp"> ${Common.timeSince(turn.timestamp)} ago
+                    <span class="turn-timestamp"> 
+                     ${Common.timeSince(turn.timestamp)} ago
                     </span>
                 </div>
                 <div class="flipbook-sheet">
