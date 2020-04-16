@@ -63,10 +63,10 @@ define(function(require, exports) {
                                             </div>
                                             <div class="round-description" >
                                                 Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.handle}</strong>
-                                                <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
+                                                <div class='time'>${Common.timeSince(d.last_turn.timestamp)} ago</div>
                                             </div>
                                             <div class='since'>
-                                                Round started ${this.timeSince(d.timestamp)} ago
+                                                Round started ${Common.timeSince(d.timestamp)} ago
                                                 <br />
 
                                             </div>
@@ -97,9 +97,9 @@ define(function(require, exports) {
                                         </div>
                                         <div class="round-description" >
                                             Last <strong>${d.type}</strong> by <strong>${d.last_turn.handle}</strong>
-                                            <div class='time'>${this.timeSince(d.last_turn.timestamp)} ago</div>
+                                            <div class='time'>${Common.timeSince(d.last_turn.timestamp)} ago</div>
                                         </div>
-                                        <div class='since'>Round started ${this.timeSince(d.timestamp)} ago</div>
+                                        <div class='since'>Round started ${Common.timeSince(d.timestamp)} ago</div>
                                     </a>
                                 </div>
                             `)}
@@ -112,6 +112,7 @@ define(function(require, exports) {
             </div>
             `;
         }
+
         createPaperStack(count) {
             const maxcount = Math.min(count, 6);
             const countArray = Array(maxcount).fill(null)
@@ -154,32 +155,6 @@ define(function(require, exports) {
                 #add-round-button:hover { background: #707; color: #fff; }
 
             `
-        }
-
-        timeSince(date) {
-            var seconds = Math.floor((new Date() - date) / 1000);
-            var interval = Math.floor(seconds / 31536000);
-
-            if (interval > 1) {
-                return interval + " years";
-            }
-            interval = Math.floor(seconds / 2592000);
-            if (interval > 1) {
-                return interval + " months";
-            }
-            interval = Math.floor(seconds / 86400);
-            if (interval > 1) {
-                return interval + " days";
-            }
-            interval = Math.floor(seconds / 3600);
-            if (interval > 1) {
-                return interval + " hours";
-            }
-            interval = Math.floor(seconds / 60);
-            if (interval > 1) {
-                return interval + " minutes";
-            }
-            return Math.floor(seconds) + " seconds";
         }
 
     }

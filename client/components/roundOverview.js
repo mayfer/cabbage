@@ -18,7 +18,7 @@ define(function(require, exports) {
             return html`
             <div class="flipbook-wrapper">
             ${JSON.stringify()}
-                <div class="stack paper-stack-wrapper" >
+                <div class="stack paper-stack-wrapper overview" >
                     ${this.props.round.turns.map((turn,i) => {
                         return this.createSheet(turn, i)
                     })}
@@ -30,18 +30,23 @@ define(function(require, exports) {
         static css() {
             return `
                 .flipbook-wrapper { margin: 60px;}
-                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; margin-top: 6px; margin-bottom: 45px; display: flex; justify-content: center; align-items: center;}
+                .flipbook-sheet { box-shadow: inset 0 0 5px #000; background-color: #f5f3f3; width: 600px; height: 400px; margin-top: 6px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center;}
                 .turn-image { max-width: 600px; }
                 .turn-prompt-text { font-size: larger; }
-                .user-handle { }
+                .stack.paper-stack-wrapper.overview { width: 600px;}
+                .handle-text { font-weight: bold; line-height: 25px; font-size: 17px;}
+                .turn-timestamp { margin-left: 5px; color: #666; font-size: 16px;}
             `
         }
 
         createSheet(turn, i) {
-            console.log(turn)
             return html `
-                <div class="user-handle">
-                    ${turn.handle}
+                <div class="handle-wrapper">
+                    <span class="handle-text"> 
+                        ${turn.handle} 
+                    </span>
+                    <span class="turn-timestamp"> - ${Common.timeSince(turn.timestamp)} ago
+                    </span>
                 </div>
                 <div class="flipbook-sheet">
                     ${turn.type == "drawing" ? html`
