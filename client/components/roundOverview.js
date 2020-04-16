@@ -35,17 +35,18 @@ define(function(require, exports) {
                 .turn-prompt-text { font-size: larger; }
                 .stack.paper-stack-wrapper.overview { width: 600px;}
                 .handle-text { font-weight: bold; line-height: 25px; font-size: 17px;}
-                .turn-timestamp { margin-left: 5px; color: #666; font-size: 16px;}
+                .turn-timestamp { float: right; color: #666; font-size: 16px;}
             `
         }
 
         createSheet(turn, i) {
             return html `
                 <div class="handle-wrapper">
+                    By
                     <span class="handle-text"> 
-                        ${turn.handle} 
+                      ${" " + turn.handle} 
                     </span>
-                    <span class="turn-timestamp"> - ${Common.timeSince(turn.timestamp)} ago
+                    <span class="turn-timestamp"> ${Common.timeSince(turn.timestamp)} ago
                     </span>
                 </div>
                 <div class="flipbook-sheet">
