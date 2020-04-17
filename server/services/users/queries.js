@@ -6,7 +6,7 @@ const common = rfr('/client/lib/common');
 
 async function get_user({public_id}) {
 
-    let user = await db.return_one(`SELECT * FROM users WHERE public_id={public_id}`, {public_id});
+    let user = await db.return_one(`SELECT id, handle, email, public_id FROM users WHERE public_id={public_id}`, {public_id});
 
     return user;
 }

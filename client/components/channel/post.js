@@ -12,16 +12,17 @@ define(function(require, exports) {
             super()
             this.state = {
                 text: '',
-                name: '',
-            }
-            if(typeof window !== 'undefined' && window.localStorage) {
-                this.state.name = localStorage.getItem('name');
+                name: props.user.handle,
             }
         }
 
         componentDidMount() {
             this.textarea.focus();
             //this.setState({name: '', text: ''});
+        }
+
+        componentDidUpdate() {
+            if(this.props.user.handle !== this.state.name) this.setState({name: this.props.user.handle})
         }
 
         render(props, s) {

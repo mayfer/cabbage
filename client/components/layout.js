@@ -22,6 +22,7 @@ define(function(require, exports) {
         constructor(props) {
             super();
             let { channel, page, prompt_mode, view, round, user } = props;
+            user.handle = channel.username;
             this.state = {
                 channel,
                 page,
@@ -39,7 +40,12 @@ define(function(require, exports) {
                 } else {
                     this.setState({loading: true})
                     const {channel} = await API.request({url: `/api/cabbage/channel?slug=${slug}`});
-                    this.setState({loading: false})
+                    this.setState({loading: false, channel});
+                    if(channel.username) {
+                        let _user = this.state.user;
+                        user.handle = channel.username;
+                        this.setState({user});
+                    }
                     return channel;
                 }
             }
@@ -112,9 +118,9 @@ define(function(require, exports) {
             e.preventDefault();
             const email = this.state.email;
             await API.request({"method": "post", "url": "/api/email", body: {email}})
-            const user = this.state.user;
-            user.email = email;
-            this.setState({user})
+            const _user = this.state.user;
+            _user.email = email;
+            this.setState({user: _user})
         }
 
         log_in ({detail: {user}})  {
@@ -203,8 +209,10 @@ define(function(require, exports) {
                                                     `}
                                                     <form onSubmit=${async (e) => {
                                                         e.preventDefault();
-                                                        let {channel: updated_channel} = await API.request({method: "post", url: "/api/cabbage/channel/pick-name/", body: {slug: channel.slug, username: this.state.pick_name}})
-                                                        this.setState({channel: updated_channel});
+                                                        let {channel: updated_channel} = await API.request({method: "post", url: "/api/cabbage/channel/pick-name/", body: {slug: channel.slug, username: this.state.pick_name}});
+                                                        let _user = this.state.user;
+                                                        _user.handle = updated_channel.username;
+                                                        this.setState({channel: updated_channel, user: _user});
                                                     }}>
                                                         <input type="text" onInput=${e => this.setState({pick_name: e.target.value})} ref=${r => this.pick_name=r} />
                                                         <br />

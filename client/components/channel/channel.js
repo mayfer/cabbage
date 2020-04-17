@@ -128,9 +128,11 @@ define(function(require, exports) {
         render(props, s) {
             return html`
                 <div class="channel-container ${s.narrow ? 'narrow' : ''}" onClick=${e => this.clickFocusHandler(e)}>
+                    <!--
                     <div class='channel-details-container channel-tab ${s.channel_tab == 'details' ? 'active' : 'inactive'}'>
                         <${ChannelDetails} channel=${props.channel} />
                     </div>
+                    -->
                     <div class='channel-stream-container channel-tab  ${s.channel_tab == 'stream' ? 'active' : 'inactive'}'>
                         <${ChannelStream}
                             narrow=${s.narrow}
