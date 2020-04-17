@@ -62,12 +62,13 @@ define(function(require, exports) {
                                                 ${this.createPaperStack(d.count)}
                                             </div>
                                             <div class="round-description" >
-                                                Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                                Last <strong>${d.last_turn.type}</strong> by <strong>${d.last_turn.username}</strong>
                                                 <div class='time'>${Common.timeSince(d.last_turn.timestamp)} ago</div>
                                             </div>
                                             <div class='since'>
                                                 Round started ${Common.timeSince(d.timestamp)} ago
                                                 <br />
+                                                Round ${d.count}/${d.settings.min_turns}
 
                                             </div>
                                         </a>
@@ -146,7 +147,7 @@ define(function(require, exports) {
 
                 .round-link, .round-link:visited { color: #000; border-radius: 5px; margin: 6px 0; padding: 10px; background-color: rgba(130, 120, 120, 0.1); line-height: 25px; font-size: 17px; cursor: pointer; display: block; text-decoration: none; }
                 .round-link .time { color: #666; }
-                .round-link .since { color: #666; float: right; font-size: 16px; }
+                .round-link .since { color: #666; float: right; text-align: right; font-size: 16px; }
                 .round-link:hover { background: #9ad6af;  }
 
             

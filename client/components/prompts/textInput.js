@@ -31,14 +31,13 @@ define(function(require, exports) {
             this.setState({ value: e.target.value })
         }
 
-        handleSubmit(){
+        handleSubmit({close_round=false}){
             const { submitPrompt } = this.props;
-            const data = { type: 'caption', contents: this.state.value }
-            submitPrompt(data);
+            submitPrompt({ type: 'caption', contents: this.state.value, close_round });
         }
 
         render(props, s) {
-            const { channel } = props;
+            const { channel, round } = props;
             const { value } = s;
             return html`
                 <div class='main-textarea'>
@@ -46,8 +45,15 @@ define(function(require, exports) {
                         ${value}
                     </textarea>
                     <div class="button-grid">
-                        <div></div>
-	                    <button id='prompt-submit' onClick=${this.handleSubmit}>Submit</button>
+                        <div class="submit-area">
+                            ${round && round.count >= round.settings.min_turns-1 ? html`
+                                <button class='prompt-submit' onClick=${e => this.handleSubmit({close_round: true})}>Submit, close & reveal round ⮕</button>
+                                <br />
+                                <button class='prompt-submit' onClick=${e => this.handleSubmit({})}>Submit & leave round open ⮕ </button>
+                            ` : html`
+                                <button class='prompt-submit' onClick=${e => this.handleSubmit({})}>Submit</button>
+                            `}
+                        </div>
                     </div>
                 </div>
             `

@@ -42,8 +42,9 @@ const { argv } = require('yargs');
         defer: true,
         limit: 1024*1024*100,
         parameterLimit: 100000,
+
     }));
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({ limit: '10mb' }));
     app.use(require('cookie-parser')());
 
     const sessionMiddleware = session({

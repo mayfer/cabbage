@@ -43,7 +43,7 @@ define(function(require, exports) {
             return false;
         }
 
-        handleSubmit(){
+        handleSubmit({close_round=false}){
             const submitPrompt = this.props.submitPrompt;
             const canvas = document.querySelector('.drawing-canvas');
             const image = canvas.toDataURL();
@@ -52,7 +52,7 @@ define(function(require, exports) {
         }
 
         render(props, s) {
-            const { channel, handleSubmit } = props;
+            const { channel, handleSubmit, round } = props;
             return html`
                 <div class='drawing-container'>
                     <div class='draw-area' ref=${r => this.draw_area=r}> </div>
@@ -61,7 +61,15 @@ define(function(require, exports) {
                             <button id='undoStrokeButton' class='control-button'>Undo</button>
                             <button id='redoStrokeButton' class='control-button'>Redo</button>
                         </div>
-                        <button id='prompt-submit' onClick=${this.handleSubmit}>Submit</button>
+                        <div class="submit-area">
+                            ${round && round.count >= round.settings.min_turns-1 ? html`
+                                <button class='prompt-submit' onClick=${e => this.handleSubmit({close_round: true})}>Submit, close & reveal round ⮕</button>
+                                <br />
+                                <button class='prompt-submit' onClick=${e => this.handleSubmit({})}>Submit & leave round open ⮕</button>
+                            ` : html`
+                                <button class='prompt-submit' onClick=${e => this.handleSubmit({})}>Submit</button>
+                            `}
+                        </div>
                     </div>
                 </div>
 

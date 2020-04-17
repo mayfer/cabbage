@@ -30,7 +30,7 @@ async function get_channel({user_id, slug}) {
 async function get_rounds({channel_id}) {
     // available, pending and completed
     let result = await db.execute(`
-        SELECT r.id, r.timestamp, r.status, COUNT(r.id) as count, array_agg(u.handle) as users FROM rounds r
+        SELECT r.id, r.timestamp, r.status, r.settings, COUNT(r.id) as count, array_agg(u.handle) as users FROM rounds r
         LEFT JOIN turns t ON r.id = t.round_id
         JOIN users u on u.id = t.user_id
         WHERE r.channel_id={channel_id}
@@ -68,7 +68,7 @@ async function get_round({ round_id}) {
     // available, pending and completed
     // available, pending and completed
     let result = await db.execute(`
-        SELECT r.id, r.timestamp, r.status, COUNT(r.id) as count, array_agg(cu.name) as users FROM rounds r
+        SELECT r.id, r.timestamp, r.status, r.settings, COUNT(r.id) as count, array_agg(cu.name) as users FROM rounds r
         LEFT JOIN turns t ON r.id = t.round_id
         LEFT JOIN channel_users cu ON (r.channel_id = cu.channel_id AND t.user_id = cu.user_id)
         WHERE r.id={round_id}

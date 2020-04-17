@@ -12,7 +12,7 @@ define(function(require, exports) {
             super();
             this.state = {
                 disableSubmit: false,
-                count: 6,
+                min_turns: 5,
             };
             this.submitFirstPrompt = this.submitFirstPrompt.bind(this)
             this.submitPromptResponse = this.submitPromptResponse.bind(this)
@@ -29,30 +29,34 @@ define(function(require, exports) {
         }
 
         async submitFirstPrompt(data){
-            const { channel } = this.props; 
+            const { channel } = this.props;
+            const min_turns = parseInt(this.state.min_turns);
             const {type, contents} = data;
             this.props.loadingHandler({loading: true});
-            const turn_res = await API.request({method: "post", url: "/api/round/create", body: { type, contents, channel }})
+            const {ok, round, turn}  = await API.request({method: "post", url: "/api/round/create", body: { type, contents, slug: channel.slug, min_turns }})
             this.props.loadingHandler({loading: false});
-            if (turn_res.ok) {
+            if (ok) {
                 Router.navigate(`/lobby/${channel.slug}`)
             } else {
                 alert("error")
             }
         }
 
-        async submitPromptResponse(data){
+        async submitPromptResponse({type, contents, close_round=false}){
             const { channel, round } = this.props; 
             const previous_turn_id = round.last_turn.id;
-            const {type, contents} = data;
 
-            const body = { type, contents, channel, round_id: round.id, previous_turn_id }
+            const body = { type, contents, slug: channel.slug, round_id: round.id, previous_turn_id, close_round }
 
             this.props.loadingHandler({loading: true});
-            const turn_res = await API.request({method: "post", url: "/api/turn/create", body})
+            const {ok, round: updated_round, turn} = await API.request({method: "post", url: "/api/turn/create", body})
             this.props.loadingHandler({loading: false});
-            if (turn_res.ok) {
-                Router.navigate(`/lobby/${channel.slug}`)
+            if (ok) {
+                if(updated_round.status == "closed") {
+                    Router.navigate(`/lobby/${channel.slug}/round/${updated_round.id}`)
+                } else {
+                    Router.navigate(`/lobby/${channel.slug}`)
+                }
             } else {
                 alert("error")
             }
@@ -69,9 +73,12 @@ define(function(require, exports) {
             return html`
             	<div id="prompt-container">
                     ${round ? html`` : html`
-                        <div id="rounds-input-wrapper" >
+                        <div id="rounds-input-wrapper">
                             Choose a <strong>minimum number of turns</strong> before reveal:
-                            <input id="rounds-count-input" type="number" min="2" value="${this.state.count}" onInput=${e => this.setState({count: e.target.value})} />
+                            <input id="rounds-count-input" type="number" min="2" value="${this.state.min_turns}" onInput=${e => this.setState({min_turns: e.target.value})} autocomplete="off" />
+                            <p class='more-info'>
+                                After ${this.state.min_turns} turns, the last person to submit can choose to end the round; and reveal the entire chain.<br />Or not.
+                            </p>
                         </div>
                     `}
 					${mode === 'draw' ? html`
@@ -116,19 +123,21 @@ define(function(require, exports) {
             	}
             	#prompt-image {
             		width: 100%;
+                    display: block;
             	}
             	#text-prompt-wrapper h2 { 
             		background: rgba(255, 255, 255, 0.3); padding: 20px; margin: 5px 0;
             	}
-            	#prompt-submit { text-decoration: none; display: inline-block; padding: 10px 30px; background: #0a0; color: #fff; font-size: 30px; }
-                #prompt-submit .newgame:hover { background: #000; }
-                #prompt-submit .newgame:active { background: #00a; }
-                .button-grid { width: 100%; display: grid; grid-template-columns: 1fr 160px; padding-top: 5px; }
+                .submit-area { text-align: right; }
+            	.prompt-submit { cursor: pointer; margin-bottom: 5px; text-decoration: none; display: inline-block; padding: 10px 30px; background: #0a0; color: #fff; font-size: 20px; }
+
+                .button-grid { width: 100%; padding-top: 5px; }
 
 
                 #rounds-count-input { margin-left: 10px; text-align: center; border: none !important; background: #eee; line-height: 25px; font-size: 15px; border: 1px solid #000; width: 50px;}
                 #rounds-count-input:focus { outline:none !important; outline-width: 0 !important; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;}
                 #rounds-input-wrapper { margin: 20px 0; font-size: 17px; }
+                #rounds-input-wrapper .more-info { color: rgba(0, 0, 0, 0.7); }
             ` + DrawingCanvas.css() + TextInput.css();
         }
 

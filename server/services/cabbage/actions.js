@@ -69,7 +69,7 @@ async function create_new_turn({round_id, user_id, previous_turn_id, type, conte
 
 }
 
-async function start_new_round({channel_id, user_id, settings={} }) {
+async function start_new_round({channel_id, user_id, settings={min_turns: 5} }) {
     let res = await db.execute(`
         INSERT INTO rounds
         (channel_id, user_id, timestamp, settings)
@@ -77,6 +77,17 @@ async function start_new_round({channel_id, user_id, settings={} }) {
         ({channel_id}, {user_id}, {timestamp}, {settings})
         RETURNING *
     `, {channel_id, user_id, timestamp: Date.now(), settings});
+
+    const round = res.rows[0];
+
+    return round;
+}
+async function close_round({round_id, settings={} }) {
+    let res = await db.execute(`
+        UPDATE rounds
+        SET status='closed'
+        WHERE id={round_id}
+    `, {round_id});
 
     const round = res.rows[0];
 
@@ -98,4 +109,5 @@ module.exports = {
     start_new_round,
     set_user_email,
     update_channel_user,
+    close_round,
 }

@@ -74,7 +74,6 @@ function genColor (seed) {
 }
 
 module.exports = function({app, io, websockets}) {
-
     app.disable('etag');
 
     app.use(async function(req, res, next) {
@@ -190,10 +189,11 @@ module.exports = function({app, io, websockets}) {
 
     app.post("/api/round/create", async function(req, res){
         const user_id = req.user.id;
-        const channel_id = req.body.channel.id;
-        const { contents, type, previous_turn_id } = req.body;
+        const { contents, type, previous_turn_id, slug, min_turns } = req.body;
+        const settings = { min_turns };
         try {
-            const round = await cabbage.actions.start_new_round({channel_id, user_id});
+            const channel = await cabbage.queries.get_channel({user_id, slug});
+            const round = await cabbage.actions.start_new_round({channel_id: channel.id, user_id, settings});
             const turn = await cabbage.actions.create_new_turn({round_id: round.id, user_id: req.user.id, contents, type, previous_turn_id});
             res.json({ok: true, round, turn});
         } catch(e) {
@@ -203,11 +203,15 @@ module.exports = function({app, io, websockets}) {
     });
     app.post("/api/turn/create", async function(req, res){
         const user_id = req.user.id;
-        const channel_id = req.body.channel.id;
-        const { contents, type, previous_turn_id, round_id } = req.body;
+        const slug = req.body.slug;
+        const { contents, type, previous_turn_id, round_id, close_round } = req.body;
         let round = await cabbage.queries.get_round({round_id}); 
         try {
             const turn = await cabbage.actions.create_new_turn({round_id: round_id, user_id: req.user.id, contents, type, previous_turn_id});
+            if(close_round) {
+                await cabbage.actions.close_round({round_id});
+            }
+            round = await cabbage.queries.get_round({round_id}); 
             res.json({ok: true, round, turn});
         } catch(e) {
             res.status(403);
