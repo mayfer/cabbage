@@ -82,20 +82,15 @@ define(function(require, exports) {
 
             canvas_jq.on("touchstart", function(e) {
                 if (e.originalEvent.touches.length == 1) {
-                    console.log("hihih")
                     e.preventDefault();
                     that.startDrawing(that.getCursorPosition(e));
                 }
             });
 
-            $(document).on("", function() {
-                that.stopDrawing();
-            });
-
             canvas_jq.on("touchend", function(e) {
-                console.log(e.originalEvent.touches)
                 e.preventDefault();
                 that.stopDrawing();
+                that.snapshot();
             });
 
             canvas_jq.on("touchmove", function(e) {
