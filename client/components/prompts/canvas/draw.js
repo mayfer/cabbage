@@ -1,5 +1,4 @@
 
-
 define(function(require, exports) {
 
     const css = require('core/css')

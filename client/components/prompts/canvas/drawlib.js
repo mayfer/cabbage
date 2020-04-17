@@ -80,6 +80,35 @@ define(function(require, exports) {
                 that.stopDrawing();
             });
 
+            canvas_jq.on("touchstart", function(e) {
+                if (e.originalEvent.touches.length == 1) {
+                    console.log("hihih")
+                    e.preventDefault();
+                    that.startDrawing(that.getCursorPosition(e));
+                }
+            });
+
+            $(document).on("", function() {
+                that.stopDrawing();
+            });
+
+            canvas_jq.on("touchend", function(e) {
+                console.log(e.originalEvent.touches)
+                e.preventDefault();
+                that.stopDrawing();
+            });
+
+            canvas_jq.on("touchmove", function(e) {
+                if (e.originalEvent.touches.length == 1) {
+                    e.preventDefault();
+                    if(draw == true) {
+                        var current_position = that.getCursorPosition(e);
+                        that.drawLine(prev_position, current_position);
+                        prev_position = current_position;
+                    }
+                }
+            });
+
             canvas_jq.mousedown(function(e) {
                 e.preventDefault();
                 that.startDrawing(that.getCursorPosition(e));
