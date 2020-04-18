@@ -11,7 +11,7 @@ define(function(require, exports) {
         constructor(props) {
             super();
             this.state = {};
-            css.load("round-overview", RoundOverview.css())
+            //css.load("round-overview", RoundOverview.css())
         }
 
         render(props, s) {
@@ -28,8 +28,8 @@ define(function(require, exports) {
         }
 
         static css() {
-            return `
-                .flipbook-wrapper { margin: 60px;}
+            return css.add_parents('.flipbook-wrapper ', `
+                { margin: 60px 0;}
                 .flipbook-sheet { margin-top: 6px; margin-bottom: 40px; display: flex; justify-content: center; align-items: center;}
                 .turn-image { border-radius: 5px;  max-width: 600px; box-shadow: inset 0 0 5px #000; background-color: #f5f3f3;   }
                 .turn-prompt-text { border-radius: 5px;  font-size: 25px; text-align: center; width: 100%; background: rgba(255, 255, 255, 0.3); padding: 20px; margin: 5px 0; }
@@ -37,7 +37,7 @@ define(function(require, exports) {
                 .handle-text { font-weight: bold; line-height: 25px; font-size: 17px;}
                 .turn-timestamp { float: right; color: #666; font-size: 16px;}
 
-            `
+            `);
         }
 
         createSheet(turn, i, denom) {

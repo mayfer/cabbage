@@ -127,6 +127,10 @@ define(function(require, exports) {
             this.setState({user});
         }
 
+        toggleChatOnMobile() {
+            this.setState({mobile_chat: !this.state.mobile_chat});
+        }
+
         render(props, s) {
             const { page, channel, prompt_mode, view, round } = s;
             const users = channel && channel.users ? channel.users.filter(u => u) : [];
@@ -260,7 +264,7 @@ define(function(require, exports) {
                                         `}
                                     </div>
                                 </div>
-                                <div class="channel-column active column ${s.chat_open ? 'visible' : 'hidden'}">
+                                <div class="channel-column active column ${s.mobile_chat ? 'visible' : 'hidden'}">
                                     <div class="padding">
                                         <${Channel} channel=${channel.slug} user=${s.user} color=${s.color} initial_spiels=${initial_spiels} />
                                     </div>
@@ -269,6 +273,7 @@ define(function(require, exports) {
                         ` : ``}
                     </div>
                 </div>
+                <div id="chat-toggle" onClick=${e => this.toggleChatOnMobile()}>💬</div>
             `
         }
 
@@ -410,12 +415,11 @@ define(function(require, exports) {
                 }
 
                 #game-wrapper {
-                    min-width: 600px;
-                    max-width: 700px;
+                    width: 600px;
                     margin: 0px auto;
                     justify-content: center;
                     align-items: center;
-                    display: block;
+                    display: flex-grow;
                 }
                 #game-wrapper.disabled {
                     opacity: 0.5;
@@ -427,13 +431,31 @@ define(function(require, exports) {
                     filter: blur(5px) grayscale(100%);
                 }
 
-
-                @media only screen and (min-width: 600px) {
+                #chat-toggle { display: none; }
+                @media only screen and (min-width: 1000px) {
 
                 }
-                @media only screen and (max-width: 600px) {
+                @media only screen and (max-width: 1000px) {
+
+                    #content-container .column.channel-column {
+                        display: none;
+                    }
+                    #content-container .column.visible {
+                        display: block;
+                    }
+                    #content-container .column {
+                        margin: 0;
+                    }
+                    #content-container .column:first-child {
+                        margin-left: 0;
+                    }
+                    #game-wrapper {
+                        width: calc(100% - 20px) ;
+                    }
+                    #chat-toggle {  z-index: 1; display: block; line-height: 50px; text-align: center; font-size: 30px; position: absolute; bottom: 10px; left: 10px; border-radius: 50%; height: 50px; width: 50px; background: #000; color: #fff; box-shadow: -3px 3px 0px 3px #eef; cursor: pointer; }
+                    #chat-toggle:hover {  background: #fff; box-shadow: -3px 3px 0px 3px #00f;  }
                 }
-            ` + Header.css() + Channel.css() + Prompt.css() + CreateForm.css() + Lobby.css();
+            ` + Header.css() + Channel.css() + Prompt.css() + CreateForm.css() + Lobby.css() + RoundOverview.css();
         }
 
     }

@@ -128,12 +128,12 @@ define(function(require, exports) {
         }
 
         static css() {
-            return `
-                #lobby {  display: block; }
+            return css.add_parents("#lobby", `
+                {  display: block; }
 
-                #lobby .copy-link { background: #fff; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #000; }
-                #lobby .copy-link:hover { background: #df69ff; color: #000; }
-                #lobby .copy-link:active { background: #000; color: #fff; }
+                .copy-link { background: #fff; cursor: pointer; height: 30px; line-height: 30px; padding: 0 10px; display: inline-block; vertical-align:  middle; color: #000; }
+                .copy-link:hover { background: #df69ff; color: #000; }
+                .copy-link:active { background: #000; color: #fff; }
                 #copied-text { color: #666; margin-left: 15px; font-size: small;}
 
                 .stack-image { width: 50px; }
@@ -155,8 +155,8 @@ define(function(require, exports) {
                 #add-round-button { background: #efe; color: #040; line-height: 30px; padding: 0 10px; display: inline-block; }
                 #add-round-button:hover { background: #707; color: #fff; }
 
-                #lobby .welcome { margin-top: 30px; }
-            `
+                .welcome { margin-top: 30px; }
+            `)
         }
 
     }
