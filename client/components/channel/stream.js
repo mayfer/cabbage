@@ -94,6 +94,7 @@ define(function(require, exports) {
 
                 .chat { position: absolute; left: 0; right: 0; bottom: 0; top: 0; overflow: scroll; font-size: 13px; -webkit-overflow-scrolling: touch; -webkit-text-size-adjust: none; overflow-x: hidden; color: #333;  }
                 .chat .padding { padding: 20px 0 70px 0;  }
+                .chat.narrow .padding { padding: 20px 0 100px 0;  }
                 .chat .load-more { display: block; padding: 10px 45px; margin-top: 10px; text-align: center; color: #999; }
                 .chat .load-more span { cursor: pointer; color: #931a28; padding: 3px 5px; background: rgba(255, 255, 255, 0.5); }
                 .chat .load-more span:hover { background: #fff; }

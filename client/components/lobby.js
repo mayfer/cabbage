@@ -97,7 +97,7 @@ define(function(require, exports) {
                                             ${this.createPaperStack(d.count)}
                                         </div>
                                         <div class="round-description" >
-                                            Last <strong>${d.type}</strong> by <strong>${d.last_turn.handle}</strong>
+                                            Last <strong>${d.type}</strong> by <strong>${d.last_turn.username}</strong>
                                             <div class='time'>${Common.timeSince(d.last_turn.timestamp)} ago</div>
                                         </div>
                                         <div class='since'>Round started ${Common.timeSince(d.timestamp)} ago</div>
