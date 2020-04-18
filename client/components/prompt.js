@@ -53,7 +53,7 @@ define(function(require, exports) {
             this.props.loadingHandler({loading: false});
             if (ok) {
                 if(updated_round.status == "closed") {
-                    Router.navigate(`/lobby/${channel.slug}/round/${updated_round.id}`)
+                    Router.forceNavigate(`/lobby/${channel.slug}/round/${updated_round.id}`)
                 } else {
                     Router.navigate(`/lobby/${channel.slug}`)
                 }

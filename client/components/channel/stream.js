@@ -114,6 +114,8 @@ define(function(require, exports) {
                 .message .spiel-content, .message .name { white-space: pre-wrap; word-wrap: break-word; tab-size: 4; }
                 .message .spiel-content { color: #111; outline: none; font-family: ${fonts.mono};}
 
+                .message .name {  background: rgba(255, 255, 255, 0.1); border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); font-family: ${fonts.mono}; margin-right: 5px; }
+                .message .name .hash.at { color: #fff; border: none; text-decoration: none; }
 
                 .chat .color-wrap { display: inline-block; height: 30px; width: 30px; position: absolute; left: -3px; top: -2px;}
                 .chat .color { display: inline-block; height: 16px; width: 16px; border-radius: 8px; position: absolute; left: 5px; top: 5px; box-shadow: 0 0 7px rgba(0,0,0,0.2); }
@@ -135,8 +137,6 @@ define(function(require, exports) {
                 .row a.linkified { color: #fff; border-bottom: 1px solid #666;  }
                 .row a.linkified:hover { border-bottom: 1px solid #fff; }
 
-                .message .name { color: rgba(255, 255, 255, 0.5); font-family: ${fonts.mono}; margin-right: 5px; }
-                .message .name .hash.at { color: #fff; border: none; text-decoration: none; }
                 .message.system .color-wrap { display: none; }
                 .message.system {
                     background:#e8e8e8;

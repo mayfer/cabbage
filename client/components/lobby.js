@@ -54,7 +54,7 @@ define(function(require, exports) {
                         <div class="rounds">
                             <div class="rounds">
                                 ${available_rounds.length == 0 ? html`
-                                    <p>No rounds are currently open.</p>
+                                    No rounds are currently open.
                                 ` : available_rounds.map(d => html`
                                     <div class="single-round-wrapper">
                                         <a class="round-link" href="/lobby/${channel.slug}/round/${d.id}" onClick=${e => Router.hijack(e)}>

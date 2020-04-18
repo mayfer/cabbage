@@ -47,7 +47,7 @@ define(function(require, exports) {
             const submitPrompt = this.props.submitPrompt;
             const canvas = document.querySelector('.drawing-canvas');
             const image = canvas.toDataURL();
-            const data = { type: 'drawing', contents: image };
+            const data = { type: 'drawing', contents: image, close_round };
             submitPrompt(data);
         }
 

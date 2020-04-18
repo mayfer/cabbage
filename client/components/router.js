@@ -12,6 +12,14 @@ define(function(require, exports) {
 			Router.navigate(href);
 		}
 	}
-
+	Router.forceNavigate = function(path, absolute) {
+	  if (absolute === undefined) {
+	    absolute = false;
+	  }
+	  if (Router._lastRouteResolved) {
+	    Router._lastRouteResolved.query = '_=' + Number(new Date());
+	  }
+	  Router.navigate(path, absolute);
+	}
 	return Router;
 });

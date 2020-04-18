@@ -17,6 +17,7 @@ define(function(require, exports) {
         render(props, s) {
             return html`
             <div class="flipbook-wrapper">
+                <h3>This round is closed.</h3>
                 <div class="stack paper-stack-wrapper overview" >
                     ${this.props.round.turns.map((turn,i) => {
                         return this.createSheet(turn, i, this.props.round.turns.length)
