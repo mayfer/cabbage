@@ -11,7 +11,7 @@ var crypto = require('crypto');
 
 var elastic_client = elasticsearch;
 
-var es_index = 'teaorbit';
+var es_index = 'cabbage';
 
 const default_results_per_page = 50;
 

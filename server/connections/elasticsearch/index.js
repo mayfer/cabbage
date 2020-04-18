@@ -19,7 +19,7 @@ const es_settings = {
 };
 
 
-var es_index = 'teaorbit';
+var es_index = 'cabbage';
 var es_table = 'spiels';
 
 
