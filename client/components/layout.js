@@ -22,7 +22,7 @@ define(function(require, exports) {
         constructor(props) {
             super();
             let { channel, page, prompt_mode, view, round, user } = props;
-            user.handle = channel.username;
+	    if(channel) user.handle = channel.username;
             this.state = {
                 channel,
                 page,
