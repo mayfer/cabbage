@@ -2,7 +2,6 @@ const rfr = require('rfr');
 
 const { db } = rfr('/server/connections');
 const common = rfr('/client/lib/common');
-//const { User } = require('./models');
 
 
 async function get_user_channels({user_id}) {
@@ -64,7 +63,7 @@ async function get_rounds({channel_id}) {
     return result.rows;
 }
 
-async function get_round({ round_id}) {
+async function get_round({ round_id, user_id}) {
     // available, pending and completed
     // available, pending and completed
     let result = await db.execute(`
@@ -89,7 +88,7 @@ async function get_round({ round_id}) {
         result.rows.forEach((r) => {
             r.turns = all_posts;
         });
-    } else {
+    } else if (result.rows[0] && result.rows[0].status == "open"){
         let last_posts = {};
         let last_posts_result = await db.execute(`
             SELECT DISTINCT ON(r.id) t.round_id, t.type, t.contents, t.timestamp, cu.name AS username FROM rounds r
@@ -98,6 +97,16 @@ async function get_round({ round_id}) {
             WHERE r.id={round_id}
             ORDER BY r.id, t.timestamp DESC
         `, {round_id});
+        let res = await db.execute(`
+            UPDATE rounds
+            SET status='reserved'
+            WHERE id={round_id}
+        `, {round_id});
+        await db.execute(`
+            UPDATE rounds 
+            SET reserved_for_user_id={user_id}
+            WHERE id={round_id}
+        `, {user_id, round_id});
 
         last_posts_result.rows.forEach((t) => {
             last_posts[t.round_id] = t;
@@ -107,6 +116,8 @@ async function get_round({ round_id}) {
                 r.last_turn = last_posts[r.id];
             }
         });
+
+    } else if (result.rows[0] && result.rows[0].status == "reserved"){
 
     }
 

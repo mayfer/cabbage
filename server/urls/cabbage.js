@@ -146,7 +146,7 @@ module.exports = function({app, io, websockets}) {
     app.get("/lobby/:slug([^/]+)/round/:round_id([^/]+)/?", async function(req, res){
         const { round_id } = req.params;
 
-        const round = await cabbage.queries.get_round({round_id}); 
+        const round = await cabbage.queries.get_round({round_id, user_id: req.user.id}); 
         const custom_props = {page: 'channel', view: 'round', round};
         load_channel({req, res, custom_props});
     });
@@ -238,7 +238,7 @@ module.exports = function({app, io, websockets}) {
         const user_id = req.user.id;
         //let opts = {channel, filters, since, until, center_timestamp, user_id, spiel_id};
         
-        let round = await cabbage.queries.get_round({round_id});
+        let round = await cabbage.queries.get_round({round_id, user_id});
         return res.json({round});
     
     });
