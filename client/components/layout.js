@@ -63,14 +63,14 @@ define(function(require, exports) {
                 '/newgame': {
                     as: 'newgame',
                     uses: async (...args) => {
-                        this.setState({page: 'newgame', channel: undefined}, () => {
+                        this.setState({page: 'newgame', channel: undefined, round: undefined}, () => {
                         });
                     }
                 },
                 '/lobby/:slug': {
                     as: 'lobby',
                     uses: async ({slug}) => {
-                        this.setState({page: 'channel', view: 'lobby', channel: await load_channel({slug, force: true})}, () => {});
+                        this.setState({page: 'channel', view: 'lobby', round: undefined, channel: await load_channel({slug, force: true})}, () => {});
                     }
                 },
                 '/lobby/:slug/round/new': {
@@ -95,11 +95,6 @@ define(function(require, exports) {
                                 this.setState({loading: false, prompt_mode, round})
                             }
                         });
-                    }
-                },
-                '/lobby/:slug/peek/:round_id': {
-                    as: 'round',
-                    uses: async ({slug, round_id }) => {
                     }
                 },
             });
@@ -202,38 +197,38 @@ define(function(require, exports) {
                             <div class="columns">
                                 <div class="game-column active column">
                                     <${Header} channel=${channel} page=${page} />
-                                        ${channel.username ? html`
-                                        ` : html`
-                                            <div class="pick-name">
-                                                <div class="inner">
-                                                    ${users && users.length > 0 ? html`
-                                                        Pick a name to join <strong>${channel.title}</strong>:
-                                                    ` : html`
-                                                        Pick a name for yourself in <strong>${channel.title}</strong>:
-                                                    `}
-                                                    <form onSubmit=${async (e) => {
-                                                        e.preventDefault();
-                                                        let {channel: updated_channel} = await API.request({method: "post", url: "/api/cabbage/channel/pick-name/", body: {slug: channel.slug, username: this.state.pick_name}});
-                                                        let _user = this.state.user;
-                                                        _user.handle = updated_channel.username;
-                                                        this.setState({channel: updated_channel, user: _user});
-                                                    }}>
-                                                        <input type="text" onInput=${e => this.setState({pick_name: e.target.value})} ref=${r => this.pick_name=r} />
-                                                        <br />
-                                                        <button type="submit">Pick name</button>
-                                                    </form>
-                                                    ${users && users.length > 0 ? html`
-                                                        <div class='members'>
-                                                            Members:
-                                                            ${users.map(username => html`
-                                                                <div class="user"><strong>${username}</strong></div>
-                                                            `)}
-                                                        </div>
-                                                     ` : html``}
-                                                </div>
+                                    ${channel.username || (round && round.status == 'closed') ? html`
+                                    ` : html`
+                                        <div class="pick-name">
+                                            <div class="inner">
+                                                ${users && users.length > 0 ? html`
+                                                    Pick a name to join <strong>${channel.title}</strong>:
+                                                ` : html`
+                                                    Pick a name for yourself in <strong>${channel.title}</strong>:
+                                                `}
+                                                <form onSubmit=${async (e) => {
+                                                    e.preventDefault();
+                                                    let {channel: updated_channel} = await API.request({method: "post", url: "/api/cabbage/channel/pick-name/", body: {slug: channel.slug, username: this.state.pick_name}});
+                                                    let _user = this.state.user;
+                                                    _user.handle = updated_channel.username;
+                                                    this.setState({channel: updated_channel, user: _user});
+                                                }}>
+                                                    <input type="text" onInput=${e => this.setState({pick_name: e.target.value})} ref=${r => this.pick_name=r} />
+                                                    <br />
+                                                    <button type="submit">Pick name</button>
+                                                </form>
+                                                ${users && users.length > 0 ? html`
+                                                    <div class='members'>
+                                                        Members:
+                                                        ${users.map(username => html`
+                                                            <div class="user"><strong>${username}</strong></div>
+                                                        `)}
+                                                    </div>
+                                                 ` : html``}
                                             </div>
-                                        `}
-                                    <div id="game-wrapper" class="${channel.username ? '' : 'disabled'}">
+                                        </div>
+                                    `}
+                                    <div id="game-wrapper" class="${channel.username || (round && round.status == 'closed') ? '' : 'disabled'}">
 
                                         ${s.loading ? html`
                                             <div class="loading">Loading</div>
