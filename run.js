@@ -50,6 +50,7 @@ const { argv } = require('yargs');
     const sessionMiddleware = session({
         store: new RedisStore({ client: redis_client }),
         secret: 'omgwtfbbq123',
+        cookie: {_expires: 1000*60*60*24*365*5},
         resave: false,
         saveUninitialized: true,
     });
