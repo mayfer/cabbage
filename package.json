@@ -16,7 +16,7 @@
     "global-define": "^2.3.0",
     "http": "0.0.0",
     "ioredis": "^4.6.2",
-    "minimatch": "^3.0.4",
+    "minimatch": "^3.0.5",
     "node-fetch": "^2.6.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
